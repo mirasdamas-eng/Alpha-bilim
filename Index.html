@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALPHA — 5-сыныптан ҰБТ-ға дейін</title>
+<style>
+:root{
+  --bg:#f5f7fb;--card:#fff;--text:#14213d;--muted:#667085;
+  --primary:#5b5cf0;--primary2:#7c3aed;--line:#e7eaf1;
+  --green:#16a34a;--orange:#f59e0b;--red:#ef4444;
+  --shadow:0 18px 50px rgba(24,34,65,.09);--radius:22px
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+button,input,select{font:inherit} button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+.container{width:min(1160px,92%);margin:auto}
+.nav{height:76px;background:rgba(255,255,255,.88);backdrop-filter:blur(15px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+.nav-inner{height:100%;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:11px;font-weight:900;font-size:20px}
+.logo-mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;display:grid;place-items:center;box-shadow:0 8px 20px #5b5cf033}
+.nav-links{display:flex;gap:26px;color:#596579;font-size:14px;font-weight:600}
+.nav-actions{display:flex;gap:10px}
+.btn{border:0;border-radius:13px;padding:12px 18px;font-weight:750;transition:.2s}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:white;box-shadow:0 10px 25px #5b5cf033}
+.btn-light{background:#fff;border:1px solid var(--line);color:var(--text)}
+.btn-danger{background:#fff0f0;color:#c62828}
+.hero{padding:76px 0 65px;background:
+radial-gradient(circle at 85% 15%,#dcd9ff 0,transparent 30%),
+radial-gradient(circle at 10% 30%,#d9f6ff 0,transparent 25%)}
+.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:55px;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border-radius:99px;background:#eeedff;color:#504ee8;font-size:13px;font-weight:800}
+.hero h1{font-size:clamp(42px,6vw,72px);line-height:.98;margin:20px 0 20px;letter-spacing:-3px}
+.gradient{background:linear-gradient(135deg,#4f46e5,#8b5cf6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:18px;line-height:1.7;color:var(--muted);max-width:650px}
+.hero-actions{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
+.hero-card{background:#fff;border:1px solid #e8e9f4;border-radius:30px;padding:22px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero-card:before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:#e9e7ff;right:-90px;top:-100px}
+.mock-top{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
+.mock-title{font-weight:850}.avatar{width:38px;height:38px;border-radius:50%;background:#ede9fe;display:grid;place-items:center;color:#5b21b6;font-weight:800}
+.progress-card{margin-top:22px;padding:20px;border-radius:20px;background:#f7f7ff}
+.progress-row{display:flex;justify-content:space-between;margin-bottom:10px;font-size:13px;color:var(--muted)}
+.progress{height:9px;border-radius:99px;background:#e5e7eb;overflow:hidden}.progress i{display:block;height:100%;width:78%;background:linear-gradient(90deg,#6366f1,#8b5cf6);border-radius:99px}
+.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.mini{background:#fff;border:1px solid var(--line);padding:15px;border-radius:16px}.mini b{font-size:20px}.mini span{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+section{padding:75px 0}.section-head{text-align:center;max-width:700px;margin:0 auto 40px}.section-head h2{font-size:38px;margin:0 0 12px}.section-head p{color:var(--muted);line-height:1.7}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.feature{background:#fff;border:1px solid var(--line);padding:26px;border-radius:var(--radius);box-shadow:0 8px 30px #26324d08}.icon{width:50px;height:50px;border-radius:15px;background:#f0efff;display:grid;place-items:center;font-size:24px;margin-bottom:16px}.feature h3{margin:0 0 9px}.feature p{color:var(--muted);line-height:1.6;font-size:14px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.step{background:#fff;padding:22px;border:1px solid var(--line);border-radius:18px}.step-no{color:var(--primary);font-weight:900;font-size:13px}.step h3{font-size:16px;margin:9px 0}.step p{color:var(--muted);font-size:13px;line-height:1.5}
+.pricing{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.price{background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px}.price.pop{border:2px solid var(--primary);box-shadow:0 15px 40px #5b5cf022;transform:translateY(-5px)}.price h3{margin-top:0}.price .amount{font-size:27px;font-weight:900;margin:14px 0}.price ul{padding-left:18px;color:var(--muted);line-height:1.9;font-size:13px;min-height:125px}
+.cta{background:linear-gradient(135deg,#151a3b,#4338ca);color:#fff;border-radius:30px;padding:55px;text-align:center}.cta p{color:#d9dcf2;max-width:650px;margin:12px auto 25px;line-height:1.6}
+footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-size:13px}.footer-inner{display:flex;justify-content:space-between;gap:20px}
+
+.app{display:none;min-height:100vh}.app-layout{display:grid;grid-template-columns:245px 1fr}.sidebar{background:#fff;border-right:1px solid var(--line);min-height:100vh;padding:20px;position:sticky;top:0;height:100vh}.side-logo{margin-bottom:28px}.menu button{width:100%;border:0;background:transparent;text-align:left;padding:12px 13px;border-radius:12px;margin:3px 0;color:#697386;font-weight:650}.menu button.active,.menu button:hover{background:#efefff;color:#514de7}.side-bottom{position:absolute;bottom:20px;left:20px;right:20px}.main{min-width:0}.topbar{height:72px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:20}.search{background:#f7f8fb;border:1px solid var(--line);padding:10px 14px;border-radius:12px;width:min(300px,40vw);outline:none}.userbox{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700}.content{padding:28px}.view{display:none}.view.active{display:block}.dash-head{display:flex;justify-content:space-between;align-items:flex-end;gap:15px;margin-bottom:22px}.dash-head h1{margin:0;font-size:29px}.muted{color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px}.stat span{font-size:12px;color:var(--muted)}.stat b{display:block;font-size:25px;margin-top:8px}
+.dash-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:18px;margin-top:18px}.panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px}.panel h3{margin:0 0 18px}.subject{display:flex;align-items:center;gap:13px;padding:13px 0;border-bottom:1px solid #f0f1f5}.subject:last-child{border-bottom:0}.subject-icon{width:42px;height:42px;border-radius:12px;background:#f0efff;display:grid;place-items:center}.subject-main{flex:1}.subject-main b{font-size:14px}.subject-main small{display:block;color:var(--muted);margin-top:4px}.subject .progress{width:100px;height:7px}
+.passport{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.passport .p{padding:18px;border-radius:16px;background:#f8f9fc}.p b{font-size:22px}.p small{display:block;color:var(--muted);margin-top:5px}.good{color:var(--green)}.warn{color:var(--orange)}.bad{color:var(--red)}
+.list-card{display:grid;gap:10px}.list-item{display:flex;align-items:center;justify-content:space-between;padding:16px;background:#f8f9fc;border-radius:14px}.list-item .left{display:flex;align-items:center;gap:12px}.pill{font-size:11px;padding:6px 9px;border-radius:99px;background:#ecebff;color:#514de7;font-weight:800}
+.table-wrap{overflow:auto;background:#fff;border:1px solid var(--line);border-radius:18px}.table{width:100%;border-collapse:collapse;min-width:650px}.table th,.table td{text-align:left;padding:15px;border-bottom:1px solid var(--line);font-size:13px}.table th{background:#fafbfc;color:var(--muted)}
+.login-overlay{display:none;position:fixed;inset:0;background:rgba(12,17,38,.55);backdrop-filter:blur(8px);z-index:100;align-items:center;justify-content:center;padding:20px}.login-card{width:min(430px,100%);background:#fff;border-radius:25px;padding:30px;box-shadow:0 30px 80px #0004}.login-card h2{margin:0 0 7px}.login-card p{color:var(--muted);font-size:14px}.field{margin:15px 0}.field label{display:block;font-size:12px;font-weight:800;margin-bottom:7px}.field input,.field select{width:100%;border:1px solid var(--line);padding:13px;border-radius:12px;outline:none}.field input:focus,.field select:focus{border-color:var(--primary)}.close{float:right;border:0;background:#f2f3f7;border-radius:10px;width:34px;height:34px}.login-submit{width:100%;margin-top:5px}.switch{margin-top:16px;text-align:center;font-size:13px;color:var(--muted)}.switch a{color:var(--primary);font-weight:800;cursor:pointer}.error{color:#d92d20;font-size:12px;display:none;margin-top:7px}
+.toast{position:fixed;right:20px;bottom:20px;background:#151a3b;color:#fff;padding:14px 18px;border-radius:13px;box-shadow:var(--shadow);display:none;z-index:200}
+@media(max-width:900px){.hero-grid,.dash-grid{grid-template-columns:1fr}.features{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr 1fr}.pricing{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}.passport{grid-template-columns:1fr 1fr}.nav-links{display:none}.app-layout{grid-template-columns:1fr}.sidebar{display:none}}
+@media(max-width:560px){.hero{padding-top:45px}.features,.steps,.pricing,.stats,.passport{grid-template-columns:1fr}.hero h1{letter-spacing:-2px}.content{padding:18px}.topbar{padding:0 15px}.search{display:none}.cta{padding:35px 20px}.footer-inner{flex-direction:column}}
+</style>
+
+<style>
+/* ===== TARIFF STYLES ===== */
+.tariff-panel{max-width:1180px;margin:28px auto;padding:0 20px}
+.tariff-panel-head{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:20px}
+.tariff-panel-head h2{margin:5px 0 7px}
+.tariff-panel-head p{margin:0;opacity:.72}
+.current-tariff{min-width:160px;padding:15px 18px;border:1px solid rgba(120,120,120,.18);border-radius:18px;background:rgba(255,255,255,.65);text-align:center}
+.current-tariff span,.current-tariff small{display:block;font-size:12px;opacity:.65}
+.current-tariff strong{display:block;font-size:18px;margin:3px 0}
+.free-video-card{display:flex;align-items:center;gap:18px;padding:20px;border-radius:22px;margin-bottom:20px;border:1px solid rgba(0,150,90,.2);background:rgba(0,170,100,.06)}
+.video-icon{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;font-size:22px;background:#fff;box-shadow:0 8px 25px rgba(0,0,0,.08)}
+.video-copy{flex:1}.video-copy h3{margin:5px 0}.video-copy p{margin:0;opacity:.7}
+.free-label{font-size:12px;font-weight:800}
+.course-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.course-card{position:relative;padding:20px;border-radius:20px;border:1px solid rgba(120,120,120,.16);background:rgba(255,255,255,.7);min-height:210px;display:flex;flex-direction:column}
+.course-card h3{margin:14px 0 8px}.course-card p{opacity:.68;line-height:1.5;flex:1}
+.course-top{display:flex;justify-content:space-between;gap:8px;font-size:11px;font-weight:800}
+.course-tag{font-size:10px;padding:6px 9px;border-radius:99px;background:rgba(80,80,80,.09)}
+.course-tag.free{background:rgba(0,160,100,.12)}
+.premium-course.locked{opacity:.72}
+.premium-course.locked:after{content:"🔒";position:absolute;right:15px;bottom:15px;font-size:22px;opacity:.55}
+.access-badge{font-size:10px;opacity:.8}
+.tariff-modal-card{max-width:980px!important}
+.tariff-options{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+.tariff-option{padding:22px;border:1px solid rgba(120,120,120,.16);border-radius:20px;background:rgba(255,255,255,.72)}
+.tariff-option.featured{border:2px solid rgba(80,100,255,.45);transform:translateY(-3px)}
+.tariff-option h3{margin:12px 0 5px}
+.tariff-price{font-size:27px;font-weight:900;margin:8px 0}
+.tariff-price small{font-size:13px;font-weight:500}
+.tariff-option p{min-height:42px;opacity:.68}
+@media(max-width:900px){.course-grid{grid-template-columns:repeat(2,1fr)}.tariff-options{grid-template-columns:1fr}.tariff-panel-head{align-items:flex-start;flex-direction:column}}
+@media(max-width:560px){.course-grid{grid-template-columns:1fr}.free-video-card{align-items:flex-start;flex-wrap:wrap}.free-video-card .btn{width:100%}}
+</style>
+
+
+<style>
+/* ===== STUDENT HOME / COURSES ===== */
+.my-courses{margin:28px 0 30px}.courses-heading{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:18px}.section-kicker{font-size:11px;font-weight:900;letter-spacing:1.3px;color:#5b5cf0}.courses-heading h2{margin:5px 0;font-size:28px}.courses-heading p{margin:0;color:var(--muted);max-width:700px;line-height:1.55}.student-course-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.student-course{background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 12px 35px rgba(24,34,65,.06);display:flex;flex-direction:column;min-width:0}.course-image{height:125px;display:grid;place-items:center;font-size:44px}.math-bg{background:linear-gradient(135deg,#dbeafe,#eef2ff)}.purple-bg{background:linear-gradient(135deg,#ede9fe,#ddd6fe)}.blue-bg{background:linear-gradient(135deg,#dff6ff,#dbeafe)}.orange-bg{background:linear-gradient(135deg,#ffedd5,#fef3c7)}.student-course-body{padding:18px;display:flex;flex-direction:column;flex:1}.course-line{display:flex;align-items:center;justify-content:space-between;gap:8px}.course-status{font-size:10px;font-weight:900;letter-spacing:.3px;padding:6px 8px;border-radius:999px;background:#eef2ff;color:#4f46e5}.free-status{background:#dcfce7;color:#15803d}.course-price{font-size:12px;font-weight:900;color:#172033}.student-course h3{font-size:17px;margin:12px 0 7px}.student-course p{font-size:13px;line-height:1.55;color:var(--muted);margin:0 0 15px;flex:1}.course-btn{width:100%;margin-top:auto}.whatsapp-btn{width:100%;border:1px solid #d9eadf;background:#f0fdf4;color:#15803d;border-radius:12px;padding:10px 12px;font-weight:800;margin-top:9px;cursor:pointer}.whatsapp-btn:hover{background:#dcfce7}.free-course-card{border-color:#b7e4c7}.free-course-card .course-image{position:relative}.free-course-card .course-image:after{content:'АШЫҚ';position:absolute;top:12px;left:12px;font-size:10px;font-weight:900;padding:6px 8px;border-radius:99px;background:#fff;color:#15803d;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+@media(max-width:1100px){.student-course-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.courses-heading{align-items:flex-start;flex-direction:column}.student-course-grid{grid-template-columns:1fr}.courses-heading h2{font-size:24px}}
+</style>
+
+<style>
+
+/* ===== FIX: TARIFF MODAL ===== */
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:rgba(15,23,42,.58);
+  backdrop-filter:blur(6px);
+  overflow:auto;
+}
+.modal.show{display:flex;}
+.modal-card{
+  width:min(980px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:24px;
+  padding:28px;
+  position:relative;
+  box-shadow:0 25px 80px rgba(0,0,0,.25);
+}
+.modal-close{
+  position:absolute;
+  top:12px;
+  right:14px;
+  width:38px;
+  height:38px;
+  border:0;
+  border-radius:50%;
+  background:#f1f5f9;
+  cursor:pointer;
+  font-size:24px;
+  line-height:1;
+}
+
+</style>
+</head>
+<body>
+
+<div id="tariffModal" class="modal" aria-hidden="true" style="display:none;">
+  <div class="modal-card tariff-modal-card">
+    <button class="modal-close" onclick="closeTariffModal()">×</button>
+    <div class="eyebrow">ТАРИФТЕР</div>
+    <h2>Өзіңізге ыңғайлы тарифті таңдаңыз</h2>
+    <p class="muted">Тегін видео әрқашан қолжетімді. Толық курстар үшін тариф қажет.</p>
+
+    <div class="tariff-options">
+      <div class="tariff-option">
+        <span class="course-tag free">ТЕГІН</span>
+        <h3>Тегін</h3>
+        <div class="tariff-price">0 ₸</div>
+        <p>Тегін видео сабақтар</p>
+        <button class="btn primary" onclick="chooseTariff('free');closeTariffModal()">Тегін бастау</button>
+      </div>
+
+      <div class="tariff-option featured">
+        <span class="course-tag">START</span>
+        <h3>Online Start</h3>
+        <div class="tariff-price">7 000 ₸<small>/ай</small></div>
+        <p>Толық курс + тесттер + оқу жоспары</p>
+        <button class="btn primary" onclick="chooseTariff('start');closeTariffModal()">Таңдау</button>
+      </div>
+
+      <div class="tariff-option">
+        <span class="course-tag">PLUS</span>
+        <h3>Online Plus</h3>
+        <div class="tariff-price">12 000 ₸<small>/ай</small></div>
+        <p>Кеңейтілген материалдар + қателер талдауы</p>
+        <button class="btn primary" onclick="chooseTariff('plus');closeTariffModal()">Таңдау</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div id="landing">
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="logo" href="#"><span class="logo-mark">A</span><span>ALPHA</span></a>
+    <nav class="nav-links">
+      <a href="#about">Жоба</a><a href="#system">Жүйе</a><a href="#contact">Байланыс</a>
+    </nav>
+    <div class="nav-actions"><button class="btn btn-light" onclick="openLogin('login')">Кіру</button><button class="btn btn-primary" onclick="openLogin('register')">Тіркелу</button></div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <span class="badge">🎓 5-сыныптан ҰБТ-ға дейін</span>
+      <h1>Бір оқушы.<br><span class="gradient">Бір платформа.</span><br>Біртұтас жол.</h1>
+      <p>Мектеп бағдарламасы, диагностика, жеке оқу жоспары, тест, олимпиада, емтихан және ҰБТ дайындығын бір жүйеге біріктіретін білім беру платформасы.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="openLogin('register')">Тегін бастау →</button>
+        <a class="btn btn-light" href="#system">Қалай жұмыс істейді?</a>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="mock-top"><div><div class="muted" style="font-size:12px">Оқушы кабинеті</div><div class="mock-title">Білім паспорты</div></div><div class="avatar">А</div></div>
+      <div class="progress-card">
+        <div class="progress-row"><span>Жалпы оқу прогресі</span><b>78%</b></div><div class="progress"><i></i></div>
+        <div class="mini-grid">
+          <div class="mini"><b>12</b><span>Сабақ</span></div><div class="mini"><b>8</b><span>Тест</span></div>
+          <div class="mini"><b>146</b><span>Тапсырма</span></div><div class="mini"><b>+9%</b><span>Өсу</span></div>
+        </div>
+      </div>
+      <div style="margin-top:15px;padding:14px;border-radius:15px;background:#eefbf2;color:#16743a;font-size:13px">✓ AI: келесі аптаға жеке оқу жоспары дайын</div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="container">
+    <div class="section-head"><h2>Бір экожүйеде барлық оқу қажеттілігі</h2><p>Жоба оқушының 5-сыныптан 11-сыныпқа дейінгі оқу процесін бір жүйеге біріктіреді.</p></div>
+    <div class="features">
+      <div class="feature"><div class="icon">🧠</div><h3>AI диагностика</h3><p>Тест нәтижесін талдап, әлсіз тақырыптарды анықтайды және оқушы деңгейіне сай тапсырма ұсынады.</p></div>
+      <div class="feature"><div class="icon">📚</div><h3>Жеке оқу жоспары</h3><p>Әр оқушыға жеке білім траекториясы қалыптасады: оқу → тапсырма → тест → қате → қайталау.</p></div>
+      <div class="feature"><div class="icon">📊</div><h3>Білім паспорты</h3><p>Пәндер бойынша қазіргі нәтиже, мақсат, деңгей және прогресс бір жерде көрсетіледі.</p></div>
+      <div class="feature"><div class="icon">👨‍👩‍👧</div><h3>Ата-ана кабинеті</h3><p>Сабаққа қатысу, үй тапсырмасы, тест нәтижесі, әлсіз пәндер және айлық есепті бақылауға болады.</p></div>
+      <div class="feature"><div class="icon">👨‍🏫</div><h3>Мұғалім кабинеті</h3><p>Топ құру, сабақ пен тест жүктеу, үй тапсырмасын беру және оқушы қателерін талдау.</p></div>
+      <div class="feature"><div class="icon">🎯</div><h3>ҰБТ және олимпиада</h3><p>ҰБТ — жүйенің соңғы кезеңдерінің бірі. Оған дейін оқушының базасы кезең-кезеңімен қалыптасады.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="system" style="background:#fff">
+  <div class="container">
+    <div class="section-head"><h2>Платформа қалай жұмыс істейді?</h2><p>Оқушының оқу жолы диагностикадан бастап тұрақты прогреске дейін бақыланады.</p></div>
+    <div class="steps">
+      <div class="step"><span class="step-no">01 — БАСТАУ</span><h3>Аккаунт ашу</h3><p>Сынып пен пәнді таңдап, жеке кабинет ашылады.</p></div>
+      <div class="step"><span class="step-no">02 — ДИАГНОСТИКА</span><h3>Деңгейді анықтау</h3><p>Диагностикалық тест арқылы бастапқы білім деңгейі анықталады.</p></div>
+      <div class="step"><span class="step-no">03 — ЖОСПАР</span><h3>Жеке траектория</h3><p>Платформа әлсіз тақырыптарды тауып, оқу жоспарын құрады.</p></div>
+      <div class="step"><span class="step-no">04 — ПРОГРЕСС</span><h3>Оқу және бақылау</h3><p>Сабақ, тапсырма, тест, қате бойынша жұмыс және қайта тест.</p></div>
+    </div>
+    <div style="margin-top:18px" class="features">
+      <div class="feature"><div class="icon">💻</div><h3>Онлайн мектеп</h3><p>Видео сабақ, теория, интерактивті тапсырма, тест, чат және аналитика.</p></div>
+      <div class="feature"><div class="icon">🏫</div><h3>Офлайн орталық</h3><p>Математика, физика, химия, ағылшын, информатика, олимпиада және ҰБТ сабақтары.</p></div>
+      <div class="feature"><div class="icon">🔄</div><h3>Онлайн + офлайн</h3><p>Апталық оқу ырғағы: сабақ → тапсырма → тест → қате бойынша жұмыс → бақылау.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="container">
+    <div class="section-head"><h2>Тарифтер</h2><p>Жобаның бизнес-жоспарында көрсетілген бастапқы тарифтер.</p></div>
+    <div class="pricing">
+      <div class="price"><h3>Online Start</h3><div class="amount">7 000 ₸<small>/ай</small></div><ul><li>Видео сабақ</li><li>Тест</li><li>Тапсырмалар</li></ul><button class="btn btn-light" style="width:100%" onclick="openLogin('register')">Таңдау</button></div>
+      <div class="price pop"><span class="pill">ТАНЫМАЛ</span><h3>Online Plus</h3><div class="amount">12 000 ₸<small>/ай</small></div><ul><li>Толық онлайн</li><li>Мұғаліммен байланыс</li><li>Тест және аналитика</li></ul><button class="btn btn-primary" style="width:100%" onclick="openLogin('register')">Таңдау</button></div>
+      <div class="price"><h3>Offline</h3><div class="amount">20–30 мың ₸</div><ul><li>Оқу орталығындағы сабақ</li><li>Шағын топ</li><li>Мұғаліммен жұмыс</li></ul><button class="btn btn-light" style="width:100%" onclick="openLogin('register')">Таңдау</button></div>
+      <div class="price"><h3>Premium</h3><div class="amount">30–40 мың ₸</div><ul><li>Онлайн + офлайн</li><li>Жеке жоспар</li><li>Толық бақылау</li></ul><button class="btn btn-light" style="width:100%" onclick="openLogin('register')">Таңдау</button></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <div class="cta"><h2>Оқу жолыңды бүгін баста</h2><p>5-сыныптан бастап 11-сыныпқа дейінгі білімді бір жүйеге біріктір. Диагностикадан өтіп, жеке жоспарыңды құр.</p><button class="btn" style="background:#fff;color:#3730a3" onclick="openLogin('register')">Платформаға кіру →</button></div>
+  </div>
+</section>
+
+<footer><div class="container footer-inner"><div>© 2026 ALPHA — 5-сыныптан ҰБТ-ға дейін</div><div>Офлайн + Онлайн + Жеке платформа + AI</div></div></footer>
+</div>
+
+<div id="app" class="app">
+<div class="app-layout">
+<aside class="sidebar">
+  <div class="logo side-logo"><span class="logo-mark">A</span><span>ALPHA</span></div>
+  <div id="studentMenu" class="menu">
+    <button class="active" data-view="dashboard">🏠 Басты бет</button>
+    <button data-view="lessons">📚 Менің сабақтарым</button>
+    <button data-view="tests">📝 Тесттер</button>
+    <button data-view="plan">🎯 Менің жоспарым</button>
+    <button data-view="passport">📊 Білім паспорты</button>
+    <button data-view="errors">❌ Қателерім</button>
+    <button data-view="olympiad">🏆 Олимпиада</button>
+    <button data-view="exam">🎓 Емтихан</button>
+    <button data-view="unt">🚀 ҰБТ</button>
+    <button data-view="teacher">💬 Мұғаліммен байланыс</button>
+  </div>
+  <div id="teacherMenu" class="menu" style="display:none">
+    <button class="active" data-view="teacherDashboard">🏠 Басты бет</button>
+    <button data-view="teacherStudents">👥 Оқушыларым</button>
+    <button data-view="teacherLessons">📚 Сабақтар</button>
+    <button data-view="teacherTests">📝 Тесттер</button>
+    <button data-view="teacherAnalytics">📊 Аналитика</button>
+  </div>
+  <div class="side-bottom"><button class="btn btn-light" style="width:100%" onclick="logout()">Шығу</button></div>
+</aside>
+<main class="main">
+<header class="topbar"><input class="search" placeholder="🔎 Іздеу..." oninput="searchContent(this.value)"><div class="userbox"><div class="avatar" id="userAvatar">А</div><span id="userName">Оқушы</span></div></header>
+<div class="content">
+
+<div id="dashboard" class="view active">
+  <div class="dash-head"><div><h1>Сәлем, <span id="helloName">оқушы</span>! 👋</h1><p class="muted">Курстарыңды таңда, сабақтарды баста және нәтижелеріңді бақыла.</p></div><button class="btn btn-primary" onclick="toast('Жаңа диагностикалық тест ашылды')">Диагностика тапсыру</button></div>
+
+  <section class="my-courses">
+    <div class="courses-heading">
+      <div><span class="section-kicker">ОҚУШЫ КАБИНЕТІ</span><h2>Менің курстарым</h2><p>Тегін сабақтарды бірден көр. Толық курстарға жазылу үшін тарифті таңда немесе WhatsApp арқылы байланыс.</p></div>
+      <button class="btn btn-light" onclick="openTariffModal()">Тарифтерді көру</button>
+    </div>
+    <div class="student-course-grid">
+      <article class="student-course free-course-card">
+        <div class="course-image math-bg"><span>🎥</span></div>
+        <div class="student-course-body">
+          <div class="course-line"><span class="course-status free-status">✓ ТЕГІН</span><span class="course-price">0 ₸</span></div>
+          <h3>Тегін видео сабақтар</h3>
+          <p>5–11 сыныпқа арналған таныстыру және базалық тақырыптар. Тегін видеоларға қазір қолжетімділік бар.</p>
+          <button class="btn btn-primary course-btn" onclick="showSection('lessons')">Видео сабақтарды көру →</button>
+        </div>
+      </article>
+
+      <article class="student-course">
+        <div class="course-image purple-bg"><span>📐</span></div>
+        <div class="student-course-body">
+          <div class="course-line"><span class="course-status">ONLINE START</span><span class="course-price">7 000 ₸/ай</span></div>
+          <h3>Математика — толық курс</h3>
+          <p>Толық сабақтар, тесттер, үй тапсырмасы және жеке оқу жоспары.</p>
+          <button class="btn btn-primary course-btn" onclick="openTariffModal()">Тариф таңдау →</button>
+          <button class="whatsapp-btn" onclick="openWhatsApp('Математика толық курсына жазылғым келеді')">💬 WhatsApp арқылы жазылу</button>
+        </div>
+      </article>
+
+      <article class="student-course">
+        <div class="course-image blue-bg"><span>🚀</span></div>
+        <div class="student-course-body">
+          <div class="course-line"><span class="course-status">ONLINE PLUS</span><span class="course-price">12 000 ₸/ай</span></div>
+          <h3>Кеңейтілген дайындық</h3>
+          <p>Тереңдетілген материалдар, қателер талдауы, қосымша тапсырмалар және прогресс.</p>
+          <button class="btn btn-primary course-btn" onclick="openTariffModal()">Тариф таңдау →</button>
+          <button class="whatsapp-btn" onclick="openWhatsApp('Online Plus тарифі туралы білгім келеді')">💬 WhatsApp арқылы жазылу</button>
+        </div>
+      </article>
+
+      <article class="student-course">
+        <div class="course-image orange-bg"><span>🎯</span></div>
+        <div class="student-course-body">
+          <div class="course-line"><span class="course-status">ҰБТ</span><span class="course-price">Арнайы тариф</span></div>
+          <h3>ҰБТ дайындық курсы</h3>
+          <p>ҰБТ форматына дайындық, сынақ тесттері және нәтижені талдау.</p>
+          <button class="btn btn-primary course-btn" onclick="openTariffModal()">Тарифті көру →</button>
+          <button class="whatsapp-btn" onclick="openWhatsApp('ҰБТ курсына жазылғым келеді')">💬 WhatsApp арқылы жазылу</button>
+        </div>
+      </article>
+    </div>
+  </section>
+  <div class="stats"><div class="stat"><span>Жалпы прогресс</span><b>78%</b></div><div class="stat"><span>Орындалған сабақ</span><b>12</b></div><div class="stat"><span>Тест саны</span><b>8</b></div><div class="stat"><span>Осы айдағы өсу</span><b class="good">+9%</b></div></div>
+  <div class="dash-grid">
+    <div class="panel"><h3>Пәндер бойынша прогресс</h3>
+      <div class="subject"><div class="subject-icon">➗</div><div class="subject-main"><b>Математика</b><small>Мақсат: 90%</small></div><b>78%</b></div>
+      <div class="subject"><div class="subject-icon">⚡</div><div class="subject-main"><b>Физика</b><small>Мақсат: 80%</small></div><b class="warn">54%</b></div>
+      <div class="subject"><div class="subject-icon">📝</div><div class="subject-main"><b>Қазақ тілі</b><small>Мақсат: 90%</small></div><b class="good">87%</b></div>
+      <div class="subject"><div class="subject-icon">🇬🇧</div><div class="subject-main"><b>Ағылшын</b><small>Мақсат: 85%</small></div><b>71%</b></div>
+    </div>
+    <div class="panel"><h3>Бүгінгі жоспар</h3><div class="list-card">
+      <div class="list-item"><div class="left">🎥 <span>Квадрат теңдеулер</span></div><span class="pill">Видео</span></div>
+      <div class="list-item"><div class="left">📝 <span>Математика тесті</span></div><span class="pill">20 сұрақ</span></div>
+      <div class="list-item"><div class="left">🔁 <span>Қате тақырыптарды қайталау</span></div><span class="pill">15 мин</span></div>
+    </div></div>
+  </div>
+</div>
+
+
+<div id="teacherDashboard" class="view">
+  <div class="dash-head"><div><h1>Мұғалім кабинеті 👨‍🏫</h1><p class="muted">Оқушыларды, сабақтарды және нәтижелерді басқару.</p></div><button class="btn btn-primary" onclick="toast('Жаңа сабақ құру терезесі ашылды')">+ Сабақ қосу</button></div>
+  <div class="stats">
+    <div class="stat"><span>Оқушылар</span><b>124</b></div>
+    <div class="stat"><span>Белсенді топтар</span><b>8</b></div>
+    <div class="stat"><span>Орташа нәтиже</span><b>76%</b></div>
+    <div class="stat"><span>Үй тапсырмасы</span><b class="good">89%</b></div>
+  </div>
+  <div class="dash-grid">
+    <div class="panel"><h3>Сынып аналитикасы</h3>
+      <div class="subject"><div class="subject-icon">📐</div><div class="subject-main"><b>Алгебра — Квадрат теңдеулер</b><small>Оқушылардың 60%-ы қиналады</small></div><b class="warn">60%</b></div>
+      <div class="subject"><div class="subject-icon">📊</div><div class="subject-main"><b>Функциялар</b><small>Меңгеру деңгейі</small></div><b class="good">82%</b></div>
+      <div class="subject"><div class="subject-icon">🧮</div><div class="subject-main"><b>Теңсіздіктер</b><small>Меңгеру деңгейі</small></div><b>74%</b></div>
+    </div>
+    <div class="panel"><h3>Жылдам әрекеттер</h3><div class="list-card">
+      <div class="list-item"><div class="left">👥 <span>Оқушы қосу</span></div><button class="btn btn-light" onclick="toast('Оқушы қосу формасы ашылды')">Ашу</button></div>
+      <div class="list-item"><div class="left">📝 <span>Тест жасау</span></div><button class="btn btn-light" onclick="toast('Тест құрастыру ашылды')">Ашу</button></div>
+      <div class="list-item"><div class="left">📤 <span>Үй тапсырмасын беру</span></div><button class="btn btn-light" onclick="toast('Үй тапсырмасы бөлімі ашылды')">Ашу</button></div>
+    </div></div>
+  </div>
+</div>
+
+<div id="teacherStudents" class="view">
+  <div class="dash-head"><div><h1>Оқушыларым</h1><p class="muted">Оқушылардың нәтижелері мен прогресі.</p></div></div>
+  <div class="table-wrap"><table class="table"><tr><th>Оқушы</th><th>Сынып</th><th>Прогресс</th><th>Соңғы тест</th><th>Әрекет</th></tr>
+  <tr><td>Аян Ермек</td><td>8-сынып</td><td>82%</td><td>88%</td><td><button class="btn btn-light" onclick="toast('Оқушы профилі ашылды')">Қарау</button></td></tr>
+  <tr><td>Аружан Нұрлан</td><td>8-сынып</td><td>76%</td><td>81%</td><td><button class="btn btn-light" onclick="toast('Оқушы профилі ашылды')">Қарау</button></td></tr>
+  <tr><td>Данияр Болат</td><td>9-сынып</td><td>69%</td><td>73%</td><td><button class="btn btn-light" onclick="toast('Оқушы профилі ашылды')">Қарау</button></td></tr>
+  </table></div>
+</div>
+
+<div id="teacherLessons" class="view">
+  <div class="dash-head"><div><h1>Сабақтарды басқару</h1><p class="muted">Видео, теория және тапсырмаларды жүктеу.</p></div><button class="btn btn-primary" onclick="toast('Жаңа сабақ құру ашылды')">+ Жаңа сабақ</button></div>
+  <div class="features"><div class="feature"><div class="icon">🎥</div><h3>Квадрат теңдеулер</h3><p>8-сынып • Видео + теория + тапсырма</p><button class="btn btn-light" onclick="toast('Сабақ өңдеуге дайын')">Өңдеу</button></div>
+  <div class="feature"><div class="icon">📐</div><h3>Функциялар</h3><p>8-сынып • Видео + тест</p><button class="btn btn-light" onclick="toast('Сабақ өңдеуге дайын')">Өңдеу</button></div></div>
+</div>
+
+<div id="teacherTests" class="view">
+  <div class="dash-head"><div><h1>Тесттерді басқару</h1><p class="muted">Тест құру, жариялау және нәтижелерді талдау.</p></div><button class="btn btn-primary" onclick="toast('Жаңа тест құру ашылды')">+ Тест жасау</button></div>
+  <div class="table-wrap"><table class="table"><tr><th>Тест</th><th>Сұрақ</th><th>Қатысқан</th><th>Орташа нәтиже</th><th>Әрекет</th></tr>
+  <tr><td>Квадрат теңдеулер</td><td>20</td><td>32</td><td>78%</td><td><button class="btn btn-light" onclick="toast('Нәтижелер ашылды')">Нәтиже</button></td></tr>
+  <tr><td>Функциялар</td><td>25</td><td>28</td><td>82%</td><td><button class="btn btn-light" onclick="toast('Нәтижелер ашылды')">Нәтиже</button></td></tr>
+  </table></div>
+</div>
+
+<div id="teacherAnalytics" class="view">
+  <div class="dash-head"><div><h1>Аналитика</h1><p class="muted">Сынып бойынша білім деңгейінің талдауы.</p></div></div>
+  <div class="panel"><h3>AI ұсынысы 🤖</h3><p class="muted">8-сыныптағы оқушылардың 60%-ы функция тақырыбынан қиналады. Келесі сабақта осы тақырыпқа қосымша уақыт бөлу ұсынылады.</p><button class="btn btn-primary" onclick="toast('AI ұсынысы жоспарға қосылды')">Жоспарға қосу</button></div>
+</div>
+
+<div id="lessons" class="view"><div class="dash-head"><div><h1>Менің сабақтарым</h1><p class="muted">Онлайн сабақтар мен оқу материалдары.</p></div></div>
+<div class="features"><div class="feature"><div class="icon">🎥</div><h3>Квадрат теңдеулер</h3><p>10–20 минуттық видео сабақ. Теория және мысалдар.</p><button class="btn btn-primary" onclick="toast('Сабақ ашылды')">Сабақты көру</button></div><div class="feature"><div class="icon">📐</div><h3>Геометрия</h3><p>Үшбұрыштар тақырыбы бойынша қысқаша теория.</p><button class="btn btn-primary" onclick="toast('Сабақ ашылды')">Сабақты көру</button></div><div class="feature"><div class="icon">⚡</div><h3>Физика</h3><p>Механика негіздері және интерактивті тапсырмалар.</p><button class="btn btn-primary" onclick="toast('Сабақ ашылды')">Сабақты көру</button></div></div></div>
+
+<div id="tests" class="view"><div class="dash-head"><div><h1>Тесттер</h1><p class="muted">Диагностикалық, тақырыптық, БЖБ, ТЖБ және ҰБТ тесттері.</p></div></div>
+<div class="table-wrap"><table class="table"><tr><th>Тест</th><th>Түрі</th><th>Сұрақ</th><th>Нәтиже</th><th></th></tr>
+<tr><td>Математика базасы</td><td>Диагностикалық</td><td>30</td><td>78%</td><td><button class="btn btn-primary" onclick="startTest()">Бастау</button></td></tr>
+<tr><td>Квадрат теңдеулер</td><td>Тақырыптық</td><td>20</td><td>—</td><td><button class="btn btn-primary" onclick="startTest()">Бастау</button></td></tr>
+<tr><td>БЖБ — Алгебра</td><td>БЖБ</td><td>25</td><td>—</td><td><button class="btn btn-primary" onclick="startTest()">Бастау</button></td></tr>
+<tr><td>ҰБТ математика</td><td>Пробный</td><td>40</td><td>—</td><td><button class="btn btn-primary" onclick="startTest()">Бастау</button></td></tr>
+</table></div></div>
+
+<div id="plan" class="view"><div class="dash-head"><div><h1>Менің оқу жоспарым</h1><p class="muted">AI талдауы негізінде құрылған апталық жоспар.</p></div></div>
+<div class="panel"><div class="list-card">
+<div class="list-item"><div class="left">📅 <b>Дүйсенбі</b> — Математика: квадрат теңдеулер</div><span class="pill">30 мин</span></div>
+<div class="list-item"><div class="left">📅 <b>Сейсенбі</b> — Физика: механика</div><span class="pill">25 мин</span></div>
+<div class="list-item"><div class="left">📅 <b>Сәрсенбі</b> — Математика тесті</div><span class="pill">20 сұрақ</span></div>
+<div class="list-item"><div class="left">📅 <b>Бейсенбі</b> — Қате бойынша жұмыс</div><span class="pill">20 мин</span></div>
+<div class="list-item"><div class="left">📅 <b>Сенбі</b> — Бақылау тесті</div><span class="pill">40 сұрақ</span></div>
+<div class="list-item"><div class="left">📅 <b>Жексенбі</b> — Демалыс</div><span class="pill">☕</span></div>
+</div></div></div>
+
+<div id="passport" class="view"><div class="dash-head"><div><h1>Digital Bilim Passport</h1><p class="muted">Пәндер бойынша қазіргі нәтиже мен мақсат.</p></div></div>
+<div class="passport"><div class="p"><small>Математика</small><b>78%</b><span class="good">Мақсат 90%</span></div><div class="p"><small>Физика</small><b class="warn">54%</b><span>Мақсат 80%</span></div><div class="p"><small>Қазақ тілі</small><b class="good">87%</b><span>Мақсат 90%</span></div><div class="p"><small>Ағылшын</small><b>71%</b><span>Мақсат 85%</span></div></div>
+<div class="panel" style="margin-top:18px"><h3>AI талдауы 🤖</h3><p class="muted">Физикадан нәтижені көтеру қажет. Әсіресе «Механика» тақырыбына назар аудар. Келесі аптаға 3 қосымша тапсырма ұсынылды.</p><button class="btn btn-primary" onclick="toast('Жеке тапсырмалар қосылды')">Ұсынылған тапсырмаларды ашу</button></div></div>
+
+<div id="errors" class="view"><div class="dash-head"><div><h1>Қателерім</h1><p class="muted">Қате кеткен сұрақтарды қайта қарап, білімдегі олқылықтарды жой.</p></div></div>
+<div class="list-card"><div class="list-item"><div class="left">❌ <span><b>Квадрат теңдеулер</b><br><small class="muted">Дискриминантты есептеу</small></span></div><button class="btn btn-light" onclick="toast('Тақырып қайта ашылды')">Қайталау</button></div><div class="list-item"><div class="left">❌ <span><b>Физика — механика</b><br><small class="muted">Жылдамдық формуласын қолдану</small></span></div><button class="btn btn-light" onclick="toast('Тақырып қайта ашылды')">Қайталау</button></div></div></div>
+
+<div id="olympiad" class="view"><div class="dash-head"><div><h1>Олимпиада</h1><p class="muted">Күрделі тапсырмалар мен арнайы дайындық.</p></div></div><div class="features"><div class="feature"><div class="icon">🏆</div><h3>Математика олимпиадасы</h3><p>Логикалық және күрделі есептер. Арнайы шағын топқа дайындық.</p><button class="btn btn-primary" onclick="toast('Олимпиада курсына өтінім қабылданды')">Қосылу</button></div><div class="feature"><div class="icon">🧩</div><h3>Логика</h3><p>Стандарттан тыс есептер мен ойлау қабілетін дамыту.</p><button class="btn btn-primary" onclick="toast('Тапсырмалар ашылды')">Тапсырмаларды ашу</button></div></div></div>
+
+<div id="exam" class="view"><div class="dash-head"><div><h1>Емтихан</h1><p class="muted">Қорытынды аттестаттауға дайындық.</p></div></div><div class="panel"><h3>Дайындық деңгейі</h3><div class="progress"><i style="width:68%"></i></div><p class="muted">68% — жақсы деңгей. 4 тақырыпты қайталау ұсынылады.</p><button class="btn btn-primary" onclick="toast('Емтихан жоспары жасалды')">Жоспарды жаңарту</button></div></div>
+
+<div id="unt" class="view"><div class="dash-head"><div><h1>ҰБТ</h1><p class="muted">10–11 сыныпқа арналған арнайы дайындық.</p></div></div><div class="stats"><div class="stat"><span>Соңғы пробный</span><b>92/140</b></div><div class="stat"><span>Математика</span><b>31/45</b></div><div class="stat"><span>Оқу сауаттылығы</span><b>8/10</b></div><div class="stat"><span>Өсу</span><b class="good">+12%</b></div></div><div class="panel" style="margin-top:18px"><h3>Келесі қадам</h3><p class="muted">Әлсіз тақырыптарды қайталап, пробный тест тапсыру ұсынылады.</p><button class="btn btn-primary" onclick="startTest()">Пробный тестті бастау</button></div></div>
+
+<div id="teacher" class="view"><div class="dash-head"><div><h1>Мұғаліммен байланыс</h1><p class="muted">Сұрағыңды мұғалімге жібер.</p></div></div><div class="panel"><h3>Мұғалім: Айдана Серікқызы</h3><p class="muted">Математика • Алгебра • ҰБТ</p><textarea id="message" style="width:100%;min-height:120px;border:1px solid var(--line);border-radius:14px;padding:14px;resize:vertical" placeholder="Сұрағыңызды жазыңыз..."></textarea><button class="btn btn-primary" style="margin-top:12px" onclick="sendMessage()">Жіберу</button></div></div>
+
+</div></main></div></div>
+
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-card">
+    <button class="close" onclick="closeLogin()">×</button>
+    <div class="logo"><span class="logo-mark">A</span><span>ALPHA</span></div>
+    <h2 id="loginTitle" style="margin-top:20px">Кіру</h2>
+    <p id="loginSub">Жеке оқу кабинетіге кіріңіз.</p>
+    <div id="nameField" class="field" style="display:none"><label>Аты</label><input id="firstName" placeholder="Мысалы: Аян"></div><div id="patronymicField" class="field" style="display:none"><label>Әкесінің аты</label><input id="patronymic" placeholder="Мысалы: Ермекұлы"></div><div id="surnameField" class="field" style="display:none"><label>Фамилия</label><input id="surname" placeholder="Мысалы: Ахметов"></div>
+    <div id="phoneField" class="field" style="display:none"><label>Телефон нөмірі</label><input id="phone" type="tel" placeholder="+7 700 123 45 67"></div>
+    <div id="roleField" class="field" style="display:none"><label>Кім ретінде тіркелесіз?</label><select id="role"><option value="student">Оқушы</option><option value="teacher">Мұғалім</option></select></div>
+    <div class="field"><label>Email</label><input id="email" type="email" placeholder="you@example.com"></div>
+    <div class="field"><label>Құпиясөз</label><input id="password" type="password" placeholder="••••••••"></div>
+    <div id="classField" class="field" style="display:none"><label>Сынып</label><select id="grade"><option>5-сынып</option><option>6-сынып</option><option>7-сынып</option><option>8-сынып</option><option>9-сынып</option><option>10-сынып</option><option>11-сынып</option></select></div>
+    <div class="error" id="loginError"></div>
+    <button class="btn btn-primary login-submit" onclick="submitAuth()">Жалғастыру →</button>
+    <div class="switch"><span id="switchText">Аккаунтыңыз жоқ па?</span> <a onclick="toggleAuth()">Тіркелу</a></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let authMode='login';
+const $=id=>document.getElementById(id);
+
+function openLogin(mode='login'){
+  authMode=mode;
+  $('loginOverlay').style.display='flex';
+  updateAuth();
+}
+function closeLogin(){$('loginOverlay').style.display='none';$('loginError').style.display='none'}
+function toggleAuth(){authMode=authMode==='login'?'register':'login';updateAuth()}
+function updateAuth(){
+  const reg=authMode==='register';
+  $('loginTitle').textContent=reg?'Тіркелу':'Кіру';
+  $('loginSub').textContent=reg?'Жеке оқу кабинетін жасаңыз.':'Жеке оқу кабинетіге кіріңіз.';
+  $('nameField').style.display=reg?'block':'none';
+  if($('patronymicField')) $('patronymicField').style.display=reg?'block':'none';
+  if($('surnameField')) $('surnameField').style.display=reg?'block':'none';
+  $('phoneField').style.display=reg?'block':'none';
+  $('roleField').style.display=reg?'block':'none';
+  $('classField').style.display=reg?'block':'none';
+  $('switchText').textContent=reg?'Аккаунтыңыз бар ма?':'Аккаунтыңыз жоқ па?';
+  document.querySelector('.switch a').textContent=reg?'Кіру':'Тіркелу';
+  $('loginError').style.display='none';
+}
+function submitAuth(){
+  const email=$('email').value.trim(), pass=$('password').value.trim();
+  const firstName=$('firstName')?.value.trim()||'', patronymic=$('patronymic')?.value.trim()||'', surname=$('surname')?.value.trim()||'';
+  const name=[firstName,patronymic,surname].filter(Boolean).join(' ');
+  const phone=$('phone').value.trim(), role=$('role').value, grade=$('grade').value;
+  if(!email || !pass || (authMode==='register'&&(!firstName||!patronymic||!surname||!phone))){showError('Барлық міндетті жолдарды толтырыңыз.');return}
+  if(!email.includes('@')){showError('Email дұрыс енгізілмеген.');return}
+  if(authMode==='register' && !/^\\+?7[0-9 ()-]{9,}$/.test(phone)){showError('Телефон нөмірін дұрыс енгізіңіз. Мысалы: +7 700 123 45 67');return}
+  const userName=authMode==='register'?name:(localStorage.getItem('alphaName')||'Оқушы');
+  const userRole=authMode==='register'?role:(localStorage.getItem('alphaRole')||'student');
+  localStorage.setItem('alphaName',userName);
+  localStorage.setItem('alphaFirstName',firstName);
+  localStorage.setItem('alphaPatronymic',patronymic);
+  localStorage.setItem('alphaSurname',surname);
+  localStorage.setItem('alphaRole',userRole);
+  localStorage.setItem('alphaPhone',phone);
+  localStorage.setItem('alphaGrade',grade);
+  localStorage.setItem('alphaLogged','1');
+  closeLogin(); showApp(userName,userRole); toast(userRole==='teacher'?'Мұғалім кабинеті ашылды! 👨‍🏫':'Оқушы кабинеті ашылды! 🎓');
+}
+function showError(t){$('loginError').textContent=t;$('loginError').style.display='block'}
+function showApp(name, role){
+  role=role||localStorage.getItem('alphaRole')||'student';
+  $('landing').style.display='none';$('app').style.display='block';
+  $('userName').textContent=name;$('helloName').textContent=name.split(' ')[0];$('userAvatar').textContent=name[0]?.toUpperCase()||'А';
+  $('studentMenu').style.display=role==='teacher'?'none':'block';
+  $('teacherMenu').style.display=role==='teacher'?'block':'none';
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  $(role==='teacher'?'teacherDashboard':'dashboard').classList.add('active');
+  document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));
+  const first=(role==='teacher'?$('teacherMenu'):$('studentMenu')).querySelector('button');
+  if(first) first.classList.add('active');
+  window.scrollTo(0,0);
+}
+function logout(){localStorage.removeItem('alphaLogged');$('app').style.display='none';$('landing').style.display='block';window.scrollTo(0,0);toast('Аккаунттан шықтыңыз')}
+function toast(msg){const t=$('toast');t.textContent=msg;t.style.display='block';clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.style.display='none',2600)}
+document.querySelectorAll('.menu button').forEach(btn=>btn.addEventListener('click',()=>{
+ document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');
+ document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));$(btn.dataset.view).classList.add('active');
+ window.scrollTo(0,0);
+}));
+function startTest(){toast('Тест интерфейсі демо режимінде ашылды. Нақты сұрақтар базасын кейін қосуға болады.')}
+function sendMessage(){const m=$('message').value.trim();if(!m){toast('Алдымен хабарлама жазыңыз');return}$('message').value='';toast('Хабарлама мұғалімге жіберілді ✓')}
+function searchContent(v){if(v.trim())toast('Іздеу: '+v)}
+window.addEventListener('keydown',e=>{if(e.key==='Escape')closeLogin()});
+if(localStorage.getItem('alphaLogged')==='1')showApp(localStorage.getItem('alphaName')||'Оқушы',localStorage.getItem('alphaRole')||'student');
+
+
+function openWhatsApp(message){
+  const text=encodeURIComponent(message + '\nALPHA білім платформасы туралы ақпарат алғым келеді.');
+  window.open('https://wa.me/?text='+text,'_blank','noopener,noreferrer');
+}
+
+/* ===== TARIFF ACCESS ===== */
+const ALPHA_TARIFFS = {
+  free: {name:'Тегін', price:'0 ₸', color:'free'},
+  start: {name:'Online Start', price:'7 000 ₸/ай', color:'start'},
+  plus: {name:'Online Plus', price:'12 000 ₸/ай', color:'plus'}
+};
+
+function getStudentTariff(){
+  return localStorage.getItem('alphaTariff') || 'free';
+}
+
+function setStudentTariff(tariff){
+  localStorage.setItem('alphaTariff', tariff);
+  renderTariffUI();
+  if(typeof showSection === 'function') showSection('home');
+}
+
+function chooseTariff(tariff){
+  if(tariff === 'free'){
+    setStudentTariff('free');
+    alert('Тегін тариф қосылды. Тегін видео сабақтарға қолжетімділік берілді.');
+    return;
+  }
+  // Demo payment flow: real payment/backend can be connected later.
+  const t = ALPHA_TARIFFS[tariff];
+  if(confirm(`${t.name} тарифін таңдайсыз ба?\nБағасы: ${t.price}`)){
+    setStudentTariff(tariff);
+    alert(`${t.name} тарифі демо режимде қосылды.`);
+  }
+}
+
+function renderTariffUI(){
+  const tariff = getStudentTariff();
+  const t = ALPHA_TARIFFS[tariff] || ALPHA_TARIFFS.free;
+
+  document.querySelectorAll('[data-current-tariff]').forEach(el=>{
+    el.textContent = t.name;
+  });
+
+  document.querySelectorAll('[data-tariff-price]').forEach(el=>{
+    el.textContent = t.price;
+  });
+
+  document.querySelectorAll('[data-premium-lock]').forEach(el=>{
+    const locked = tariff === 'free';
+    el.classList.toggle('locked', locked);
+    const badge = el.querySelector('.access-badge');
+    if(badge) badge.textContent = locked ? '🔒 Қолжетімсіз' : '✓ Қолжетімді';
+  });
+
+  const freeBadge = document.getElementById('freeAccessBadge');
+  if(freeBadge) freeBadge.textContent = '✓ Тегін видео ашық';
+
+  const tariffNote = document.getElementById('tariffAccessNote');
+  if(tariffNote){
+    tariffNote.innerHTML = tariff === 'free'
+      ? 'Қазір <b>Тегін</b> тарифі қосулы. Тегін видео сабақтарды көре аласыз. Қалған курстар құлыптаулы.'
+      : `Қазір <b>${t.name}</b> тарифі қосулы. Ақылы курс контенттеріне қолжетімділік бар.`;
+  }
+}
+
+function openTariffModal(){
+  const modal = document.getElementById('tariffModal');
+  if(modal){
+    modal.style.display = 'flex';
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden','false');
+  }
+}
+
+function closeTariffModal(){
+  const modal = document.getElementById('tariffModal');
+  if(modal){
+    modal.classList.remove('show');
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden','true');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', renderTariffUI);
+
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const role = localStorage.getItem('alphaRole');
+  const panel = document.getElementById('studentTariffPanel');
+  if(panel && role === 'teacher') panel.style.display = 'none';
+  renderTariffUI();
+});
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('a,button').forEach(function (el) {
+    if (el.textContent.trim().toLowerCase() === 'тарифтер') {
+      const inTopNav = el.closest('header, nav, .navbar, .top-nav, .header-nav');
+      if (inTopNav) el.remove();
+    }
+  });
+});
+</script>
+
+
+<script>
+(function(){
+  function getAlphaFullName(){
+    return (
+      localStorage.getItem('alphaFullName') ||
+      localStorage.getItem('alphaName') ||
+      'Оқушы'
+    ).trim();
+  }
+
+  function updateFullStudentName(){
+    const fullName = getAlphaFullName();
+
+    // Replace greeting text without changing the rest of the page.
+    document.querySelectorAll('*').forEach(function(el){
+      if(el.children.length === 0 && el.textContent.trim().match(/^Сәлем,\s*.+!?\s*👋$/)){
+        el.textContent = 'Сәлем, ' + fullName + '! 👋';
+      }
+    });
+
+    // Common greeting containers in case the page renders dynamically.
+    document.querySelectorAll('[data-student-greeting], .student-greeting, .welcome-title').forEach(function(el){
+      el.textContent = 'Сәлем, ' + fullName + '! 👋';
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', updateFullStudentName);
+  window.addEventListener('storage', updateFullStudentName);
+})();
+</script>
+
+
+<script>
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('form').forEach(function(form){
+      form.addEventListener('submit', function(){
+        const nameInput =
+          form.querySelector('input[name="name"]') ||
+          form.querySelector('input[placeholder*="аты"]') ||
+          form.querySelector('input[placeholder*="Аты"]');
+        if(nameInput && nameInput.value.trim()){
+          localStorage.setItem('alphaFullName', nameInput.value.trim());
+        }
+      });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
