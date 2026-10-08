@@ -305,16 +305,72 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
 <div class="content">
 
 <div id="dashboard" class="view active">
-  <div class="dash-head"><div><h1>Сәлем, <span id="helloName">оқушы</span>! 👋</h1><p class="muted">Саған арналған ұсыныстар және менеджермен жылдам байланыс.</p></div></div>
-  <div class="panel" style="margin-bottom:18px">
-    <h3>Сізге ұсыныстар</h3><p class="muted">Оқу нәтижелеріңе қарай келесі қадамдарды ұсынамыз.</p>
-    <div class="list-card">
-      <div class="list-item"><div class="left">🎯 <span><b>Математика</b><br><small class="muted">Квадрат теңдеулер тақырыбын қайталау</small></span></div><button class="btn btn-light" onclick="toast('Ұсынылған сабақ ашылды')">Ашу</button></div>
-      <div class="list-item"><div class="left">⚡ <span><b>Физика</b><br><small class="muted">Механика бойынша қосымша тапсырма</small></span></div><button class="btn btn-light" onclick="toast('Ұсынылған тапсырма ашылды')">Ашу</button></div>
-      <div class="list-item"><div class="left">📝 <span><b>Бүгінгі ұсыныс</b><br><small class="muted">20 сұрақтық тест тапсыру</small></span></div><button class="btn btn-light" onclick="toast('Тест ашылды')">Бастау</button></div>
+  <div class="dash-head">
+    <div>
+      <h1>Сәлем, <span id="helloName">оқушы</span>! 👋</h1>
+      <p class="muted">Өзіңізге қолайлы оқу тарифін таңдаңыз.</p>
     </div>
   </div>
-  <div class="panel"><h3>Менеджермен байланыс</h3><p class="muted">Тариф, курс немесе оқу туралы сұрағың болса, WhatsApp арқылы менеджерге жаз.</p><button class="btn btn-primary" style="width:100%" onclick="openWhatsApp('Менеджермен сөйлескім келеді')">💬 WhatsApp арқылы менеджерге жазу</button></div>
+
+  <div class="section-head" style="margin-bottom:18px;text-align:left">
+    <h2 style="margin-bottom:6px">Тарифтер</h2>
+    <p class="muted">Оқу форматыңызды таңдап, ALPHA платформасында оқуды бастаңыз.</p>
+  </div>
+
+  <div class="pricing" style="margin-bottom:22px">
+    <div class="price">
+      <h3>Online Start</h3>
+      <div class="amount">7 000 ₸<small>/ай</small></div>
+      <ul>
+        <li>Видео сабақ</li>
+        <li>Тест</li>
+        <li>Тапсырмалар</li>
+      </ul>
+      <button class="btn btn-light" style="width:100%" onclick="chooseTariff('start')">Таңдау</button>
+    </div>
+
+    <div class="price pop">
+      <span class="pill">ТАНЫМАЛ</span>
+      <h3>Online Plus</h3>
+      <div class="amount">12 000 ₸<small>/ай</small></div>
+      <ul>
+        <li>Толық онлайн</li>
+        <li>Мұғаліммен байланыс</li>
+        <li>Тест және аналитика</li>
+      </ul>
+      <button class="btn btn-primary" style="width:100%" onclick="chooseTariff('plus')">Таңдау</button>
+    </div>
+
+    <div class="price">
+      <h3>Offline</h3>
+      <div class="amount">20–30 мың ₸</div>
+      <ul>
+        <li>Оқу орталығындағы сабақ</li>
+        <li>Шағын топ</li>
+        <li>Мұғаліммен жұмыс</li>
+      </ul>
+      <button class="btn btn-light" style="width:100%" onclick="chooseTariff('offline')">Таңдау</button>
+    </div>
+
+    <div class="price">
+      <h3>Premium</h3>
+      <div class="amount">30–40 мың ₸</div>
+      <ul>
+        <li>Онлайн + офлайн</li>
+        <li>Жеке жоспар</li>
+        <li>Толық бақылау</li>
+      </ul>
+      <button class="btn btn-light" style="width:100%" onclick="chooseTariff('premium')">Таңдау</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Менеджермен байланыс</h3>
+    <p class="muted">Тариф, курс немесе оқу туралы сұрағыңыз болса, WhatsApp арқылы менеджерге жазыңыз.</p>
+    <button class="btn btn-primary" style="width:100%" onclick="openWhatsApp('Менеджермен сөйлескім келеді. Тариф бойынша ақпарат керек.')">
+      💬 WhatsApp арқылы менеджерге жазу
+    </button>
+  </div>
 </div>
 
 <div id="lessonsView" class="view">
