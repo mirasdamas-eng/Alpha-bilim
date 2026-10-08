@@ -291,6 +291,12 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
     <button data-view="teacherTests">📝 Тесттер</button>
     <button data-view="teacherAnalytics">📊 Аналитика</button>
   </div>
+  <div id="studentTasksMenu" class="menu" style="margin-top:10px">
+    <button data-view="lessonsView">📚 Сабақтар</button>
+    <button data-view="tasksView">📝 Тапсырмалар</button>
+    <button data-view="testsView">🧪 Тесттер</button>
+    <button data-view="errorsView">❌ Қателер</button>
+  </div>
   <div class="side-bottom"><button class="btn btn-light" style="width:100%" data-view="profileView">👤 Профиль</button></div>
 </aside>
 <main class="main">
@@ -308,6 +314,39 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
     </div>
   </div>
   <div class="panel"><h3>Менеджермен байланыс</h3><p class="muted">Тариф, курс немесе оқу туралы сұрағың болса, WhatsApp арқылы менеджерге жаз.</p><button class="btn btn-primary" style="width:100%" onclick="openWhatsApp('Менеджермен сөйлескім келеді')">💬 WhatsApp арқылы менеджерге жазу</button></div>
+</div>
+
+<div id="lessonsView" class="view">
+  <div class="dash-head"><div><h1>Сабақтар 📚</h1><p class="muted">Сізге арналған сабақтар мен оқу материалдары.</p></div></div>
+  <div class="panel"><h3>Оқу сабақтары</h3><div class="list-card">
+    <div class="list-item"><div class="left">📐 <span><b>Математика</b><br><small class="muted">Квадрат теңдеулер</small></span></div><button class="btn btn-light" onclick="toast('Сабақ ашылды')">Ашу</button></div>
+    <div class="list-item"><div class="left">⚡ <span><b>Физика</b><br><small class="muted">Механика негіздері</small></span></div><button class="btn btn-light" onclick="toast('Сабақ ашылды')">Ашу</button></div>
+  </div></div>
+</div>
+
+<div id="tasksView" class="view">
+  <div class="dash-head"><div><h1>Тапсырмалар 📝</h1><p class="muted">Орындалуы тиіс тапсырмаларыңыз.</p></div></div>
+  <div class="panel"><div class="list-card">
+    <div class="list-item"><div class="left">📐 <span><b>Математика</b><br><small class="muted">Квадрат теңдеулер бойынша тапсырма</small></span></div><button class="btn btn-light" onclick="toast('Тапсырма ашылды')">Орындау</button></div>
+    <div class="list-item"><div class="left">⚡ <span><b>Физика</b><br><small class="muted">Механика бойынша есептер</small></span></div><button class="btn btn-light" onclick="toast('Тапсырма ашылды')">Орындау</button></div>
+    <div class="list-item"><div class="left">📖 <span><b>Үй тапсырмасы</b><br><small class="muted">Бүгінгі оқу жоспары</small></span></div><button class="btn btn-light" onclick="toast('Тапсырма ашылды')">Орындау</button></div>
+  </div></div>
+</div>
+
+<div id="testsView" class="view">
+  <div class="dash-head"><div><h1>Тесттер 🧪</h1><p class="muted">Бақылау және дайындық тесттері.</p></div></div>
+  <div class="panel"><div class="list-card">
+    <div class="list-item"><span>📝 20 сұрақтық математика тесті</span><button class="btn btn-light" onclick="startTest()">Бастау</button></div>
+    <div class="list-item"><span>📝 Физика бойынша тест</span><button class="btn btn-light" onclick="startTest()">Бастау</button></div>
+  </div></div>
+</div>
+
+<div id="errorsView" class="view">
+  <div class="dash-head"><div><h1>Қателер ❌</h1><p class="muted">Қате жауаптарыңызды қарап, қайта жұмыс жасаңыз.</p></div></div>
+  <div class="panel"><div class="list-card">
+    <div class="list-item"><span>➗ Квадрат теңдеу — 2 қате</span><button class="btn btn-light" onclick="toast('Қате талдауы ашылды')">Талдау</button></div>
+    <div class="list-item"><span>⚡ Механика — 1 қате</span><button class="btn btn-light" onclick="toast('Қате талдауы ашылды')">Талдау</button></div>
+  </div></div>
 </div>
 
 <div id="progressView" class="view">
@@ -679,6 +718,7 @@ function showApp(name, role){
   $('helloName').textContent=(name||'Оқушы').split(' ')[0];
   $('userAvatar').textContent=(name||'А')[0]?.toUpperCase()||'А';
   $('studentMenu').style.display=(role==='teacher'||role==='parent')?'none':'block';
+  if($('studentTasksMenu')) $('studentTasksMenu').style.display=role==='student'?'block':'none';
   $('teacherMenu').style.display=role==='teacher'?'block':'none';
   document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
   $(role==='teacher'?'teacherDashboard':role==='parent'?'parentDashboard':'dashboard').classList.add('active');
