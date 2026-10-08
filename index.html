@@ -451,6 +451,7 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
     <div id="phoneField" class="field" style="display:none"><label>Телефон нөмірі</label><input id="phone" type="tel" placeholder="+7 (777) 777 7777" oninput="formatPhone(this)" maxlength="16"></div>
     <div id="roleField" class="field" style="display:none"><label>Кім ретінде тіркелесіз?</label><select id="role" onchange="updateAuthRole()"><option value="student">Оқушы</option><option value="parent">Ата-ана</option><option value="teacher">Мұғалім</option></select></div>
     <div class="field"><label>Email</label><input id="email" type="email" placeholder="you@example.com"></div>
+    <div id="passwordField" class="field"><label>Құпиясөз</label><input id="password" type="password" placeholder="••••••••"></div>
     
     <div id="classField" class="field" style="display:none"><label id="gradeLabel">Сынып</label><select id="grade"><option>5-сынып</option><option>6-сынып</option><option>7-сынып</option><option>8-сынып</option><option>9-сынып</option><option>10-сынып</option><option>11-сынып</option></select></div>
     <div id="childDataField" style="display:none">
@@ -507,7 +508,7 @@ function toggleAuth(){authMode=authMode==='login'?'register':'login';updateAuth(
 function updateAuth(){
   const reg=authMode==='register';
   $('loginTitle').textContent=reg?'Тіркелу':'Кіру';
-  $('loginSub').textContent=reg?'Жеке оқу кабинетін жасаңыз.':'Email арқылы парольсіз кіріңіз.';
+  $('loginSub').textContent=reg?'Жеке оқу кабинетін жасаңыз.':'Жеке оқу кабинетіңізге кіріңіз.';
   $('nameField').style.display=reg?'block':'none';
   if($('patronymicField')) $('patronymicField').style.display=reg?'block':'none';
   if($('surnameField')) $('surnameField').style.display=reg?'block':'none';
@@ -597,7 +598,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 function submitAuth(){
   const email=$('email').value.trim().toLowerCase();
-  const pass='';
+  const pass=$('password').value.trim();
   const firstName=$('firstName')?.value.trim()||'';
   const patronymic=$('patronymic')?.value.trim()||'';
   const surname=$('surname')?.value.trim()||'';
@@ -609,8 +610,8 @@ function submitAuth(){
   const childGrade=$('childGrade')?.value||'';
   const name=[firstName,surname].filter(Boolean).join(' ') || firstName || surname;
 
-  if(!email || (authMode==='register'&&(!firstName||!phone))){
-    showError(authMode==='register'?'Email, аты және телефон міндетті.':'Email міндетті.');return;
+  if(!email || !pass || (authMode==='register'&&(!firstName||!phone))){
+    showError(authMode==='register'?'Email, құпиясөз, аты және телефон міндетті.':'Email және құпиясөз міндетті.');return;
   }
   if(!email.includes('@')){showError('Email дұрыс енгізілмеген.');return}
   if(authMode==='register' && !/^\+7\s?\(\d{3}\)\s?\d{3}\s?\d{4}$/.test(phone)){
@@ -641,8 +642,8 @@ function submitAuth(){
     return;
   }
 
-  const user=users.find(u=>u.email===email);
-  if(!user){showError('Бұл email тіркелмеген. Алдымен тіркеліңіз.');return}
+  const user=users.find(u=>u.email===email && u.password===pass);
+  if(!user){showError('Email немесе құпиясөз қате.');return}
   syncCurrentUser(user);
   closeLogin();
   showApp(user.name,user.role);
