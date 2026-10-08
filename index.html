@@ -330,7 +330,7 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
     <div class="list-item"><span>👤 Аты-жөні</span><b id="profileFullName">—</b></div>
     <div class="list-item"><span>📧 Email</span><b id="profileEmail">—</b></div>
     <div class="list-item"><span>📱 Телефон</span><b id="profilePhone">—</b></div>
-    <div class="list-item"><span>🎓 Сынып</span><b id="profileGrade">—</b></div>
+    <div id="profileGradeRow" class="list-item"><span>🎓 Сынып</span><b id="profileGrade">—</b></div>
     <div class="list-item"><span>👥 Рөлі</span><b id="profileRole">—</b></div>
   </div><button class="btn btn-danger" style="width:100%;margin-top:18px" onclick="logout()">Шығу</button></div>
 </div>
@@ -666,6 +666,7 @@ function showApp(name, role){
   if($('profileEmail')) $('profileEmail').textContent=current?.email||'—';
   if($('profilePhone')) $('profilePhone').textContent=current?.phone||'—';
   if($('profileGrade')) $('profileGrade').textContent=current?.grade||'—';
+  if($('profileGradeRow')) $('profileGradeRow').style.display=role==='teacher'?'none':'';
   if($('profileRole')) $('profileRole').textContent=current?.role==='teacher'?'Мұғалім':current?.role==='parent'?'Ата-ана':'Оқушы';
   if(role==='parent' && current?.child){
     const ch=current.child;
