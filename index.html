@@ -281,6 +281,7 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
 <aside class="sidebar">
   <div class="logo side-logo"><span class="logo-mark">A</span><span>ALPHA</span></div>
   <div id="studentMenu" class="menu">
+    <button class="active" data-view="dashboard">🏠 Басты бет</button>
     <button data-view="olympiadView">🏆 Олимпиада</button>
     <button data-view="planView">📋 Менің жоспарым</button>
     <button data-view="examView">📝 Емтихан</button>
@@ -417,6 +418,74 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
       <div class="subject"><div class="subject-icon">🇬🇧</div><div class="subject-main"><b>Ағылшын</b><small>Мақсат: 85%</small></div><b>71%</b></div>
     </div>
     <div class="panel"><h3>Бүгінгі жоспар</h3><div class="list-card"><div class="list-item"><div class="left">🎥 <span>Квадрат теңдеулер</span></div><span class="pill">Видео</span></div><div class="list-item"><div class="left">📝 <span>Математика тесті</span></div><span class="pill">20 сұрақ</span></div><div class="list-item"><div class="left">🔁 <span>Қате тақырыптарды қайталау</span></div><span class="pill">15 мин</span></div></div></div>
+  </div>
+</div>
+
+<!-- ===== STUDENT SPECIAL SECTIONS ===== -->
+<div id="olympiadView" class="view">
+  <div class="dash-head"><div><h1>Олимпиада 🏆</h1><p class="muted">Пәндер бойынша олимпиадалық есептерді орындап, нәтижеңді тексер.</p></div></div>
+  <div class="stats">
+    <div class="stat"><span>Қолжетімді олимпиадалар</span><b>12</b></div>
+    <div class="stat"><span>Қатысқаным</span><b>4</b></div>
+    <div class="stat"><span>Ең жоғары нәтиже</span><b>86%</b></div>
+    <div class="stat"><span>Деңгейім</span><b>Жақсы</b></div>
+  </div>
+  <div class="panel" style="margin-top:18px">
+    <h3>Олимпиада бағыттары</h3>
+    <div class="list-card">
+      <div class="list-item"><div class="left">📐 <span><b>Математика</b><br><small class="muted">20 күрделі есеп • 30 минут</small></span></div><button class="btn btn-primary" onclick="toast('Математика олимпиадасы жақында ашылады')">Бастау</button></div>
+      <div class="list-item"><div class="left">💻 <span><b>Информатика</b><br><small class="muted">Алгоритмдер • логика • есептер</small></span></div><button class="btn btn-primary" onclick="toast('Информатика олимпиадасы жақында ашылады')">Бастау</button></div>
+      <div class="list-item"><div class="left">🧪 <span><b>Жаратылыстану</b><br><small class="muted">Теория + олимпиадалық тапсырмалар</small></span></div><button class="btn btn-primary" onclick="toast('Жаратылыстану олимпиадасы жақында ашылады')">Бастау</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="planView" class="view">
+  <div class="dash-head"><div><h1>Менің жоспарым 📋</h1><p class="muted">Бүгінгі және осы аптадағы оқу қадамдарың.</p></div><button class="btn btn-primary" onclick="toast('Жеке жоспар диагностика нәтижесіне қарай жаңартылады')">Жоспарды жаңарту</button></div>
+  <div class="panel">
+    <h3>Бүгін орындау керек</h3>
+    <div class="list-card">
+      <div class="list-item"><div class="left">📐 <span><b>Математика</b><br><small class="muted">Квадрат теңдеулер • 25 минут</small></span></div><span class="pill">1-қадам</span></div>
+      <div class="list-item"><div class="left">📝 <span><b>Тақырыптық тест</b><br><small class="muted">10 сұрақ • 15 минут</small></span></div><span class="pill">2-қадам</span></div>
+      <div class="list-item"><div class="left">❌ <span><b>Қателерді қайталау</b><br><small class="muted">Соңғы тесттегі қате сұрақтар</small></span></div><span class="pill">3-қадам</span></div>
+    </div>
+  </div>
+  <div class="panel" style="margin-top:18px"><h3>Апталық мақсат</h3><div class="progress-row"><span>Оқу жоспарының орындалуы</span><b>65%</b></div><div class="progress"><i style="width:65%"></i></div></div>
+</div>
+
+<div id="examView" class="view">
+  <div class="dash-head"><div><h1>Емтихан 📝</h1><p class="muted">Мектеп емтиханына дайындалуға арналған бөлім.</p></div></div>
+  <div class="stats">
+    <div class="stat"><span>Пәндер</span><b>4</b></div>
+    <div class="stat"><span>Сынақ тесті</span><b>8</b></div>
+    <div class="stat"><span>Орташа балл</span><b>74%</b></div>
+    <div class="stat"><span>Дайындық</span><b>Орташа</b></div>
+  </div>
+  <div class="panel" style="margin-top:18px">
+    <h3>Емтихан пәндері</h3>
+    <div class="list-card">
+      <div class="list-item"><div class="left">📐 <span><b>Математика</b><br><small class="muted">Бақылау тесті • 25 сұрақ</small></span></div><button class="btn btn-light" onclick="startTest()">Сынақ тапсыру</button></div>
+      <div class="list-item"><div class="left">📚 <span><b>Қазақ тілі</b><br><small class="muted">Емтихан форматы • 20 сұрақ</small></span></div><button class="btn btn-light" onclick="startTest()">Сынақ тапсыру</button></div>
+      <div class="list-item"><div class="left">🌍 <span><b>Қазақстан тарихы</b><br><small class="muted">Қайталау тесті • 20 сұрақ</small></span></div><button class="btn btn-light" onclick="startTest()">Сынақ тапсыру</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="untView" class="view">
+  <div class="dash-head"><div><h1>ҰБТ 🎯</h1><p class="muted">ҰБТ-ға дайындық, пробный тест және нәтиже талдауы.</p></div><button class="btn btn-primary" onclick="startTest()">Пробный тест</button></div>
+  <div class="stats">
+    <div class="stat"><span>Соңғы нәтиже</span><b>87</b></div>
+    <div class="stat"><span>Мақсат</span><b>120+</b></div>
+    <div class="stat"><span>Дайындық</span><b>73%</b></div>
+    <div class="stat"><span>Пробный тест</span><b>6</b></div>
+  </div>
+  <div class="panel" style="margin-top:18px">
+    <h3>ҰБТ бөлімдері</h3>
+    <div class="list-card">
+      <div class="list-item"><div class="left">📚 <span><b>Міндетті пәндер</b><br><small class="muted">Қазақстан тарихы • Оқу сауаттылығы • Математикалық сауаттылық</small></span></div><span class="pill">Дайындалу</span></div>
+      <div class="list-item"><div class="left">📐 <span><b>Бейіндік пәндер</b><br><small class="muted">Жеке таңдаған бағытың бойынша дайындық</small></span></div><span class="pill">Курс</span></div>
+      <div class="list-item"><div class="left">📊 <span><b>Нәтиже талдауы</b><br><small class="muted">Әлсіз тақырыптар мен қате сұрақтарды талдау</small></span></div><button class="btn btn-light" onclick="toast('ҰБТ нәтижелер талдауы ашылады')">Талдау</button></div>
+    </div>
   </div>
 </div>
 
@@ -827,7 +896,7 @@ function showApp(name, role){
   $('helloName').textContent=(name||'Оқушы').split(' ')[0];
   $('userAvatar').textContent=(name||'А')[0]?.toUpperCase()||'А';
   $('studentMenu').style.display=(role==='teacher'||role==='parent')?'none':'block';
-  if($('studentTasksMenu')) $('studentTasksMenu').style.display=role==='student'?'block':'none';
+  if($('studentTasksMenu')) $('studentTasksMenu').style.display='none';
   $('teacherMenu').style.display=role==='teacher'?'block':'none';
   document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
   $(role==='teacher'?'teacherDashboard':role==='parent'?'parentDashboard':'dashboard').classList.add('active');
