@@ -571,12 +571,15 @@ function updateAuthRole(){
 }
 
 function formatPhone(input){
+  // Телефон әр өзгерген сайын тек сандарды алып, форматты қайта құрамыз.
+  // Сондықтан өшіргенде жақша да, ішіндегі цифрлар да бірге жоғалады.
   let digits=input.value.replace(/\D/g,'');
   if(digits.startsWith('8')) digits='7'+digits.slice(1);
   if(digits.startsWith('7')) digits=digits.slice(1);
   digits=digits.slice(0,10);
+
   let out='+7';
-  if(digits.length) out+=' ('+digits.slice(0,3);
+  if(digits.length>0) out+='('+digits.slice(0,3);
   if(digits.length>=3) out+=')';
   if(digits.length>3) out+=' '+digits.slice(3,6);
   if(digits.length>6) out+=' '+digits.slice(6,10);
@@ -587,9 +590,49 @@ document.addEventListener('DOMContentLoaded',()=>{
   const phone=$('phone');
   if(phone){
     phone.addEventListener('focus',()=>{
-      if(!phone.value.trim()) phone.value='+7 (';
+      if(!phone.value.trim()) phone.value='+7';
     });
     phone.addEventListener('input',()=>formatPhone(phone));
+
+    // Backspace/Delete кезінде формат таңбаларын "қатып" қалдырмаймыз.
+    phone.addEventListener('keydown',(e)=>{
+      if(e.key!=='Backspace' && e.key!=='Delete') return;
+      const value=phone.value;
+      const start=phone.selectionStart ?? value.length;
+      const end=phone.selectionEnd ?? value.length;
+
+      // Тек +7 қалып, қалған нөмір өшірілсе — +7 күйінде қалады.
+      if(start<=2 && end<=2 && e.key==='Backspace'){
+        e.preventDefault();
+        phone.value='+7';
+        phone.setSelectionRange(2,2);
+        return;
+      }
+
+      // Формат таңбасын өшіруге әрекет жасалса, оның жанындағы цифрды да
+      // алып тастап, қайта форматтаймыз.
+      if(start===end){
+        let digits=value.replace(/\D/g,'');
+        if(digits.startsWith('7')) digits=digits.slice(1);
+
+        let pos=start-2; // +7-ден кейінгі позиция
+        if(e.key==='Backspace') pos--;
+        if(pos>=0 && pos<digits.length){
+          digits=digits.slice(0,pos)+digits.slice(pos+1);
+        }
+        let out='+7';
+        if(digits.length>0) out+='('+digits.slice(0,3);
+        if(digits.length>=3) out+=')';
+        if(digits.length>3) out+=' '+digits.slice(3,6);
+        if(digits.length>6) out+=' '+digits.slice(6,10);
+        phone.value=out;
+        e.preventDefault();
+
+        // Курсорды өшірілген цифрдың орнына жуықтап қоямыз.
+        let cursor=Math.min(2+Math.max(0,pos),phone.value.length);
+        phone.setSelectionRange(cursor,cursor);
+      }
+    });
   }
 });
 function submitAuth(){
