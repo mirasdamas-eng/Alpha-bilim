@@ -486,6 +486,34 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
 let authMode='login';
 const $=id=>document.getElementById(id);
 
+const USERS_KEY='alphaUsers';
+const CURRENT_USER_KEY='alphaCurrentUserId';
+
+function getUsers(){
+  try{return JSON.parse(localStorage.getItem(USERS_KEY)||'[]')}catch(e){return []}
+}
+function saveUsers(users){localStorage.setItem(USERS_KEY,JSON.stringify(users))}
+function getCurrentUser(){
+  const id=localStorage.getItem(CURRENT_USER_KEY);
+  if(!id) return null;
+  return getUsers().find(u=>u.id===id)||null;
+}
+function syncCurrentUser(u){
+  if(!u) return;
+  localStorage.setItem(CURRENT_USER_KEY,u.id);
+  localStorage.setItem('alphaLogged','1');
+  localStorage.setItem('alphaName',u.name||'Оқушы');
+  localStorage.setItem('alphaFirstName',u.firstName||'');
+  localStorage.setItem('alphaPatronymic',u.patronymic||'');
+  localStorage.setItem('alphaSurname',u.surname||'');
+  localStorage.setItem('alphaRole',u.role||'student');
+  localStorage.setItem('alphaPhone',u.phone||'');
+  localStorage.setItem('alphaGrade',u.grade||'');
+}
+function clearLegacySession(){
+  ['alphaName','alphaFirstName','alphaPatronymic','alphaSurname','alphaRole','alphaPhone','alphaGrade','alphaLogged'].forEach(k=>localStorage.removeItem(k));
+  localStorage.removeItem(CURRENT_USER_KEY);
+}
 function openLogin(mode='login'){
   authMode=mode;
   $('loginOverlay').style.display='flex';
@@ -508,53 +536,108 @@ function updateAuth(){
   $('loginError').style.display='none';
 }
 function submitAuth(){
-  const email=$('email').value.trim(), pass=$('password').value.trim();
-  const firstName=$('firstName')?.value.trim()||'', patronymic=$('patronymic')?.value.trim()||'', surname=$('surname')?.value.trim()||'';
+  const email=$('email').value.trim().toLowerCase();
+  const pass=$('password').value.trim();
+  const firstName=$('firstName')?.value.trim()||'';
+  const patronymic=$('patronymic')?.value.trim()||'';
+  const surname=$('surname')?.value.trim()||'';
   const name=[firstName,patronymic,surname].filter(Boolean).join(' ');
-  const phone=$('phone').value.trim(), role=$('role').value, grade=$('grade').value;
-  if(!email || !pass || (authMode==='register'&&(!firstName||!patronymic||!surname||!phone))){showError('Барлық міндетті жолдарды толтырыңыз.');return}
+  const phone=$('phone').value.trim();
+  const role=$('role').value;
+  const grade=$('grade').value;
+
+  if(!email || !pass || (authMode==='register'&&(!firstName||!patronymic||!surname||!phone))){
+    showError('Барлық міндетті жолдарды толтырыңыз.');return;
+  }
   if(!email.includes('@')){showError('Email дұрыс енгізілмеген.');return}
-  if(authMode==='register' && !/^\\+?7[0-9 ()-]{9,}$/.test(phone)){showError('Телефон нөмірін дұрыс енгізіңіз. Мысалы: +7 700 123 45 67');return}
-  const userName=authMode==='register'?name:(localStorage.getItem('alphaName')||'Оқушы');
-  const userRole=authMode==='register'?role:(localStorage.getItem('alphaRole')||'student');
-  localStorage.setItem('alphaName',userName);
-  localStorage.setItem('alphaFirstName',firstName);
-  localStorage.setItem('alphaPatronymic',patronymic);
-  localStorage.setItem('alphaSurname',surname);
-  localStorage.setItem('alphaRole',userRole);
-  localStorage.setItem('alphaPhone',phone);
-  localStorage.setItem('alphaGrade',grade);
-  localStorage.setItem('alphaLogged','1');
-  closeLogin(); showApp(userName,userRole); toast(userRole==='teacher'?'Мұғалім кабинеті ашылды! 👨‍🏫':'Оқушы кабинеті ашылды! 🎓');
+  if(authMode==='register' && !/^\\+?7[0-9 ()-]{9,}$/.test(phone)){
+    showError('Телефон нөмірін дұрыс енгізіңіз. Мысалы: +7 700 123 45 67');return;
+  }
+
+  const users=getUsers();
+
+  if(authMode==='register'){
+    if(users.some(u=>u.email===email)){
+      showError('Бұл email бұрын тіркелген. Кіру бөлімінен кіріңіз.');return;
+    }
+    const user={
+      id:'u_'+Date.now()+'_'+Math.random().toString(36).slice(2,8),
+      email, password:pass, name, firstName, patronymic, surname,
+      phone, role, grade, createdAt:new Date().toISOString()
+    };
+    users.push(user);
+    saveUsers(users);
+    syncCurrentUser(user);
+    closeLogin();
+    showApp(user.name,user.role);
+    toast(user.role==='teacher'?'Мұғалім кабинеті ашылды! 👨‍🏫':'Оқушы кабинеті ашылды! 🎓');
+    return;
+  }
+
+  const user=users.find(u=>u.email===email && u.password===pass);
+  if(!user){
+    showError('Email немесе құпиясөз қате.');return;
+  }
+  syncCurrentUser(user);
+  closeLogin();
+  showApp(user.name,user.role);
+  toast(user.role==='teacher'?'Мұғалім кабинеті ашылды! 👨‍🏫':'Жеке профиліңіз ашылды! 🎓');
 }
 function showError(t){$('loginError').textContent=t;$('loginError').style.display='block'}
 function showApp(name, role){
-  role=role||localStorage.getItem('alphaRole')||'student';
-  $('landing').style.display='none';$('app').style.display='block';
-  $('userName').textContent=name;$('helloName').textContent=name.split(' ')[0];$('userAvatar').textContent=name[0]?.toUpperCase()||'А';
+  const current=getCurrentUser();
+  if(current){
+    name=current.name;
+    role=current.role||'student';
+    syncCurrentUser(current);
+  }else{
+    role=role||'student';
+  }
+  $('landing').style.display='none';
+  $('app').style.display='block';
+  $('userName').textContent=name||'Оқушы';
+  $('helloName').textContent=(name||'Оқушы').split(' ')[0];
+  $('userAvatar').textContent=(name||'А')[0]?.toUpperCase()||'А';
   $('studentMenu').style.display=role==='teacher'?'none':'block';
   $('teacherMenu').style.display=role==='teacher'?'block':'none';
   document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
   $(role==='teacher'?'teacherDashboard':'dashboard').classList.add('active');
   document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));
-  const first=(role==='teacher'?$('teacherMenu'):$('studentMenu')).querySelector('button');
+  const menu=role==='teacher'?$('teacherMenu'):$('studentMenu');
+  const first=menu?.querySelector('button');
   if(first) first.classList.add('active');
   window.scrollTo(0,0);
 }
-function logout(){localStorage.removeItem('alphaLogged');$('app').style.display='none';$('landing').style.display='block';window.scrollTo(0,0);toast('Аккаунттан шықтыңыз')}
-function toast(msg){const t=$('toast');t.textContent=msg;t.style.display='block';clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.style.display='none',2600)}
+function logout(){
+  clearLegacySession();
+  $('app').style.display='none';
+  $('landing').style.display='block';
+  window.scrollTo(0,0);
+  toast('Аккаунттан шықтыңыз');
+}
+function toast(msg){
+  const t=$('toast');t.textContent=msg;t.style.display='block';
+  clearTimeout(window.toastTimer);
+  window.toastTimer=setTimeout(()=>t.style.display='none',2600);
+}
 document.querySelectorAll('.menu button').forEach(btn=>btn.addEventListener('click',()=>{
- document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');
- document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));$(btn.dataset.view).classList.add('active');
- window.scrollTo(0,0);
+  document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  $(btn.dataset.view).classList.add('active');
+  window.scrollTo(0,0);
 }));
 function startTest(){toast('Тест интерфейсі демо режимінде ашылды. Нақты сұрақтар базасын кейін қосуға болады.')}
 function sendMessage(){const m=$('message').value.trim();if(!m){toast('Алдымен хабарлама жазыңыз');return}$('message').value='';toast('Хабарлама мұғалімге жіберілді ✓')}
 function searchContent(v){if(v.trim())toast('Іздеу: '+v)}
 window.addEventListener('keydown',e=>{if(e.key==='Escape')closeLogin()});
-if(localStorage.getItem('alphaLogged')==='1')showApp(localStorage.getItem('alphaName')||'Оқушы',localStorage.getItem('alphaRole')||'student');
 
-
+const initialUser=getCurrentUser();
+if(initialUser){
+  showApp(initialUser.name,initialUser.role);
+}else if(localStorage.getItem('alphaLogged')==='1'){
+  clearLegacySession();
+}
 function openWhatsApp(message){
   const text=encodeURIComponent(message + '\nALPHA білім платформасы туралы ақпарат алғым келеді.');
   window.open('https://wa.me/?text='+text,'_blank','noopener,noreferrer');
