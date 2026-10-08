@@ -308,68 +308,66 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
   <div class="dash-head">
     <div>
       <h1>Сәлем, <span id="helloName">оқушы</span>! 👋</h1>
-      <p class="muted">Өзіңізге қолайлы оқу тарифін таңдаңыз.</p>
+      <p class="muted">Курстарды таңда, сабақтарды баста және нәтижелеріңді бақыла.</p>
+    </div>
+    <button class="btn btn-primary" onclick="toast('Диагностика тесті жақында ашылады')">Диагностика тапсыру</button>
+  </div>
+
+  <div class="my-courses">
+    <div class="courses-heading">
+      <div>
+        <div class="section-kicker">ОҚУШЫ КАБИНЕТІ</div>
+        <h2 style="margin:4px 0">Менің курстарым</h2>
+        <p class="muted" style="margin:0">Тегін сабақтарды бірден көр. Толық курстарға жазылу үшін тарифті таңда немесе WhatsApp арқылы байланыс.</p>
+      </div>
+      <button class="btn btn-light" onclick="openTariffModal()">Тарифтерді көру</button>
+    </div>
+
+    <div class="course-grid">
+      <div class="course-card free-video-card" style="background:linear-gradient(135deg,#eef6ff,#e8f0ff);border-color:#b8dfcf">
+        <div class="course-top">
+          <span class="course-tag free">✓ ТЕГІН</span>
+          <b>0 ₸</b>
+        </div>
+        <div class="course-icon" style="font-size:40px;text-align:center;margin:16px 0">🎥</div>
+        <h3>Тегін видео сабақтар</h3>
+        <p>5–11 сыныптарға арналған таныстыру және базалық тақырыптар. Тегін видеоларға қазір қолжетімділік бар.</p>
+        <button class="btn btn-primary" style="width:100%" onclick="document.querySelector('[data-view=&quot;lessonsView&quot;]')?.click()">Видео сабақтарды көру →</button>
+      </div>
+
+      <div class="course-card" style="background:linear-gradient(135deg,#f3efff,#e8e0ff)">
+        <div class="course-top"><span class="course-tag">ONLINE START</span><b>7 000 ₸/ай</b></div>
+        <div class="course-icon" style="font-size:40px;text-align:center;margin:16px 0">📐</div>
+        <h3>Математика — толық курс</h3>
+        <p>Толық сабақтар, тесттер, үй тапсырмалары және жеке оқу жоспары.</p>
+        <button class="btn btn-primary" style="width:100%" onclick="openTariffModal()">Тариф таңдау →</button>
+        <button class="btn" style="width:100%;margin-top:8px;background:#ecfff3;color:#16834a;border:1px solid #cdeed9" onclick="openWhatsApp('Математика толық курсына жазылғым келеді')">💬 WhatsApp арқылы жазылу</button>
+      </div>
+
+      <div class="course-card" style="background:linear-gradient(135deg,#e8f7ff,#dff3ff)">
+        <div class="course-top"><span class="course-tag">ONLINE PLUS</span><b>12 000 ₸/ай</b></div>
+        <div class="course-icon" style="font-size:40px;text-align:center;margin:16px 0">🚀</div>
+        <h3>Кеңейтілген дайындық</h3>
+        <p>Тереңдетілген материалдар, қателер талдауы, қосымша тапсырмалар және прогресс.</p>
+        <button class="btn btn-primary" style="width:100%" onclick="openTariffModal()">Тариф таңдау →</button>
+        <button class="btn" style="width:100%;margin-top:8px;background:#ecfff3;color:#16834a;border:1px solid #cdeed9" onclick="openWhatsApp('Кеңейтілген дайындыққа жазылғым келеді')">💬 WhatsApp арқылы жазылу</button>
+      </div>
+
+      <div class="course-card" style="background:linear-gradient(135deg,#fff4d8,#fff0c5)">
+        <div class="course-top"><span class="course-tag">ҰБТ</span><b>Арнайы тариф</b></div>
+        <div class="course-icon" style="font-size:40px;text-align:center;margin:16px 0">🎯</div>
+        <h3>ҰБТ дайындық курсы</h3>
+        <p>ҰБТ форматына дайындық, сынақ тестері және нәтижені талдау.</p>
+        <button class="btn btn-primary" style="width:100%" onclick="openTariffModal()">Тарифті көру →</button>
+        <button class="btn" style="width:100%;margin-top:8px;background:#ecfff3;color:#16834a;border:1px solid #cdeed9" onclick="openWhatsApp('ҰБТ дайындық курсы туралы ақпарат керек')">💬 WhatsApp арқылы жазылу</button>
+      </div>
     </div>
   </div>
 
-  <div class="section-head" style="margin-bottom:18px;text-align:left">
-    <h2 style="margin-bottom:6px">Тарифтер</h2>
-    <p class="muted">Оқу форматыңызды таңдап, ALPHA платформасында оқуды бастаңыз.</p>
-  </div>
-
-  <div class="pricing" style="margin-bottom:22px">
-    <div class="price">
-      <h3>Online Start</h3>
-      <div class="amount">7 000 ₸<small>/ай</small></div>
-      <ul>
-        <li>Видео сабақ</li>
-        <li>Тест</li>
-        <li>Тапсырмалар</li>
-      </ul>
-      <button class="btn btn-light" style="width:100%" onclick="chooseTariff('start')">Таңдау</button>
-    </div>
-
-    <div class="price pop">
-      <span class="pill">ТАНЫМАЛ</span>
-      <h3>Online Plus</h3>
-      <div class="amount">12 000 ₸<small>/ай</small></div>
-      <ul>
-        <li>Толық онлайн</li>
-        <li>Мұғаліммен байланыс</li>
-        <li>Тест және аналитика</li>
-      </ul>
-      <button class="btn btn-primary" style="width:100%" onclick="chooseTariff('plus')">Таңдау</button>
-    </div>
-
-    <div class="price">
-      <h3>Offline</h3>
-      <div class="amount">20–30 мың ₸</div>
-      <ul>
-        <li>Оқу орталығындағы сабақ</li>
-        <li>Шағын топ</li>
-        <li>Мұғаліммен жұмыс</li>
-      </ul>
-      <button class="btn btn-light" style="width:100%" onclick="chooseTariff('offline')">Таңдау</button>
-    </div>
-
-    <div class="price">
-      <h3>Premium</h3>
-      <div class="amount">30–40 мың ₸</div>
-      <ul>
-        <li>Онлайн + офлайн</li>
-        <li>Жеке жоспар</li>
-        <li>Толық бақылау</li>
-      </ul>
-      <button class="btn btn-light" style="width:100%" onclick="chooseTariff('premium')">Таңдау</button>
-    </div>
-  </div>
-
-  <div class="panel">
+  <div class="panel" style="margin-top:20px">
     <h3>Менеджермен байланыс</h3>
-    <p class="muted">Тариф, курс немесе оқу туралы сұрағыңыз болса, WhatsApp арқылы менеджерге жазыңыз.</p>
-    <button class="btn btn-primary" style="width:100%" onclick="openWhatsApp('Менеджермен сөйлескім келеді. Тариф бойынша ақпарат керек.')">
-      💬 WhatsApp арқылы менеджерге жазу
-    </button>
+    <p class="muted">Тариф, курс немесе оқу туралы сұрақ болса, WhatsApp арқылы менеджерге жазыңыз.</p>
+    <button class="btn btn-primary" style="width:100%" onclick="openWhatsApp('Менеджермен сөйлескім келеді')">💬 WhatsApp арқылы менеджерге жазу</button>
   </div>
 </div>
 
