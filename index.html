@@ -375,6 +375,24 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
 </div>
 
 
+<div id="parentDashboard" class="view">
+  <div class="dash-head"><div><h1>Ата-ана кабинеті 👨‍👩‍👧</h1><p class="muted">Балаңыздың оқу нәтижесін осы жерден бақылаңыз.</p></div></div>
+  <div class="stats">
+    <div class="stat"><span>Бала</span><b id="parentChildName">—</b></div>
+    <div class="stat"><span>Сынып</span><b id="parentChildGrade">—</b></div>
+    <div class="stat"><span>Прогресс</span><b>—</b></div>
+    <div class="stat"><span>Үй тапсырмасы</span><b>—</b></div>
+  </div>
+  <div class="panel" style="margin-top:20px">
+    <h3>Баланың деректері</h3>
+    <p class="muted">Тіркелу кезінде енгізілген бала туралы ақпарат.</p>
+    <div class="list-card">
+      <div class="list-item"><span>👤 Аты-жөні</span><b id="parentChildFullName">—</b></div>
+      <div class="list-item"><span>🎓 Сыныбы</span><b id="parentChildGrade2">—</b></div>
+    </div>
+  </div>
+</div>
+
 <div id="teacherDashboard" class="view">
   <div class="dash-head"><div><h1>Мұғалім кабинеті 👨‍🏫</h1><p class="muted">Оқушыларды, сабақтарды және нәтижелерді басқару.</p></div><button class="btn btn-primary" onclick="toast('Жаңа сабақ құру терезесі ашылды')">+ Сабақ қосу</button></div>
   <div class="stats">
@@ -471,10 +489,15 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
     <p id="loginSub">Жеке оқу кабинетіге кіріңіз.</p>
     <div id="nameField" class="field" style="display:none"><label>Аты</label><input id="firstName" placeholder="Мысалы: Аян"></div><div id="patronymicField" class="field" style="display:none"><label>Әкесінің аты</label><input id="patronymic" placeholder="Мысалы: Ермекұлы"></div><div id="surnameField" class="field" style="display:none"><label>Фамилия</label><input id="surname" placeholder="Мысалы: Ахметов"></div>
     <div id="phoneField" class="field" style="display:none"><label>Телефон нөмірі</label><input id="phone" type="tel" placeholder="+7 700 123 45 67"></div>
-    <div id="roleField" class="field" style="display:none"><label>Кім ретінде тіркелесіз?</label><select id="role"><option value="student">Оқушы</option><option value="teacher">Мұғалім</option></select></div>
+    <div id="roleField" class="field" style="display:none"><label>Кім ретінде тіркелесіз?</label><select id="role" onchange="updateAuthRole()"><option value="student">Оқушы</option><option value="parent">Ата-ана</option><option value="teacher">Мұғалім</option></select></div>
     <div class="field"><label>Email</label><input id="email" type="email" placeholder="you@example.com"></div>
     <div class="field"><label>Құпиясөз</label><input id="password" type="password" placeholder="••••••••"></div>
-    <div id="classField" class="field" style="display:none"><label>Сынып</label><select id="grade"><option>5-сынып</option><option>6-сынып</option><option>7-сынып</option><option>8-сынып</option><option>9-сынып</option><option>10-сынып</option><option>11-сынып</option></select></div>
+    <div id="classField" class="field" style="display:none"><label id="gradeLabel">Сынып</label><select id="grade"><option>5-сынып</option><option>6-сынып</option><option>7-сынып</option><option>8-сынып</option><option>9-сынып</option><option>10-сынып</option><option>11-сынып</option></select></div>
+    <div id="childDataField" style="display:none">
+      <div class="field"><label>Балаңыздың аты *</label><input id="childFirstName" placeholder="Мысалы: Аян"></div>
+      <div class="field"><label>Балаңыздың фамилиясы *</label><input id="childSurname" placeholder="Мысалы: Ахметов"></div>
+      <div class="field"><label>Балаңыздың сыныбы *</label><select id="childGrade"><option>5-сынып</option><option>6-сынып</option><option>7-сынып</option><option>8-сынып</option><option>9-сынып</option><option>10-сынып</option><option>11-сынып</option></select></div>
+    </div>
     <div class="error" id="loginError"></div>
     <button class="btn btn-primary login-submit" onclick="submitAuth()">Жалғастыру →</button>
     <div class="switch"><span id="switchText">Аккаунтыңыз жоқ па?</span> <a onclick="toggleAuth()">Тіркелу</a></div>
@@ -524,16 +547,26 @@ function toggleAuth(){authMode=authMode==='login'?'register':'login';updateAuth(
 function updateAuth(){
   const reg=authMode==='register';
   $('loginTitle').textContent=reg?'Тіркелу':'Кіру';
-  $('loginSub').textContent=reg?'Жеке оқу кабинетін жасаңыз.':'Жеке оқу кабинетіге кіріңіз.';
+  $('loginSub').textContent=reg?'Жеке оқу кабинетін жасаңыз.':'Жеке оқу кабинетіңізге кіріңіз.';
   $('nameField').style.display=reg?'block':'none';
   if($('patronymicField')) $('patronymicField').style.display=reg?'block':'none';
   if($('surnameField')) $('surnameField').style.display=reg?'block':'none';
   $('phoneField').style.display=reg?'block':'none';
   $('roleField').style.display=reg?'block':'none';
   $('classField').style.display=reg?'block':'none';
+  $('childDataField').style.display=reg && $('role').value==='parent'?'block':'none';
+  updateAuthRole();
   $('switchText').textContent=reg?'Аккаунтыңыз бар ма?':'Аккаунтыңыз жоқ па?';
   document.querySelector('.switch a').textContent=reg?'Кіру':'Тіркелу';
   $('loginError').style.display='none';
+}
+function updateAuthRole(){
+  if(!$('role')) return;
+  const role=$('role').value;
+  const parent=role==='parent';
+  $('childDataField').style.display=authMode==='register' && parent?'block':'none';
+  $('classField').style.display=authMode==='register' && role!=='parent'?'block':'none';
+  if($('gradeLabel')) $('gradeLabel').textContent=role==='parent'?'Өзіңіздің сыныбыңыз':'Сынып';
 }
 function submitAuth(){
   const email=$('email').value.trim().toLowerCase();
@@ -541,47 +574,52 @@ function submitAuth(){
   const firstName=$('firstName')?.value.trim()||'';
   const patronymic=$('patronymic')?.value.trim()||'';
   const surname=$('surname')?.value.trim()||'';
-  const name=[firstName,patronymic,surname].filter(Boolean).join(' ');
   const phone=$('phone').value.trim();
   const role=$('role').value;
   const grade=$('grade').value;
+  const childFirstName=$('childFirstName')?.value.trim()||'';
+  const childSurname=$('childSurname')?.value.trim()||'';
+  const childGrade=$('childGrade')?.value||'';
+  const name=[firstName,surname].filter(Boolean).join(' ') || firstName || surname;
 
-  if(!email || !pass || (authMode==='register'&&(!firstName||!patronymic||!surname||!phone))){
-    showError('Барлық міндетті жолдарды толтырыңыз.');return;
+  if(!email || !pass || (authMode==='register'&&(!firstName||!phone))){
+    showError('Email, құпиясөз, аты және телефон міндетті.');return;
   }
   if(!email.includes('@')){showError('Email дұрыс енгізілмеген.');return}
   if(authMode==='register' && !/^\\+?7[0-9 ()-]{9,}$/.test(phone)){
     showError('Телефон нөмірін дұрыс енгізіңіз. Мысалы: +7 700 123 45 67');return;
   }
+  if(authMode==='register' && role==='parent' && (!childFirstName||!childSurname||!childGrade)){
+    showError('Ата-ана үшін баланың аты, фамилиясы және сыныбы міндетті.');return;
+  }
 
   const users=getUsers();
-
   if(authMode==='register'){
     if(users.some(u=>u.email===email)){
       showError('Бұл email бұрын тіркелген. Кіру бөлімінен кіріңіз.');return;
     }
     const user={
       id:'u_'+Date.now()+'_'+Math.random().toString(36).slice(2,8),
-      email, password:pass, name, firstName, patronymic, surname,
-      phone, role, grade, createdAt:new Date().toISOString()
+      email,password:pass,name,firstName,patronymic,surname,phone,role,
+      grade:role==='parent'?(childGrade||''):grade,
+      child:role==='parent'?{firstName:childFirstName,surname:childSurname,grade:childGrade}:null,
+      createdAt:new Date().toISOString()
     };
     users.push(user);
     saveUsers(users);
     syncCurrentUser(user);
     closeLogin();
     showApp(user.name,user.role);
-    toast(user.role==='teacher'?'Мұғалім кабинеті ашылды! 👨‍🏫':'Оқушы кабинеті ашылды! 🎓');
+    toast(role==='parent'?'Ата-ана кабинеті ашылды! 👨‍👩‍👧':'Жеке профиліңіз ашылды! 🎓');
     return;
   }
 
   const user=users.find(u=>u.email===email && u.password===pass);
-  if(!user){
-    showError('Email немесе құпиясөз қате.');return;
-  }
+  if(!user){showError('Email немесе құпиясөз қате.');return}
   syncCurrentUser(user);
   closeLogin();
   showApp(user.name,user.role);
-  toast(user.role==='teacher'?'Мұғалім кабинеті ашылды! 👨‍🏫':'Жеке профиліңіз ашылды! 🎓');
+  toast(user.role==='parent'?'Ата-ана кабинеті ашылды! 👨‍👩‍👧':user.role==='teacher'?'Мұғалім кабинеті ашылды! 👨‍🏫':'Жеке профиліңіз ашылды! 🎓');
 }
 function showError(t){$('loginError').textContent=t;$('loginError').style.display='block'}
 function showApp(name, role){
@@ -596,12 +634,20 @@ function showApp(name, role){
   $('landing').style.display='none';
   $('app').style.display='block';
   $('userName').textContent=name||'Оқушы';
+  if(role==='parent' && current?.child){
+    const ch=current.child;
+    const full=[ch.firstName,ch.surname].filter(Boolean).join(' ');
+    if($('parentChildName')) $('parentChildName').textContent=full||'—';
+    if($('parentChildFullName')) $('parentChildFullName').textContent=full||'—';
+    if($('parentChildGrade')) $('parentChildGrade').textContent=ch.grade||'—';
+    if($('parentChildGrade2')) $('parentChildGrade2').textContent=ch.grade||'—';
+  }
   $('helloName').textContent=(name||'Оқушы').split(' ')[0];
   $('userAvatar').textContent=(name||'А')[0]?.toUpperCase()||'А';
-  $('studentMenu').style.display=role==='teacher'?'none':'block';
+  $('studentMenu').style.display=(role==='teacher'||role==='parent')?'none':'block';
   $('teacherMenu').style.display=role==='teacher'?'block':'none';
   document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
-  $(role==='teacher'?'teacherDashboard':'dashboard').classList.add('active');
+  $(role==='teacher'?'teacherDashboard':role==='parent'?'parentDashboard':'dashboard').classList.add('active');
   document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));
   const menu=role==='teacher'?$('teacherMenu'):$('studentMenu');
   const first=menu?.querySelector('button');
