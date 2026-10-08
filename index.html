@@ -698,6 +698,12 @@ function toast(msg){
   clearTimeout(window.toastTimer);
   window.toastTimer=setTimeout(()=>t.style.display='none',2600);
 }
+document.querySelector('.side-bottom [data-view="profileView"]')?.addEventListener('click',function(){
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  $('profileView').classList.add('active');
+  document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));
+  window.scrollTo(0,0);
+});
 document.querySelectorAll('.menu button').forEach(btn=>btn.addEventListener('click',()=>{
   document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));
   btn.classList.add('active');
