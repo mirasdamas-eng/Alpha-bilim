@@ -282,15 +282,8 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
   <div class="logo side-logo"><span class="logo-mark">A</span><span>ALPHA</span></div>
   <div id="studentMenu" class="menu">
     <button class="active" data-view="dashboard">🏠 Басты бет</button>
-    <button data-view="lessons">📚 Менің сабақтарым</button>
-    <button data-view="tests">📝 Тесттер</button>
-    <button data-view="plan">🎯 Менің жоспарым</button>
-    <button data-view="passport">📊 Білім паспорты</button>
-    <button data-view="errors">❌ Қателерім</button>
-    <button data-view="olympiad">🏆 Олимпиада</button>
-    <button data-view="exam">🎓 Емтихан</button>
-    <button data-view="unt">🚀 ҰБТ</button>
-    <button data-view="teacher">💬 Мұғаліммен байланыс</button>
+    <button data-view="progressView">📊 Прогресс</button>
+    <button data-view="profileView">👤 Профиль</button>
   </div>
   <div id="teacherMenu" class="menu" style="display:none">
     <button class="active" data-view="teacherDashboard">🏠 Басты бет</button>
@@ -299,65 +292,27 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
     <button data-view="teacherTests">📝 Тесттер</button>
     <button data-view="teacherAnalytics">📊 Аналитика</button>
   </div>
-  <div class="side-bottom"><button class="btn btn-light" style="width:100%" onclick="logout()">Шығу</button></div>
+  <div class="side-bottom"></div>
 </aside>
 <main class="main">
 <header class="topbar"><input class="search" placeholder="🔎 Іздеу..." oninput="searchContent(this.value)"><div class="userbox"><div class="avatar" id="userAvatar">А</div><span id="userName">Оқушы</span></div></header>
 <div class="content">
 
 <div id="dashboard" class="view active">
-  <div class="dash-head"><div><h1>Сәлем, <span id="helloName">оқушы</span>! 👋</h1><p class="muted">Курстарыңды таңда, сабақтарды баста және нәтижелеріңді бақыла.</p></div><button class="btn btn-primary" onclick="toast('Жаңа диагностикалық тест ашылды')">Диагностика тапсыру</button></div>
-
-  <section class="my-courses">
-    <div class="courses-heading">
-      <div><span class="section-kicker">ОҚУШЫ КАБИНЕТІ</span><h2>Менің курстарым</h2><p>Тегін сабақтарды бірден көр. Толық курстарға жазылу үшін тарифті таңда немесе WhatsApp арқылы байланыс.</p></div>
-      <button class="btn btn-light" onclick="openTariffModal()">Тарифтерді көру</button>
+  <div class="dash-head"><div><h1>Сәлем, <span id="helloName">оқушы</span>! 👋</h1><p class="muted">Саған арналған ұсыныстар және менеджермен жылдам байланыс.</p></div></div>
+  <div class="panel" style="margin-bottom:18px">
+    <h3>Сізге ұсыныстар</h3><p class="muted">Оқу нәтижелеріңе қарай келесі қадамдарды ұсынамыз.</p>
+    <div class="list-card">
+      <div class="list-item"><div class="left">🎯 <span><b>Математика</b><br><small class="muted">Квадрат теңдеулер тақырыбын қайталау</small></span></div><button class="btn btn-light" onclick="toast('Ұсынылған сабақ ашылды')">Ашу</button></div>
+      <div class="list-item"><div class="left">⚡ <span><b>Физика</b><br><small class="muted">Механика бойынша қосымша тапсырма</small></span></div><button class="btn btn-light" onclick="toast('Ұсынылған тапсырма ашылды')">Ашу</button></div>
+      <div class="list-item"><div class="left">📝 <span><b>Бүгінгі ұсыныс</b><br><small class="muted">20 сұрақтық тест тапсыру</small></span></div><button class="btn btn-light" onclick="toast('Тест ашылды')">Бастау</button></div>
     </div>
-    <div class="student-course-grid">
-      <article class="student-course free-course-card">
-        <div class="course-image math-bg"><span>🎥</span></div>
-        <div class="student-course-body">
-          <div class="course-line"><span class="course-status free-status">✓ ТЕГІН</span><span class="course-price">0 ₸</span></div>
-          <h3>Тегін видео сабақтар</h3>
-          <p>5–11 сыныпқа арналған таныстыру және базалық тақырыптар. Тегін видеоларға қазір қолжетімділік бар.</p>
-          <button class="btn btn-primary course-btn" onclick="showSection('lessons')">Видео сабақтарды көру →</button>
-        </div>
-      </article>
+  </div>
+  <div class="panel"><h3>Менеджермен байланыс</h3><p class="muted">Тариф, курс немесе оқу туралы сұрағың болса, WhatsApp арқылы менеджерге жаз.</p><button class="btn btn-primary" style="width:100%" onclick="openWhatsApp('Менеджермен сөйлескім келеді')">💬 WhatsApp арқылы менеджерге жазу</button></div>
+</div>
 
-      <article class="student-course">
-        <div class="course-image purple-bg"><span>📐</span></div>
-        <div class="student-course-body">
-          <div class="course-line"><span class="course-status">ONLINE START</span><span class="course-price">7 000 ₸/ай</span></div>
-          <h3>Математика — толық курс</h3>
-          <p>Толық сабақтар, тесттер, үй тапсырмасы және жеке оқу жоспары.</p>
-          <button class="btn btn-primary course-btn" onclick="openTariffModal()">Тариф таңдау →</button>
-          <button class="whatsapp-btn" onclick="openWhatsApp('Математика толық курсына жазылғым келеді')">💬 WhatsApp арқылы жазылу</button>
-        </div>
-      </article>
-
-      <article class="student-course">
-        <div class="course-image blue-bg"><span>🚀</span></div>
-        <div class="student-course-body">
-          <div class="course-line"><span class="course-status">ONLINE PLUS</span><span class="course-price">12 000 ₸/ай</span></div>
-          <h3>Кеңейтілген дайындық</h3>
-          <p>Тереңдетілген материалдар, қателер талдауы, қосымша тапсырмалар және прогресс.</p>
-          <button class="btn btn-primary course-btn" onclick="openTariffModal()">Тариф таңдау →</button>
-          <button class="whatsapp-btn" onclick="openWhatsApp('Online Plus тарифі туралы білгім келеді')">💬 WhatsApp арқылы жазылу</button>
-        </div>
-      </article>
-
-      <article class="student-course">
-        <div class="course-image orange-bg"><span>🎯</span></div>
-        <div class="student-course-body">
-          <div class="course-line"><span class="course-status">ҰБТ</span><span class="course-price">Арнайы тариф</span></div>
-          <h3>ҰБТ дайындық курсы</h3>
-          <p>ҰБТ форматына дайындық, сынақ тесттері және нәтижені талдау.</p>
-          <button class="btn btn-primary course-btn" onclick="openTariffModal()">Тарифті көру →</button>
-          <button class="whatsapp-btn" onclick="openWhatsApp('ҰБТ курсына жазылғым келеді')">💬 WhatsApp арқылы жазылу</button>
-        </div>
-      </article>
-    </div>
-  </section>
+<div id="progressView" class="view">
+  <div class="dash-head"><div><h1>Прогресс</h1><p class="muted">Оқу нәтижелерің мен пәндер бойынша прогресс.</p></div></div>
   <div class="stats"><div class="stat"><span>Жалпы прогресс</span><b>78%</b></div><div class="stat"><span>Орындалған сабақ</span><b>12</b></div><div class="stat"><span>Тест саны</span><b>8</b></div><div class="stat"><span>Осы айдағы өсу</span><b class="good">+9%</b></div></div>
   <div class="dash-grid">
     <div class="panel"><h3>Пәндер бойынша прогресс</h3>
@@ -366,14 +321,20 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
       <div class="subject"><div class="subject-icon">📝</div><div class="subject-main"><b>Қазақ тілі</b><small>Мақсат: 90%</small></div><b class="good">87%</b></div>
       <div class="subject"><div class="subject-icon">🇬🇧</div><div class="subject-main"><b>Ағылшын</b><small>Мақсат: 85%</small></div><b>71%</b></div>
     </div>
-    <div class="panel"><h3>Бүгінгі жоспар</h3><div class="list-card">
-      <div class="list-item"><div class="left">🎥 <span>Квадрат теңдеулер</span></div><span class="pill">Видео</span></div>
-      <div class="list-item"><div class="left">📝 <span>Математика тесті</span></div><span class="pill">20 сұрақ</span></div>
-      <div class="list-item"><div class="left">🔁 <span>Қате тақырыптарды қайталау</span></div><span class="pill">15 мин</span></div>
-    </div></div>
+    <div class="panel"><h3>Бүгінгі жоспар</h3><div class="list-card"><div class="list-item"><div class="left">🎥 <span>Квадрат теңдеулер</span></div><span class="pill">Видео</span></div><div class="list-item"><div class="left">📝 <span>Математика тесті</span></div><span class="pill">20 сұрақ</span></div><div class="list-item"><div class="left">🔁 <span>Қате тақырыптарды қайталау</span></div><span class="pill">15 мин</span></div></div></div>
   </div>
 </div>
 
+<div id="profileView" class="view">
+  <div class="dash-head"><div><h1>Профиль 👤</h1><p class="muted">Тіркелген аккаунттың деректері.</p></div></div>
+  <div class="panel"><h3>Деректерім</h3><div class="list-card">
+    <div class="list-item"><span>👤 Аты-жөні</span><b id="profileFullName">—</b></div>
+    <div class="list-item"><span>📧 Email</span><b id="profileEmail">—</b></div>
+    <div class="list-item"><span>📱 Телефон</span><b id="profilePhone">—</b></div>
+    <div class="list-item"><span>🎓 Сынып</span><b id="profileGrade">—</b></div>
+    <div class="list-item"><span>👥 Рөлі</span><b id="profileRole">—</b></div>
+  </div><button class="btn btn-danger" style="width:100%;margin-top:18px" onclick="logout()">Шығу</button></div>
+</div>
 
 <div id="parentDashboard" class="view">
   <div class="dash-head"><div><h1>Ата-ана кабинеті 👨‍👩‍👧</h1><p class="muted">Балаңыздың оқу нәтижесін осы жерден бақылаңыз.</p></div></div>
@@ -491,7 +452,7 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
     <div id="phoneField" class="field" style="display:none"><label>Телефон нөмірі</label><input id="phone" type="tel" placeholder="+7 (777) 777 7777" oninput="formatPhone(this)" maxlength="16"></div>
     <div id="roleField" class="field" style="display:none"><label>Кім ретінде тіркелесіз?</label><select id="role" onchange="updateAuthRole()"><option value="student">Оқушы</option><option value="parent">Ата-ана</option><option value="teacher">Мұғалім</option></select></div>
     <div class="field"><label>Email</label><input id="email" type="email" placeholder="you@example.com"></div>
-    <div class="field"><label>Құпиясөз</label><input id="password" type="password" placeholder="••••••••"></div>
+    
     <div id="classField" class="field" style="display:none"><label id="gradeLabel">Сынып</label><select id="grade"><option>5-сынып</option><option>6-сынып</option><option>7-сынып</option><option>8-сынып</option><option>9-сынып</option><option>10-сынып</option><option>11-сынып</option></select></div>
     <div id="childDataField" style="display:none">
       <div class="field"><label>Балаңыздың аты *</label><input id="childFirstName" placeholder="Мысалы: Аян"></div>
@@ -547,7 +508,7 @@ function toggleAuth(){authMode=authMode==='login'?'register':'login';updateAuth(
 function updateAuth(){
   const reg=authMode==='register';
   $('loginTitle').textContent=reg?'Тіркелу':'Кіру';
-  $('loginSub').textContent=reg?'Жеке оқу кабинетін жасаңыз.':'Жеке оқу кабинетіңізге кіріңіз.';
+  $('loginSub').textContent=reg?'Жеке оқу кабинетін жасаңыз.':'Email арқылы парольсіз кіріңіз.';
   $('nameField').style.display=reg?'block':'none';
   if($('patronymicField')) $('patronymicField').style.display=reg?'block':'none';
   if($('surnameField')) $('surnameField').style.display=reg?'block':'none';
@@ -637,7 +598,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 function submitAuth(){
   const email=$('email').value.trim().toLowerCase();
-  const pass=$('password').value.trim();
+  const pass='';
   const firstName=$('firstName')?.value.trim()||'';
   const patronymic=$('patronymic')?.value.trim()||'';
   const surname=$('surname')?.value.trim()||'';
@@ -649,8 +610,8 @@ function submitAuth(){
   const childGrade=$('childGrade')?.value||'';
   const name=[firstName,surname].filter(Boolean).join(' ') || firstName || surname;
 
-  if(!email || !pass || (authMode==='register'&&(!firstName||!phone))){
-    showError('Email, құпиясөз, аты және телефон міндетті.');return;
+  if(!email || (authMode==='register'&&(!firstName||!phone))){
+    showError(authMode==='register'?'Email, аты және телефон міндетті.':'Email міндетті.');return;
   }
   if(!email.includes('@')){showError('Email дұрыс енгізілмеген.');return}
   if(authMode==='register' && !/^\+7\s?\(\d{3}\)\s?\d{3}\s?\d{4}$/.test(phone)){
@@ -681,8 +642,8 @@ function submitAuth(){
     return;
   }
 
-  const user=users.find(u=>u.email===email && u.password===pass);
-  if(!user){showError('Email немесе құпиясөз қате.');return}
+  const user=users.find(u=>u.email===email);
+  if(!user){showError('Бұл email тіркелмеген. Алдымен тіркеліңіз.');return}
   syncCurrentUser(user);
   closeLogin();
   showApp(user.name,user.role);
@@ -701,6 +662,11 @@ function showApp(name, role){
   $('landing').style.display='none';
   $('app').style.display='block';
   $('userName').textContent=name||'Оқушы';
+  if($('profileFullName')) $('profileFullName').textContent=[current?.firstName,current?.patronymic,current?.surname].filter(Boolean).join(' ')||name||'—';
+  if($('profileEmail')) $('profileEmail').textContent=current?.email||'—';
+  if($('profilePhone')) $('profilePhone').textContent=current?.phone||'—';
+  if($('profileGrade')) $('profileGrade').textContent=current?.grade||'—';
+  if($('profileRole')) $('profileRole').textContent=current?.role==='teacher'?'Мұғалім':current?.role==='parent'?'Ата-ана':'Оқушы';
   if(role==='parent' && current?.child){
     const ch=current.child;
     const full=[ch.firstName,ch.surname].filter(Boolean).join(' ');
