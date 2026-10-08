@@ -289,6 +289,7 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
     <button data-view="teacherStudents">👥 Оқушыларым</button>
     <button data-view="teacherLessons">📚 Сабақтар</button>
     <button data-view="teacherTests">📝 Тесттер</button>
+    <button data-view="teacherTasks">📚 Тапсырмалар</button>
     <button data-view="teacherAnalytics">📊 Аналитика</button>
   </div>
   <div id="studentTasksMenu" class="menu" style="margin-top:10px">
@@ -375,19 +376,44 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
 </div>
 
 <div id="parentDashboard" class="view">
-  <div class="dash-head"><div><h1>Ата-ана кабинеті 👨‍👩‍👧</h1><p class="muted">Балаңыздың оқу нәтижесін осы жерден бақылаңыз.</p></div></div>
-  <div class="stats">
-    <div class="stat"><span>Бала</span><b id="parentChildName">—</b></div>
-    <div class="stat"><span>Сынып</span><b id="parentChildGrade">—</b></div>
-    <div class="stat"><span>Прогресс</span><b>—</b></div>
-    <div class="stat"><span>Үй тапсырмасы</span><b>—</b></div>
+  <div class="dash-head">
+    <div><h1>Үлгерім 📊</h1><p class="muted">Балаңыздың оқу үлгерімін бақылаңыз.</p></div>
   </div>
-  <div class="panel" style="margin-top:20px">
-    <h3>Баланың деректері</h3>
-    <p class="muted">Тіркелу кезінде енгізілген бала туралы ақпарат.</p>
-    <div class="list-card">
-      <div class="list-item"><span>👤 Аты-жөні</span><b id="parentChildFullName">—</b></div>
-      <div class="list-item"><span>🎓 Сыныбы</span><b id="parentChildGrade2">—</b></div>
+
+  <div class="panel" style="margin-bottom:18px">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap">
+      <div>
+        <div class="muted" style="font-size:12px">Бала</div>
+        <h2 id="parentChildFullName" style="margin:5px 0">—</h2>
+        <div class="muted" id="parentChildGrade2">—</div>
+      </div>
+      <div class="stat" style="min-width:150px"><span>Жалпы прогресс</span><b id="parentProgress">78%</b></div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><span>Жалпы үлгерім</span><b id="parentOverall">78%</b></div>
+    <div class="stat"><span>Тест нәтижесі</span><b id="parentTest">88%</b></div>
+    <div class="stat"><span>Үй тапсырмасы</span><b id="parentHomework">89%</b></div>
+    <div class="stat"><span>Оқу белсенділігі</span><b class="good" id="parentActivity">Жақсы</b></div>
+  </div>
+
+  <div class="dash-grid" style="margin-top:18px">
+    <div class="panel">
+      <h3>Пәндер бойынша үлгерім</h3>
+      <div class="subject"><div class="subject-icon">➗</div><div class="subject-main"><b>Математика</b><small>Жақсы нәтиже</small></div><b>78%</b></div>
+      <div class="subject"><div class="subject-icon">⚡</div><div class="subject-main"><b>Физика</b><small>Қосымша жұмыс қажет</small></div><b class="warn">54%</b></div>
+      <div class="subject"><div class="subject-icon">📝</div><div class="subject-main"><b>Қазақ тілі</b><small>Жақсы нәтиже</small></div><b class="good">87%</b></div>
+      <div class="subject"><div class="subject-icon">🇬🇧</div><div class="subject-main"><b>Ағылшын</b><small>Тұрақты</small></div><b>71%</b></div>
+    </div>
+    <div class="panel">
+      <h3>Соңғы нәтижелер</h3>
+      <div class="list-card">
+        <div class="list-item"><span>🧪 Математика тесті</span><b>88%</b></div>
+        <div class="list-item"><span>📝 Үй тапсырмасы</span><b class="good">Орындалды</b></div>
+        <div class="list-item"><span>📚 Сабаққа қатысу</span><b>92%</b></div>
+        <div class="list-item"><span>📈 Осы айдағы өзгеріс</span><b class="good">+9%</b></div>
+      </div>
     </div>
   </div>
 </div>
@@ -435,6 +461,35 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
   <tr><td>Квадрат теңдеулер</td><td>20</td><td>32</td><td>78%</td><td><button class="btn btn-light" onclick="toast('Нәтижелер ашылды')">Нәтиже</button></td></tr>
   <tr><td>Функциялар</td><td>25</td><td>28</td><td>82%</td><td><button class="btn btn-light" onclick="toast('Нәтижелер ашылды')">Нәтиже</button></td></tr>
   </table></div>
+</div>
+
+<div id="teacherTasks" class="view">
+  <div class="dash-head">
+    <div><h1>Тапсырмалар 📝</h1><p class="muted">Оқушыларға тапсырма қосыңыз және берілген тапсырмаларды басқарыңыз.</p></div>
+    <button class="btn btn-primary" onclick="openTeacherTaskForm()">+ Тапсырма қосу</button>
+  </div>
+
+  <div id="teacherTaskForm" class="panel" style="display:none;margin-bottom:18px">
+    <h3>Жаңа тапсырма</h3>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+      <div class="field"><label>Пән</label><select id="taskSubject"><option>Математика</option><option>Физика</option><option>Қазақ тілі</option><option>Ағылшын тілі</option></select></div>
+      <div class="field"><label>Сынып</label><select id="taskGrade"><option>5-сынып</option><option>6-сынып</option><option>7-сынып</option><option>8-сынып</option><option>9-сынып</option><option>10-сынып</option><option>11-сынып</option></select></div>
+      <div class="field" style="grid-column:1/-1"><label>Тапсырма атауы</label><input id="taskTitle" placeholder="Мысалы: Квадрат теңдеулер"></div>
+      <div class="field" style="grid-column:1/-1"><label>Тапсырма сипаттамасы</label><input id="taskDescription" placeholder="Мысалы: 10 есеп шығару"></div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-primary" onclick="addTeacherTask()">Тапсырманы сақтау</button>
+      <button class="btn btn-light" onclick="closeTeacherTaskForm()">Болдырмау</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Берілген тапсырмалар</h3>
+    <div id="teacherTaskList" class="list-card">
+      <div class="list-item"><div class="left">📐 <span><b>Квадрат теңдеулер</b><br><small class="muted">Математика • 8-сынып • 10 есеп</small></span></div><span class="pill">Берілді</span></div>
+      <div class="list-item"><div class="left">⚡ <span><b>Механика есептері</b><br><small class="muted">Физика • 9-сынып • 8 есеп</small></span></div><span class="pill">Берілді</span></div>
+    </div>
+  </div>
 </div>
 
 <div id="teacherAnalytics" class="view">
@@ -710,9 +765,7 @@ function showApp(name, role){
   if(role==='parent' && current?.child){
     const ch=current.child;
     const full=[ch.firstName,ch.surname].filter(Boolean).join(' ');
-    if($('parentChildName')) $('parentChildName').textContent=full||'—';
     if($('parentChildFullName')) $('parentChildFullName').textContent=full||'—';
-    if($('parentChildGrade')) $('parentChildGrade').textContent=ch.grade||'—';
     if($('parentChildGrade2')) $('parentChildGrade2').textContent=ch.grade||'—';
   }
   $('helloName').textContent=(name||'Оқушы').split(' ')[0];
@@ -753,6 +806,37 @@ document.querySelectorAll('.menu button').forEach(btn=>btn.addEventListener('cli
   $(btn.dataset.view).classList.add('active');
   window.scrollTo(0,0);
 }));
+function openTeacherTaskForm(){
+  const form=$('teacherTaskForm');
+  if(form) form.style.display='block';
+  $('taskTitle')?.focus();
+}
+function closeTeacherTaskForm(){
+  const form=$('teacherTaskForm');
+  if(form) form.style.display='none';
+}
+function addTeacherTask(){
+  const subject=$('taskSubject')?.value||'';
+  const grade=$('taskGrade')?.value||'';
+  const title=$('taskTitle')?.value.trim()||'';
+  const description=$('taskDescription')?.value.trim()||'';
+  if(!title){
+    toast('Тапсырма атауын енгізіңіз');
+    return;
+  }
+  const list=$('teacherTaskList');
+  if(list){
+    const item=document.createElement('div');
+    item.className='list-item';
+    item.innerHTML='<div class="left">📝 <span><b>'+title.replace(/</g,'&lt;')+'</b><br><small class="muted">'+subject+' • '+grade+' • '+(description.replace(/</g,'&lt;')||'Тапсырма')+'</small></span></div><span class="pill">Жаңа</span>';
+    list.prepend(item);
+  }
+  $('taskTitle').value='';
+  $('taskDescription').value='';
+  closeTeacherTaskForm();
+  toast('Тапсырма оқушыларға қосылды ✓');
+}
+
 function startTest(){toast('Тест интерфейсі демо режимінде ашылды. Нақты сұрақтар базасын кейін қосуға болады.')}
 function sendMessage(){const m=$('message').value.trim();if(!m){toast('Алдымен хабарлама жазыңыз');return}$('message').value='';toast('Хабарлама мұғалімге жіберілді ✓')}
 function searchContent(v){if(v.trim())toast('Іздеу: '+v)}
