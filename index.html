@@ -382,33 +382,51 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
 
 <div id="lessonsView" class="view">
   <div class="dash-head">
-    <div><h1>Тегін видео сабақтар 📚</h1><p class="muted">Информатика және математика сабақтарын осы жерден бірден көре аласыз.</p></div>
+    <div><h1>Тегін сабақтар 📚</h1><p class="muted">Алдымен пәнді таңдаңыз, содан кейін сол пәннің видео сабағын ашыңыз.</p></div>
     <span class="course-tag free">✓ ТЕГІН</span>
   </div>
   <style>
-    .free-video-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
-    .free-video-panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;min-width:0;box-shadow:0 8px 30px #26324d08}
-    .free-video-panel h3{margin:0 0 8px}
-    .free-video-panel p{color:var(--muted);font-size:13px;line-height:1.5;margin:0 0 14px}
+    .free-subject-grid,.free-lesson-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+    .free-subject-card,.free-lesson-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;min-width:0;box-shadow:0 8px 30px #26324d08}
+    .free-subject-card{cursor:pointer;transition:transform .18s,box-shadow .18s}
+    .free-subject-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px #26324d14}
+    .free-subject-icon{font-size:42px;margin-bottom:12px}
+    .free-subject-card p,.free-lesson-card p{color:var(--muted);font-size:13px;line-height:1.5}
+    .free-lesson-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
     .free-video-frame{position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#111}
     .free-video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-    @media(max-width:700px){.free-video-grid{grid-template-columns:1fr}}
+    .free-back{margin-bottom:18px}
+    @media(max-width:700px){.free-subject-grid,.free-lesson-grid{grid-template-columns:1fr}.free-subject-card,.free-lesson-card{padding:18px}}
   </style>
-  <div class="free-video-grid">
-    <article class="free-video-panel">
-      <h3>💻 Информатика</h3>
-      <p>5-сынып. «Біздің айналамыздағы ақпарат» — 1-сабақ.</p>
-      <div class="free-video-frame">
-        <iframe src="https://www.youtube-nocookie.com/embed/FbQiRQxWUoQ" title="Информатика — тегін видео сабақ" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-      </div>
-    </article>
-    <article class="free-video-panel">
-      <h3>➗ Математика</h3>
-      <p>5-сынып. «Натурал сандар және нөл» — 1.1-сабақ.</p>
-      <div class="free-video-frame">
-        <iframe src="https://www.youtube-nocookie.com/embed/vKbcqNsoBBc" title="Математика — тегін видео сабақ" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-      </div>
-    </article>
+
+  <div id="freeSubjects">
+    <div class="free-subject-grid">
+      <article class="free-subject-card" role="button" tabindex="0" onclick="openFreeSubject('informatics')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openFreeSubject('informatics')}">
+        <div class="free-subject-icon">💻</div><h3>Информатика</h3>
+        <p>Ақпарат және информатика негіздері бойынша тегін видео сабақтар.</p>
+        <button class="btn btn-primary" type="button" onclick="event.stopPropagation();openFreeSubject('informatics')">Пәнге кіру →</button>
+      </article>
+      <article class="free-subject-card" role="button" tabindex="0" onclick="openFreeSubject('math')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openFreeSubject('math')}">
+        <div class="free-subject-icon">➗</div><h3>Математика</h3>
+        <p>Натурал сандар және математика негіздері бойынша тегін видео сабақтар.</p>
+        <button class="btn btn-primary" type="button" onclick="event.stopPropagation();openFreeSubject('math')">Пәнге кіру →</button>
+      </article>
+    </div>
+  </div>
+
+  <div id="freeSubjectLessons" style="display:none">
+    <button class="btn btn-light free-back" onclick="showFreeSubjects()">← Пәндерді таңдау</button>
+    <div class="dash-head"><div><h2 id="freeSubjectTitle">Пән сабақтары</h2><p class="muted">Көргіңіз келген видео сабақты таңдаңыз.</p></div></div>
+    <div id="freeLessonList" class="free-lesson-grid"></div>
+  </div>
+
+  <div id="freeVideoPlayer" style="display:none">
+    <button class="btn btn-light free-back" onclick="backToFreeLessons()">← Видео сабақтар тізіміне қайту</button>
+    <div class="free-lesson-card">
+      <h2 id="freeVideoTitle">Видео сабақ</h2>
+      <p id="freeVideoDescription"></p>
+      <div class="free-video-frame"><iframe id="freeVideoIframe" src="about:blank" title="Тегін видео сабақ" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+    </div>
   </div>
 </div>
 
@@ -1161,6 +1179,54 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 })();
+</script>
+
+
+<script>
+const ALPHA_FREE_LESSONS = {
+  informatics: {
+    title: '💻 Информатика',
+    lessons: [{title:'1-сабақ. Біздің айналамыздағы ақпарат',description:'5-сынып · Информатика',videoId:'FbQiRQxWUoQ'}]
+  },
+  math: {
+    title: '➗ Математика',
+    lessons: [{title:'1.1-сабақ. Натурал сандар және нөл',description:'5-сынып · Математика',videoId:'vKbcqNsoBBc'}]
+  }
+};
+let currentFreeSubject = 'informatics';
+function openFreeSubject(subject){
+  const data=ALPHA_FREE_LESSONS[subject];
+  if(!data)return;
+  currentFreeSubject=subject;
+  document.getElementById('freeSubjects').style.display='none';
+  document.getElementById('freeVideoPlayer').style.display='none';
+  document.getElementById('freeSubjectLessons').style.display='block';
+  document.getElementById('freeSubjectTitle').textContent=data.title;
+  document.getElementById('freeLessonList').innerHTML=data.lessons.map((lesson,index)=>`
+    <article class="free-lesson-card">
+      <div class="free-lesson-row"><div><h3>${lesson.title}</h3><p>${lesson.description}</p></div><button class="btn btn-primary" onclick="playFreeLesson(${index})">▶ Видео сабақты көру</button></div>
+    </article>`).join('');
+}
+function showFreeSubjects(){
+  document.getElementById('freeVideoIframe').src='about:blank';
+  document.getElementById('freeSubjectLessons').style.display='none';
+  document.getElementById('freeVideoPlayer').style.display='none';
+  document.getElementById('freeSubjects').style.display='block';
+}
+function backToFreeLessons(){
+  document.getElementById('freeVideoIframe').src='about:blank';
+  document.getElementById('freeVideoPlayer').style.display='none';
+  document.getElementById('freeSubjectLessons').style.display='block';
+}
+function playFreeLesson(index){
+  const lesson=ALPHA_FREE_LESSONS[currentFreeSubject]?.lessons[index];
+  if(!lesson)return;
+  document.getElementById('freeSubjectLessons').style.display='none';
+  document.getElementById('freeVideoPlayer').style.display='block';
+  document.getElementById('freeVideoTitle').textContent=lesson.title;
+  document.getElementById('freeVideoDescription').textContent=lesson.description;
+  document.getElementById('freeVideoIframe').src='https://www.youtube-nocookie.com/embed/'+lesson.videoId;
+}
 </script>
 
 </body>
