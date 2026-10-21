@@ -887,7 +887,7 @@ async function submitAuth(){
   }
   if(!email.includes('@')){showError('Email дұрыс енгізілмеген.');return}
   if(pass.length<6){showError('Құпиясөз кемінде 6 таңбадан тұруы керек.');return}
-  if(authMode==='register' && !/^\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}\\s?\\d{4}$/.test(phone)){
+  if(authMode==='register' && !/^\+7\s?\(?\d{3}\)?\s?\d{3}\s?\d{4}$/.test(phone)){
     showError('Телефон нөмірін дұрыс енгізіңіз. Мысалы: +7 (700) 123 45 67');return;
   }
   if(authMode==='register' && role==='parent' && (!childFirstName||!childSurname||!childGrade)){
@@ -914,7 +914,7 @@ async function submitAuth(){
       if(authError) throw authError;
       if(!authData.user) throw new Error('Тіркелу аяқталмады. Қайта көріңіз.');
       if(!authData.session){
-        showError('Аккаунт жасалды. Email поштаңызды ашып, растау сілтемесін басыңыз, содан кейін сайтқа кіріңіз.');
+        showError('Тіркелу сұранысы қабылданды, бірақ Supabase email растауды талап етіп тұр. Бірден кіру үшін Supabase → Authentication → Sign In / Providers → Email ішінен Confirm email параметрін өшіріп, Save басу қажет. Содан кейін қайта тіркеліңіз.');
         return;
       }
     } else {
@@ -1390,7 +1390,7 @@ function playFreeLesson(index){
       }
       if(result.error) throw result.error;
       if(mode === 'register' && !result.data.session) {
-        showError('Аккаунт жасалды. Email поштаңызды растаңыз, содан кейін Кіру бөлімінен кіріңіз.');
+        showError('Supabase email растауды талап етіп тұр. Бірден кіру үшін Supabase → Authentication → Sign In / Providers → Email ішінен Confirm email параметрін өшіріп, Save басу қажет.');
         return;
       }
       const authUser = result.data.user;
