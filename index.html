@@ -270,6 +270,81 @@ body:has(#app[style*="display: block"]),body:has(#app[style*="display:block"]){b
 @media(prefers-reduced-motion:reduce){#app *,.alpha-subject-card{transition:none!important}}
 </style>
 
+
+<style id="alpha-auth-redesign">
+/* ALPHA — login and registration visual refresh; form logic remains unchanged */
+.login-overlay{
+  background:
+    radial-gradient(ellipse at 12% 15%,rgba(31,104,255,.28),transparent 35%),
+    radial-gradient(ellipse at 88% 85%,rgba(77,47,210,.25),transparent 36%),
+    linear-gradient(135deg,#06152d 0%,#0b2145 52%,#101b48 100%);
+  backdrop-filter:blur(10px);
+  padding:24px;
+  align-items:center;
+}
+.login-overlay::before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;
+  background-image:linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px);
+  background-size:42px 42px;
+  mask-image:linear-gradient(to bottom,black,transparent 90%);
+}
+.login-card{
+  position:relative;width:min(470px,100%);max-height:calc(100dvh - 48px);
+  overflow-y:auto;margin:auto;padding:34px 36px 30px;
+  border:1px solid rgba(255,255,255,.72);border-radius:28px;
+  background:linear-gradient(155deg,rgba(255,255,255,.99),rgba(245,249,255,.98));
+  box-shadow:0 35px 100px rgba(0,0,0,.38),0 0 0 6px rgba(255,255,255,.045);
+  animation:alphaAuthAppear .24s ease-out;
+}
+@keyframes alphaAuthAppear{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+.login-card:before{
+  content:"";position:absolute;top:0;left:0;right:0;height:6px;
+  border-radius:28px 28px 0 0;background:linear-gradient(90deg,#1c62ff,#438bff,#7547f5);
+}
+.login-card>.logo{display:flex;align-items:center;gap:12px;margin:4px 0 24px;font-size:23px;letter-spacing:1.5px;color:#10244a}
+.login-card .logo-mark{
+  width:48px;height:48px;border-radius:15px;background:linear-gradient(145deg,#3d8cff,#1648e8);
+  box-shadow:0 10px 22px rgba(37,99,235,.28);font-size:25px;
+}
+.login-card h2{font-size:30px;letter-spacing:-.7px;color:#10244a;margin-top:0!important;margin-bottom:7px}
+.login-card>p{font-size:14px;line-height:1.6;color:#657694;margin:0 0 22px}
+.login-card .close{
+  position:absolute;right:22px;top:22px;float:none;width:38px;height:38px;
+  border:1px solid #e4eaf5;background:#f5f8fd;color:#52627e;font-size:23px;
+  transition:.2s;z-index:2;
+}
+.login-card .close:hover{background:#e9f0ff;color:#174fe6;transform:rotate(90deg)}
+.login-card .field{margin:14px 0}
+.login-card .field label{font-size:12px;letter-spacing:.15px;color:#263957;margin-bottom:8px}
+.login-card .field input,.login-card .field select{
+  min-height:48px;padding:13px 15px;border:1px solid #dbe4f2;border-radius:13px;
+  background:#fff;color:#13294b;outline:none;transition:border-color .18s,box-shadow .18s;
+}
+.login-card .field input::placeholder{color:#a0aec2}
+.login-card .field input:focus,.login-card .field select:focus{
+  border-color:#3478ff;box-shadow:0 0 0 4px rgba(52,120,255,.12);
+}
+.login-card .login-submit{
+  min-height:51px;margin-top:12px;border-radius:14px;
+  background:linear-gradient(100deg,#1557f5,#2479ff 55%,#5849f4);
+  box-shadow:0 12px 25px rgba(31,96,245,.24);font-size:15px;
+}
+.login-card .login-submit:hover{filter:brightness(1.05);box-shadow:0 15px 30px rgba(31,96,245,.32)}
+.login-card .switch{margin-top:22px;padding-top:18px;border-top:1px solid #e8edf5;color:#6c7c96}
+.login-card .switch a{color:#1557f5;text-decoration:none}
+.login-card .switch a:hover{text-decoration:underline}
+.login-card .error{padding:10px 12px;border-radius:11px;background:#fff1f1;border:1px solid #ffd5d5;line-height:1.5}
+@media(max-width:560px){
+  .login-overlay{padding:12px;align-items:center}
+  .login-card{padding:29px 21px 23px;border-radius:22px;max-height:calc(100dvh - 24px)}
+  .login-card>.logo{font-size:20px;margin-bottom:20px}
+  .login-card .logo-mark{width:42px;height:42px}
+  .login-card h2{font-size:26px}
+  .login-card .close{right:16px;top:17px;width:34px;height:34px}
+}
+@media(prefers-reduced-motion:reduce){.login-card{animation:none}.login-card *{transition:none!important}}
+</style>
+
 </head>
 <body>
 
