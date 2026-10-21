@@ -718,7 +718,7 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
     <h2 id="loginTitle" style="margin-top:20px">Кіру</h2>
     <p id="loginSub">Жеке оқу кабинетіге кіріңіз.</p>
     <div id="nameField" class="field" style="display:none"><label>Аты</label><input id="firstName" placeholder="Мысалы: Аян"></div><div id="patronymicField" class="field" style="display:none"><label>Әкесінің аты</label><input id="patronymic" placeholder="Мысалы: Ермекұлы"></div><div id="surnameField" class="field" style="display:none"><label>Фамилия</label><input id="surname" placeholder="Мысалы: Ахметов"></div>
-    <div id="phoneField" class="field" style="display:none"><label>Телефон нөмірі</label><input id="phone" type="tel" placeholder="+7 (705) 340 2792" oninput="formatPhone(this)" maxlength="16"></div>
+    <div id="phoneField" class="field" style="display:none"><label>Телефон нөмірі</label><input id="phone" type="tel" placeholder="+7 (705) 340 2792" value="+7" oninput="formatPhone(this)" inputmode="numeric" autocomplete="tel" maxlength="18"></div>
     <div id="roleField" class="field" style="display:none"><label>Кім ретінде тіркелесіз?</label><select id="role" onchange="updateAuthRole()"><option value="student">Оқушы</option><option value="parent">Ата-ана</option><option value="teacher">Мұғалім</option></select></div>
     <div class="field"><label>Email</label><input id="email" type="email" placeholder="you@example.com"></div>
     <div id="passwordField" class="field"><label>Құпиясөз</label><input id="password" type="password" placeholder="••••••••"></div>
@@ -887,8 +887,8 @@ async function submitAuth(){
   }
   if(!email.includes('@')){showError('Email дұрыс енгізілмеген.');return}
   if(pass.length<6){showError('Құпиясөз кемінде 6 таңбадан тұруы керек.');return}
-  if(authMode==='register' && !/^\+7\s?\(?\d{3}\)?\s?\d{3}\s?\d{4}$/.test(phone)){
-    showError('Телефон нөмірін дұрыс енгізіңіз. Мысалы: +7 (700) 123 45 67');return;
+  if(authMode==='register' && phone.replace(/\D/g,'').length !== 11){
+    showError('Телефон нөмірін +7-ден кейін толық 10 санмен енгізіңіз. Мысалы: +7 (705) 340 2792');return;
   }
   if(authMode==='register' && role==='parent' && (!childFirstName||!childSurname||!childGrade)){
     showError('Ата-ана үшін баланың аты, фамилиясы және сыныбы міндетті.');return;
@@ -1368,7 +1368,7 @@ function playFreeLesson(index){
     const childSurname = (el('childSurname')?.value || '').trim();
     const childGrade = el('childGrade')?.value || '';
     if(!email || !password || (mode === 'register' && (!firstName || !phone))) return showError('Email, құпиясөз, аты және телефонды толтырыңыз.');
-    if(mode === 'register' && phone.replace(/\D/g,'').length !== 11) return showError('Телефонды толық енгізіңіз: +7 (705) 340 2792');
+    if(mode === 'register' && phone.replace(/\D/g,'').length !== 11) return showError('Телефон нөмірін +7-ден кейін толық 10 санмен енгізіңіз. Мысалы: +7 (705) 340 2792');
     if(!email.includes('@')) return showError('Email дұрыс енгізілмеген.');
     if(password.length < 6) return showError('Құпиясөз кемінде 6 таңбадан тұруы керек.');
     if(mode === 'register' && role === 'parent' && (!childFirstName || !childSurname || !childGrade)) return showError('Баланың мәліметтерін толық толтырыңыз.');
