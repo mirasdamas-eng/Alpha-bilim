@@ -886,39 +886,30 @@ function updateAuthRole(){
 }
 
 function formatPhone(input){
-  const raw = input.value;
+  const raw = input.value || '';
   const caret = input.selectionStart ?? raw.length;
-  // Қолданушы +7 кодынан кейін терсе де, толық нөмірді көшіріп қойса да дұрыс өңдеу.
-  let digits;
-  if (raw.trim().startsWith('+7')) {
-    digits = raw.trim().slice(2).replace(/\D/g, '');
-  } else {
-    digits = raw.replace(/\D/g, '');
-    if (digits.length === 11 && (digits.startsWith('7') || digits.startsWith('8'))) {
-      digits = digits.slice(1);
-    }
-  }
+  const hadPrefix = raw.trimStart().startsWith('+7');
+  let digits = hadPrefix ? raw.slice(raw.indexOf('+7') + 2).replace(/\D/g, '') : raw.replace(/\D/g, '');
+  if (!hadPrefix && digits.length === 11 && /^[78]/.test(digits)) digits = digits.slice(1);
   digits = digits.slice(0, 10);
 
   let out = '+7';
-  if (digits.length > 0) out += ' (' + digits.slice(0, 3);
+  if (digits.length) out += ' (' + digits.slice(0, 3);
   if (digits.length >= 3) out += ')';
   if (digits.length > 3) out += ' ' + digits.slice(3, 6);
   if (digits.length > 6) out += ' ' + digits.slice(6, 10);
   input.value = out;
 
-  // Курсорды +7 кодынан кейін немесе енгізілген цифрлардың соңына қоямыз.
-  const beforePrefix = raw.trim().startsWith('+7') ? raw.slice(2, caret) : raw.slice(0, caret);
-  let typedBefore = beforePrefix.replace(/\D/g, '');
-  if (!raw.trim().startsWith('+7') && typedBefore.length === 11 && (typedBefore.startsWith('7') || typedBefore.startsWith('8'))) typedBefore = typedBefore.slice(1);
-  const n = Math.min(typedBefore.length, digits.length);
-  let cursor = 2;
-  if (n > 0) {
-    cursor = 4 + Math.min(n, 3);
-    if (n >= 3) cursor = 5 + 3 + Math.min(n - 3, 3);
-    if (n > 6) cursor = 9 + (n - 6);
-  }
-  try { input.setSelectionRange(Math.min(cursor, out.length), Math.min(cursor, out.length)); } catch (_) {}
+  const left = raw.slice(0, caret);
+  let beforeDigits = hadPrefix ? left.slice(Math.max(0, left.indexOf('+7') + 2)).replace(/\D/g, '') : left.replace(/\D/g, '');
+  if (!hadPrefix && beforeDigits.length === 11 && /^[78]/.test(beforeDigits)) beforeDigits = beforeDigits.slice(1);
+  const n = Math.min(beforeDigits.length, digits.length);
+  let pos = 2;
+  if (n > 0) pos = 4 + Math.min(n, 3);
+  if (n >= 3) pos = 8 + Math.min(n - 3, 3);
+  if (n > 6) pos = 12 + Math.min(n - 6, 4);
+  pos = Math.min(pos, out.length);
+  try { input.setSelectionRange(pos, pos); } catch (_) {}
 }
 document.addEventListener('DOMContentLoaded',()=>{
   const phone=$('phone');
@@ -1466,8 +1457,13 @@ function playFreeLesson(index){
       }
       if(result.error) throw result.error;
       if(mode === 'register' && !result.data.session) {
-        showError('Supabase email растауды талап етіп тұр. Бірден кіру үшін Supabase → Authentication → Sign In / Providers → Email ішінен Confirm email параметрін өшіріп, Save басу қажет.');
-        return;
+        // Try an immediate password sign-in; this succeeds when email confirmation is disabled.
+        const immediate = await supa.auth.signInWithPassword({ email, password });
+        if (immediate.error || !immediate.data?.session) {
+          showError('Тіркелу сұранысы қабылданды, бірақ Supabase email растауын талап етіп тұр. Бірден кіру үшін Supabase → Authentication → Sign In / Providers → Email → Confirm email параметрін өшіріп, Save басыңыз. Содан кейін осы email мен құпиясөз арқылы қайта кіріңіз.');
+          return;
+        }
+        result = { data: immediate.data, error: null };
       }
       const authUser = result.data.user;
       const meta = authUser?.user_metadata || {};
