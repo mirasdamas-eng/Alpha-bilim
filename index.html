@@ -198,6 +198,78 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
 @media(max-width:560px){#tariffModal.modal{padding:8px;align-items:flex-start}#tariffModal .tariff-modal-card{padding:22px 14px 16px;margin:6px 0;max-height:none}#tariffModal .tariff-modal-heading{gap:10px;padding-right:35px}#tariffModal .tariff-heading-icon{width:42px;height:42px;flex-basis:42px;font-size:22px}#tariffModal .tariff-modal-heading h2{font-size:22px}#tariffModal .tariff-gift{margin-left:0;min-width:0;padding:10px}#tariffModal .tariff-option{padding:18px 15px}}
 </style>
 
+<style id="alpha-dashboard-reference-theme">
+:root{--alpha-navy:#071a36;--alpha-navy2:#0b2550;--alpha-blue:#145dff;--alpha-cyan:#18bdf4;--alpha-line:#d5e6ff}
+body:has(#app[style*="display: block"]),body:has(#app[style*="display:block"]){background:#edf5ff}
+#app{color:#10264c;background:linear-gradient(135deg,#f7fbff,#edf5ff)}
+#app .app-layout{grid-template-columns:274px minmax(0,1fr);gap:0;min-height:100vh;background:transparent}
+#app .sidebar{position:sticky;top:0;height:100vh;overflow:auto;background:radial-gradient(ellipse at 20% 0%,#12346b 0%,#071a36 47%,#06152d 100%);color:#e7f0ff;border-right:1px solid #1d3b67;padding:20px 15px;display:flex;flex-direction:column;box-shadow:10px 0 35px #08204b12}
+#app .side-logo{padding:0 10px 24px;border-bottom:1px solid #24436d;margin-bottom:17px;color:#fff;font-size:23px}
+#app .logo-mark{background:linear-gradient(145deg,#57a8ff,#2857ff);box-shadow:0 8px 18px #145dff45;border-radius:13px}
+#app .menu{display:grid;gap:7px}
+#app .menu button{width:100%;text-align:left;display:flex;align-items:center;gap:10px;padding:12px 13px;border:1px solid transparent;border-radius:12px;background:transparent;color:#bcd0ef;font-size:13px;font-weight:650;transition:background .18s,color .18s,transform .18s}
+#app .menu button:hover{background:#ffffff0d;color:white;transform:translateX(2px)}
+#app .menu button.active{background:linear-gradient(100deg,#1262f5,#3548ff);color:white;box-shadow:0 8px 22px #155dff3b}
+#app .side-bottom{margin-top:auto;padding-top:18px;border-top:1px solid #24436d}
+#app .side-bottom .btn{border:1px solid #2e4d79!important;background:#102b51!important;color:#fff!important;border-radius:12px!important}
+#app .main{min-width:0;background:linear-gradient(140deg,#f8fbff 0%,#edf6ff 58%,#f7fbff 100%)}
+#app .topbar{height:70px;padding:0 28px;background:linear-gradient(105deg,#071a36,#0b2853);color:white;border-bottom:1px solid #25446e;box-shadow:0 4px 20px #102a5010}
+#app .topbar .search{background:#ffffff10;border:1px solid #ffffff20;color:white;border-radius:12px}
+#app .topbar .search::placeholder{color:#c2d4f1}
+#app .userbox{color:#fff}
+#app .avatar{background:linear-gradient(135deg,#dceaff,#8abaff);color:#174da9;border:2px solid #ffffff70}
+#app .content{max-width:none;padding:25px 28px 35px}
+#app .view h1,#app .view h2,#app .view h3{color:#10264c;letter-spacing:-.35px}
+#app .muted{color:#627b9f}
+#app .dash-head{padding:23px 25px;border-radius:21px;background:linear-gradient(115deg,#0a2864,#104cc0 62%,#3436a6);color:white;box-shadow:0 14px 35px #0a3d9726;margin-bottom:20px}
+#app .dash-head h1,#app .dash-head p{color:white}
+#app .dash-head p{opacity:.82}
+#app .dash-head .btn{border:1px solid #ffffff40;background:#fff;color:#1246a4;box-shadow:none}
+#app .my-courses,.alpha-home-extras,#app .panel{border:1px solid #d9e8fb;border-radius:20px;background:#ffffffd9;box-shadow:0 9px 28px #244d7c08;padding:20px;margin-top:18px}
+#app .courses-heading{align-items:center;gap:16px}
+#app .courses-heading h2{font-size:23px}
+#app .course-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+#app .course-card{border:1px solid #d7e7fb!important;border-radius:17px!important;box-shadow:0 8px 22px #163d6d0b;overflow:hidden;transition:transform .2s,box-shadow .2s}
+#app .course-card:hover{transform:translateY(-3px);box-shadow:0 14px 28px #163d6d16}
+#app .btn.btn-primary,#app button.btn-primary{background:linear-gradient(100deg,#145dff,#3154ed);border:0;border-radius:12px;box-shadow:0 6px 15px #145dff20}
+#app .btn-light{background:#fff;border:1px solid #d6e5fa;color:#1555d6;border-radius:12px}
+#app .panel{color:#10264c}
+#app .modal-card{border-radius:24px}
+.alpha-home-extras{padding:20px;margin-top:20px}
+.alpha-extra-heading,.alpha-pricing-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:15px}
+.alpha-extra-heading h2,.alpha-pricing-heading h2{margin:4px 0;font-size:23px}
+.alpha-extra-heading p,.alpha-pricing-heading p{margin:0;color:#7185a4;font-size:12px}
+.alpha-eyebrow{font-size:10px;font-weight:900;letter-spacing:1.1px;color:#2865e8}
+.alpha-text-link{border:0;background:transparent;color:#135bfa;font-size:12px;font-weight:850;cursor:pointer;white-space:nowrap}
+.alpha-subject-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:20px}
+.alpha-subject-card{display:flex;align-items:flex-start;gap:14px;padding:17px;border-radius:17px;color:#fff;min-width:0;box-shadow:0 9px 22px #124a8a15}
+.alpha-info-card{background:linear-gradient(120deg,#0cbaa0,#159cc0)}
+.alpha-math-card{background:linear-gradient(120deg,#1674f8,#167de0)}
+.alpha-subject-icon{display:grid;place-items:center;flex:0 0 42px;height:42px;border-radius:14px;background:#ffffff2a;font-size:23px;font-weight:900}
+.alpha-subject-card h3{margin:1px 0 6px!important;color:#fff!important;font-size:15px}
+.alpha-subject-card p{margin:0 0 12px;font-size:11px;line-height:1.55;color:#f0f7ff}
+.alpha-subject-card button{border:1px solid #ffffff80;background:#ffffff1c;color:#fff;border-radius:9px;padding:8px 10px;font-size:11px;font-weight:800;cursor:pointer}
+.alpha-pricing-panel{border-radius:19px;padding:18px;background:linear-gradient(130deg,#071f50,#103d9b 65%,#282d83);color:white}
+.alpha-pricing-heading h2,.alpha-pricing-heading p{color:white}
+.alpha-pricing-heading p{opacity:.75}
+.alpha-pricing-heading .alpha-eyebrow{color:#91d9ff}
+.alpha-pricing-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.alpha-price-card{min-width:0;padding:15px 13px;border-radius:15px;border:1px solid #4770b8;background:#ffffff0b;color:white}
+.alpha-price-card.alpha-price-featured{border-color:#ff4bb8;background:linear-gradient(145deg,#182d83,#312b91);box-shadow:0 0 0 1px #ff4bb830}
+.alpha-price-title{display:flex;justify-content:space-between;align-items:center;gap:5px;font-size:15px;font-weight:900;color:#fff}
+.alpha-price-title span{font-size:9px;padding:4px 6px;border-radius:99px;background:#1b68e8;color:#fff;white-space:nowrap}
+.alpha-price-featured .alpha-price-title span{background:#ed2698}
+.alpha-price-value{font-size:25px;font-weight:950;margin-top:12px;color:#fff;letter-spacing:-.5px}
+.alpha-price-value small{font-size:10px;font-weight:500;letter-spacing:0;opacity:.8}
+.alpha-price-card p{font-size:10px;color:#c4d8fa;min-height:28px;margin:4px 0 10px}
+.alpha-price-card ul{padding-left:15px;margin:0 0 15px;min-height:66px;color:#d8e6ff;font-size:10px;line-height:1.9}
+.alpha-price-card button{width:100%;padding:10px 5px;border:0;border-radius:10px;background:#075fe9;color:white;font-size:11px;font-weight:850;cursor:pointer}
+.alpha-price-featured button{background:linear-gradient(100deg,#ff168f,#a442f3)}
+@media(max-width:1100px){#app .app-layout{grid-template-columns:225px minmax(0,1fr)}#app .content{padding:20px 17px}#app .topbar{padding:0 18px}.alpha-pricing-cards{grid-template-columns:1fr}.alpha-price-card ul{min-height:0}}
+@media(max-width:760px){#app .app-layout{grid-template-columns:1fr}#app .sidebar{position:relative;height:auto;display:block;padding:12px;overflow:visible}#app .side-logo{padding-bottom:10px;margin-bottom:10px}#app .menu{display:flex;overflow-x:auto;padding-bottom:5px}#app .menu button{white-space:nowrap;width:auto;flex:0 0 auto;padding:10px}#app .side-bottom{display:none}#app .content{padding:14px}#app .topbar{height:58px}.alpha-subject-cards{grid-template-columns:1fr}#app .course-grid{grid-template-columns:1fr}.alpha-extra-heading,.alpha-pricing-heading{align-items:flex-start}#app .dash-head{padding:19px}}
+@media(prefers-reduced-motion:reduce){#app *,.alpha-subject-card{transition:none!important}}
+</style>
+
 </head>
 <body>
 
@@ -446,6 +518,25 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
       </div>
     </div>
   </div>
+
+  <section class="alpha-home-extras" aria-label="Ұсыныстар және тарифтер">
+    <div class="alpha-extra-heading">
+      <div><span class="alpha-eyebrow">ALPHA · ОҚУ ОРТАЛЫҒЫ</span><h2>Ұсыныстар</h2><p>Қазір екі пәннен баста: информатика және математика.</p></div>
+      <button class="alpha-text-link" onclick="document.querySelector('[data-view=&quot;lessonsView&quot;]')?.click()">Тегін сабақтар →</button>
+    </div>
+    <div class="alpha-subject-cards">
+      <article class="alpha-subject-card alpha-info-card"><span class="alpha-subject-icon">⌘</span><div><h3>Информатика</h3><p>Алгоритмдер, компьютерлік сауаттылық және видео сабақтар.</p><button onclick="document.querySelector('[data-view=&quot;lessonsView&quot;]')?.click();setTimeout(()=>openFreeSubject('informatics'),80)">Сабақтарды көру →</button></div></article>
+      <article class="alpha-subject-card alpha-math-card"><span class="alpha-subject-icon">∑</span><div><h3>Математика</h3><p>Негізгі тақырыптар, есептер және түсіндіру видеолары.</p><button onclick="document.querySelector('[data-view=&quot;lessonsView&quot;]')?.click();setTimeout(()=>openFreeSubject('math'),80)">Сабақтарды көру →</button></div></article>
+    </div>
+    <div class="alpha-pricing-panel">
+      <div class="alpha-pricing-heading"><div><span class="alpha-eyebrow">ОҚУ МҮМКІНДІКТЕРІ</span><h2>Тарифтер</h2><p>Өзіңе ыңғайлы оқу жоспарын таңда.</p></div><button class="alpha-text-link" onclick="openTariffModal()">Барлық тарифтер →</button></div>
+      <div class="alpha-pricing-cards">
+        <article class="alpha-price-card"><div class="alpha-price-title">Lite <span>Бастапқы</span></div><div class="alpha-price-value">0 ₸</div><p>Тегін видео сабақтар</p><ul><li>Информатика</li><li>Математика</li><li>Негізгі материалдар</li></ul><button onclick="chooseTariff('free')">Тегін бастау</button></article>
+        <article class="alpha-price-card alpha-price-featured"><div class="alpha-price-title">Pro <span>Танымал</span></div><div class="alpha-price-value">7 000 ₸<small>/ай</small></div><p>Толық онлайн дайындық</p><ul><li>Курс материалдары</li><li>Видео және тесттер</li><li>Оқу жоспары</li></ul><button onclick="openTariffModal()">Тарифті таңдау →</button></article>
+        <article class="alpha-price-card"><div class="alpha-price-title">Business <span>Кеңейтілген</span></div><div class="alpha-price-value">12 000 ₸<small>/ай</small></div><p>Кеңейтілген оқу мүмкіндіктері</p><ul><li>Қосымша тапсырмалар</li><li>Қателерді талдау</li><li>Прогресс бақылау</li></ul><button onclick="openTariffModal()">Толығырақ →</button></article>
+      </div>
+    </div>
+  </section>
 
   <div class="panel" style="margin-top:20px">
     <h3>Менеджермен байланыс</h3>
