@@ -345,6 +345,75 @@ body:has(#app[style*="display: block"]),body:has(#app[style*="display:block"]){b
 @media(prefers-reduced-motion:reduce){.login-card{animation:none}.login-card *{transition:none!important}}
 </style>
 
+
+<style id="alpha-public-home-navy-theme">
+/* Public ALPHA home page: align its visual style with the navy dashboard */
+:root{
+  --bg:#f2f7ff;--card:#fff;--text:#10264b;--muted:#5e7397;
+  --primary:#1458f5;--primary2:#287cff;--line:#d9e7fb;
+  --shadow:0 18px 50px rgba(15,43,87,.09);--radius:20px;
+}
+body{background:#f2f7ff;color:#10264b}
+.nav{
+  height:70px;background:linear-gradient(105deg,#06152e,#0b2145 58%,#0b1b3b);
+  border-bottom:1px solid rgba(140,183,255,.22);color:#f7faff;
+  box-shadow:0 5px 24px rgba(5,20,48,.12)
+}
+.nav .logo{color:#fff;letter-spacing:.5px}
+.nav .logo-mark{
+  background:linear-gradient(145deg,#4b9aff,#1555f4);border-radius:12px;
+  box-shadow:0 7px 20px rgba(27,101,255,.28)
+}
+.nav-links{color:#d5e3ff}
+.nav-links a{transition:color .18s}
+.nav-links a:hover{color:#65a4ff}
+.nav .btn-light{background:rgba(255,255,255,.06);border:1px solid rgba(205,224,255,.25);color:#fff}
+.nav .btn-primary,.btn-primary{
+  background:linear-gradient(105deg,#0757f9,#267bff);color:#fff;
+  box-shadow:0 9px 23px rgba(24,94,245,.22)
+}
+.btn-primary:hover{filter:brightness(1.06)}
+.hero{
+  padding:76px 0 72px;
+  background:
+    radial-gradient(ellipse at 83% 12%,rgba(80,139,255,.16),transparent 32%),
+    radial-gradient(ellipse at 8% 35%,rgba(61,204,255,.14),transparent 28%),
+    linear-gradient(180deg,#f7faff 0%,#eef5ff 100%);
+}
+.hero .badge{background:#e3eeff;color:#1257e8;border:1px solid #d4e4ff}
+.hero h1{color:#10264b}
+.gradient{
+  background:linear-gradient(110deg,#0758f7,#3d8dff);
+  -webkit-background-clip:text;background-clip:text;color:transparent
+}
+.hero p{color:#5d7397}
+.hero .btn-light{background:#fff;border:1px solid #d9e6f8;color:#10264b}
+.hero-card{
+  border:1px solid #dce8fb;border-radius:28px;
+  box-shadow:0 22px 60px rgba(18,50,100,.12);background:#fff
+}
+.hero-card:before{background:#e2edff}
+.progress-card{background:#f0f6ff;border:1px solid #e2edff}
+.progress i{background:linear-gradient(90deg,#1458f5,#4b9aff)}
+.mini{border-color:#dce8fb}
+.icon{background:#e7f0ff;color:#1558ed}
+section{background:transparent}
+.section-head h2{color:#10264b}
+.feature,.step,.price{
+  border-color:#dce8fb;border-radius:20px;
+  box-shadow:0 10px 28px rgba(20,58,110,.045)
+}
+.feature:hover,.step:hover{border-color:#a8caff;box-shadow:0 14px 32px rgba(20,58,110,.08)}
+.price.pop{border-color:#1e69ff;box-shadow:0 16px 38px rgba(20,88,245,.13)}
+.cta{background:linear-gradient(115deg,#071a38,#123b82 65%,#1559e9);border:1px solid rgba(145,190,255,.25)}
+footer{background:#f2f7ff;border-color:#dce8fb}
+@media(max-width:700px){
+ .nav{height:66px}
+ .hero{padding-top:48px}
+ .hero h1{letter-spacing:-1.7px}
+}
+</style>
+
 </head>
 <body>
 
