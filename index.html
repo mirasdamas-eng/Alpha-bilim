@@ -1327,5 +1327,129 @@ function playFreeLesson(index){
 }
 </script>
 
+
+<script>
+/* ALPHA emergency auth handler: keeps login/register controls available independently. */
+(function () {
+  let mode = 'login';
+  let client = null;
+  const el = id => document.getElementById(id);
+  function initClient() {
+    try {
+      if (!client && window.supabase && typeof window.supabase.createClient === 'function') {
+        client = window.supabase.createClient(
+          'https://iuchrzphazitgycomtxv.supabase.co',
+          'sb_publishable_5_sK62cUTvvL--2mphuExQ_jroU-tRy'
+        );
+      }
+    } catch (e) { console.error('ALPHA auth client error', e); }
+    return client;
+  }
+  function setMode(next) {
+    mode = next === 'register' ? 'register' : 'login';
+    const reg = mode === 'register';
+    if (el('loginOverlay')) el('loginOverlay').style.display = 'flex';
+    if (el('loginTitle')) el('loginTitle').textContent = reg ? 'Тіркелу' : 'Кіру';
+    if (el('loginSub')) el('loginSub').textContent = reg ? 'Жеке оқу кабинетін жасаңыз.' : 'Жеке оқу кабинетіңізге кіріңіз.';
+    ['nameField','patronymicField','surnameField','phoneField','roleField'].forEach(id => { if(el(id)) el(id).style.display = reg ? 'block' : 'none'; });
+    if (el('classField')) el('classField').style.display = reg && el('role') && el('role').value === 'student' ? 'block' : 'none';
+    if (el('childDataField')) el('childDataField').style.display = reg && el('role') && el('role').value === 'parent' ? 'block' : 'none';
+    if (el('switchText')) el('switchText').textContent = reg ? 'Аккаунтыңыз бар ма?' : 'Аккаунтыңыз жоқ па?';
+    const link = document.querySelector('.switch a');
+    if (link) link.textContent = reg ? 'Кіру' : 'Тіркелу';
+    if (el('loginError')) el('loginError').style.display = 'none';
+  }
+  window.openLogin = setMode;
+  window.closeLogin = function(){ if(el('loginOverlay')) el('loginOverlay').style.display='none'; };
+  window.toggleAuth = function(){ setMode(mode === 'login' ? 'register' : 'login'); };
+  window.updateAuthRole = function(){
+    const role = el('role') ? el('role').value : 'student';
+    if(el('classField')) el('classField').style.display = mode === 'register' && role === 'student' ? 'block' : 'none';
+    if(el('childDataField')) el('childDataField').style.display = mode === 'register' && role === 'parent' ? 'block' : 'none';
+  };
+  window.submitAuth = async function(){
+    const button = document.querySelector('.login-submit');
+    const error = el('loginError');
+    const showError = msg => { if(error){error.textContent=msg;error.style.display='block';} };
+    const email = (el('email')?.value || '').trim().toLowerCase();
+    const password = el('password')?.value || '';
+    const firstName = (el('firstName')?.value || '').trim();
+    const patronymic = (el('patronymic')?.value || '').trim();
+    const surname = (el('surname')?.value || '').trim();
+    const phone = (el('phone')?.value || '').trim();
+    const role = el('role')?.value || 'student';
+    const grade = el('grade')?.value || '';
+    const childFirstName = (el('childFirstName')?.value || '').trim();
+    const childSurname = (el('childSurname')?.value || '').trim();
+    const childGrade = el('childGrade')?.value || '';
+    if(!email || !password || (mode === 'register' && (!firstName || !phone))) return showError('Email, құпиясөз, аты және телефонды толтырыңыз.');
+    if(!email.includes('@')) return showError('Email дұрыс енгізілмеген.');
+    if(password.length < 6) return showError('Құпиясөз кемінде 6 таңбадан тұруы керек.');
+    if(mode === 'register' && role === 'parent' && (!childFirstName || !childSurname || !childGrade)) return showError('Баланың мәліметтерін толық толтырыңыз.');
+    const supa = initClient();
+    if(!supa) return showError('Кіру жүйесі жүктелмеді. Интернетті тексеріп, Ctrl + F5 басыңыз.');
+    if(button){button.disabled=true;button.textContent='Күте тұрыңыз...';}
+    try {
+      let result;
+      if(mode === 'register') {
+        result = await supa.auth.signUp({email,password,options:{data:{
+          full_name:[firstName,patronymic,surname].filter(Boolean).join(' '),
+          first_name:firstName,patronymic,surname,phone,role,
+          grade:role==='student'?grade:'',
+          child_full_name:role==='parent'?[childFirstName,childSurname].filter(Boolean).join(' '):'',
+          child_grade:role==='parent'?childGrade:'',username:email
+        }}});
+      } else {
+        result = await supa.auth.signInWithPassword({email,password});
+      }
+      if(result.error) throw result.error;
+      if(mode === 'register' && !result.data.session) {
+        showError('Аккаунт жасалды. Email поштаңызды растаңыз, содан кейін Кіру бөлімінен кіріңіз.');
+        return;
+      }
+      const authUser = result.data.user;
+      const meta = authUser?.user_metadata || {};
+      const profileResult = await supa.from('profiles').select('full_name,role,first_name,patronymic,surname,phone,grade,child_full_name,child_grade').eq('id',authUser.id).maybeSingle();
+      const p = profileResult && !profileResult.error && profileResult.data ? profileResult.data : {};
+      const user = {
+        id:authUser.id,email:authUser.email,
+        name:p.full_name||meta.full_name||meta.first_name||email,
+        firstName:p.first_name||meta.first_name||firstName,
+        patronymic:p.patronymic||meta.patronymic||patronymic,
+        surname:p.surname||meta.surname||surname,
+        phone:p.phone||meta.phone||phone,
+        role:p.role||meta.role||role,
+        grade:p.grade||meta.grade||grade,
+        child:p.child_full_name?{fullName:p.child_full_name,grade:p.child_grade||''}:null
+      };
+      try {
+        const users = JSON.parse(localStorage.getItem('alphaUsers') || '[]').filter(u=>u.id!==user.id);
+        users.push(user); localStorage.setItem('alphaUsers',JSON.stringify(users));
+        localStorage.setItem('alphaCurrentUserId',user.id);
+        localStorage.setItem('alphaLogged','1');
+        localStorage.setItem('alphaName',user.name);
+        localStorage.setItem('alphaFirstName',user.firstName);
+        localStorage.setItem('alphaPatronymic',user.patronymic);
+        localStorage.setItem('alphaSurname',user.surname);
+        localStorage.setItem('alphaRole',user.role);
+        localStorage.setItem('alphaPhone',user.phone);
+        localStorage.setItem('alphaGrade',user.grade);
+      } catch(storageError) { console.warn('ALPHA local storage unavailable',storageError); }
+      window.closeLogin();
+      if(typeof window.showApp === 'function') window.showApp(user.name,user.role);
+      else { if(el('landing')) el('landing').style.display='none'; if(el('app')) el('app').style.display='block'; }
+      if(typeof window.toast === 'function') window.toast('Жеке кабинет ашылды!');
+    } catch(e) {
+      const msg = String(e?.message || 'Белгісіз қате');
+      if(/invalid login credentials/i.test(msg)) showError('Email немесе құпиясөз қате.');
+      else if(/already registered/i.test(msg)) showError('Бұл email бұрын тіркелген. Кіру бөлімінен кіріңіз.');
+      else showError('Кіру/тіркелу қатесі: ' + msg);
+    } finally {
+      if(button){button.disabled=false;button.textContent='Жалғастыру →';}
+    }
+  };
+})();
+</script>
+
 </body>
 </html>
