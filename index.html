@@ -1068,35 +1068,72 @@ function openWhatsApp(message){
   window.open('https://wa.me/77053402792?text='+text,'_blank','noopener,noreferrer');
 }
 
-/* ===== TARIFF ACCESS ===== */
+/* ===== SECURE TARIFF ACCESS ===== */
 const ALPHA_TARIFFS = {
   free: {name:'Тегін', price:'0 ₸', color:'free'},
   start: {name:'Online Start', price:'7 000 ₸/ай', color:'start'},
   plus: {name:'Online Plus', price:'12 000 ₸/ай', color:'plus'}
 };
 
+// Only a tariff verified from Supabase can unlock paid-course UI.
+// Never trust localStorage or a client-side "payment successful" click.
+let alphaVerifiedTariff = 'free';
+let alphaEntitlementLoaded = false;
+
 function getStudentTariff(){
-  return localStorage.getItem('alphaTariff') || 'free';
+  return alphaVerifiedTariff;
+}
+
+async function refreshAlphaEntitlement(){
+  alphaVerifiedTariff = 'free';
+  alphaEntitlementLoaded = false;
+  try{
+    const {data:{user},error:userError} = await alphaSupabase.auth.getUser();
+    if(userError || !user){
+      renderTariffUI();
+      return;
+    }
+    const now = new Date().toISOString();
+    const {data,error} = await alphaSupabase
+      .from('alpha_entitlements')
+      .select('plan_key,expires_at')
+      .eq('user_id', user.id)
+      .gt('expires_at', now)
+      .order('expires_at', {ascending:false})
+      .limit(1);
+    if(!error && data && data.length && ALPHA_TARIFFS[data[0].plan_key]){
+      alphaVerifiedTariff = data[0].plan_key;
+    }
+  }catch(err){
+    console.error('ALPHA entitlement check failed:',err);
+    alphaVerifiedTariff = 'free';
+  }finally{
+    alphaEntitlementLoaded = true;
+    renderTariffUI();
+  }
 }
 
 function setStudentTariff(tariff){
-  localStorage.setItem('alphaTariff', tariff);
-  renderTariffUI();
-  if(typeof showSection === 'function') showSection('home');
+  // Paid access is server-controlled. This function intentionally cannot grant it.
+  if(tariff === 'free'){
+    alphaVerifiedTariff = 'free';
+    renderTariffUI();
+  }
 }
 
 function chooseTariff(tariff){
   if(tariff === 'free'){
     setStudentTariff('free');
-    alert('Тегін тариф қосылды. Тегін видео сабақтарға қолжетімділік берілді.');
+    alert('Тегін тариф қосылды. Тегін видео сабақтар қолжетімді.');
     return;
   }
-  // Demo payment flow: real payment/backend can be connected later.
-  const t = ALPHA_TARIFFS[tariff];
-  if(confirm(`${t.name} тарифін таңдайсыз ба?\nБағасы: ${t.price}`)){
-    setStudentTariff(tariff);
-    alert(`${t.name} тарифі демо режимде қосылды.`);
+  if(!ALPHA_TARIFFS[tariff]){
+    alert('Тариф табылмады. Қайта таңдап көріңіз.');
+    return;
   }
+  // Checkout is deliberately fail-closed until a merchant/payment provider is configured.
+  // No browser-side confirmation may mark an order paid or grant video access.
+  alert('Онлайн төлем провайдері әлі қосылмаған. Төлем жүргізілген жоқ және ақылы видеолар ашылған жоқ. Төлемді қосу үшін ALPHA-ға төлем қабылдайтын провайдерді байланыстыру қажет.');
 }
 
 function renderTariffUI(){
@@ -1124,11 +1161,12 @@ function renderTariffUI(){
   const tariffNote = document.getElementById('tariffAccessNote');
   if(tariffNote){
     tariffNote.innerHTML = tariff === 'free'
-      ? 'Қазір <b>Тегін</b> тарифі қосулы. Тегін видео сабақтарды көре аласыз. Қалған курстар құлыптаулы.'
-      : `Қазір <b>${t.name}</b> тарифі қосулы. Ақылы курс контенттеріне қолжетімділік бар.`;
+      ? (alphaEntitlementLoaded
+        ? 'Қазір <b>Тегін</b> тарифі қосулы. Тегін видео сабақтарды көре аласыз. Төлем расталғанға дейін ақылы курстар құлыптаулы.'
+        : 'Тарифтің қолжетімділігі тексеріліп жатыр. Төлем расталмаған болса, ақылы курстар құлыптаулы болады.')
+      : `Қазір <b>${t.name}</b> тарифі Supabase арқылы расталды.`;
   }
 }
-
 function openTariffModal(){
   const modal = document.getElementById('tariffModal');
   if(modal){
@@ -1147,7 +1185,7 @@ function closeTariffModal(){
   }
 }
 
-document.addEventListener('DOMContentLoaded', renderTariffUI);
+document.addEventListener('DOMContentLoaded', function(){ renderTariffUI(); refreshAlphaEntitlement(); });
 
 </script>
 
