@@ -148,6 +148,42 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
 }
 
 </style>
+
+<style id="alpha-tariff-redesign">
+/* ALPHA tariff chooser — branded, responsive pricing cards */
+#tariffModal .modal-card.tariff-modal-card{
+  width:min(1180px,96vw);max-height:92vh;padding:34px;
+  border:1px solid #d9e5ff;border-radius:28px;
+  background:linear-gradient(145deg,#f8fbff 0%,#eef4ff 100%);
+  color:#10264b;box-shadow:0 30px 100px rgba(8,28,70,.32)
+}
+#tariffModal .modal-card .eyebrow{display:inline-flex;padding:7px 12px;border-radius:99px;background:#e4edff;color:#1457d9;font-size:11px;font-weight:900;letter-spacing:1px}
+#tariffModal .modal-card h2{font-size:clamp(25px,3vw,36px);letter-spacing:-.7px;margin:13px 42px 8px 0;color:#10264b}
+#tariffModal .modal-card>p{font-size:14px;line-height:1.6;color:#607391}
+#tariffModal .tariff-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:26px;align-items:stretch}
+#tariffModal .tariff-option{position:relative;display:flex;flex-direction:column;min-width:0;padding:25px;border-radius:23px;background:#fff;border:1px solid #dbe6f8;box-shadow:0 12px 32px rgba(20,48,95,.07);transition:transform .2s,box-shadow .2s}
+#tariffModal .tariff-option:hover{transform:translateY(-3px);box-shadow:0 18px 38px rgba(20,48,95,.12)}
+#tariffModal .tariff-option.featured{transform:none;color:#fff;border:2px solid #4c8dff;background:linear-gradient(145deg,#102c72 0%,#2439a8 58%,#5532b9 100%);box-shadow:0 18px 42px rgba(43,66,175,.24)}
+#tariffModal .tariff-option.featured p{color:#dce7ff}
+#tariffModal .tariff-option h3{font-size:23px;margin:18px 0 5px;color:inherit}
+#tariffModal .tariff-price{font-size:34px;font-weight:900;letter-spacing:-1px;color:inherit;margin:12px 0}
+#tariffModal .tariff-price small{font-size:13px;letter-spacing:0;opacity:.75}
+#tariffModal .tariff-option p{font-size:13px;line-height:1.6;min-height:48px;color:#657895}
+#tariffModal .tariff-option .btn{width:100%;margin-top:auto;min-height:46px;border-radius:13px;background:linear-gradient(110deg,#155eef,#4f46e5);color:#fff;border:0;font-weight:800}
+#tariffModal .tariff-option.featured .btn{background:linear-gradient(100deg,#ff1688,#a344f2);color:#fff}
+#tariffModal .tariff-option .course-tag{align-self:flex-start;padding:7px 10px;border-radius:99px;background:#eaf1ff;color:#2256c7}
+#tariffModal .tariff-option.featured .course-tag{background:#ffffff24;color:#fff}
+#tariffModal .tariff-option .course-tag.free{background:#e1f8eb;color:#087b45}
+#tariffModal .modal-close{z-index:2;background:#e8effb;color:#18315c}
+@media(max-width:760px){
+ #tariffModal.modal{padding:10px;align-items:flex-start}
+ #tariffModal .modal-card.tariff-modal-card{padding:24px 16px;margin:10px 0;max-height:none}
+ #tariffModal .tariff-options{grid-template-columns:1fr}
+ #tariffModal .tariff-option.featured{order:-1}
+ #tariffModal .tariff-option p{min-height:0}
+}
+</style>
+
 </head>
 <body>
 
