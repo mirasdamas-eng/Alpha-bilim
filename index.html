@@ -151,40 +151,111 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
 
 
 
+<style id="alpha-tariff-visual-redesign">
+#tariffModal.modal{padding:18px;background:rgba(5,16,39,.72);backdrop-filter:blur(9px)}
+#tariffModal .tariff-modal-card{width:min(1240px,98vw);max-width:1240px!important;max-height:94vh;overflow-y:auto;padding:28px 30px 30px;border:1px solid #d7e5ff;border-radius:28px;background:linear-gradient(145deg,#f7fbff 0%,#eef4ff 100%);color:#10264b;box-shadow:0 28px 90px rgba(4,18,52,.38)}
+#tariffModal .modal-close{background:#e4edff;color:#17315c;z-index:3}
+#tariffModal .tariff-modal-heading{display:flex;align-items:center;gap:15px;padding-right:42px;margin-bottom:22px}
+#tariffModal .tariff-heading-icon{width:52px;height:52px;flex:0 0 52px;display:grid;place-items:center;border-radius:18px;background:#fff2d5;color:#ee9c10;font-size:28px}
+#tariffModal .eyebrow{font-size:11px;letter-spacing:1px;font-weight:900;color:#2458db}
+#tariffModal .tariff-modal-heading h2{font-size:clamp(23px,2.5vw,32px);letter-spacing:-.6px;margin:5px 0;color:#10264b}
+#tariffModal .tariff-modal-heading p{margin:0;font-size:13px;color:#607391}
+#tariffModal .tariff-gift{margin-left:auto;display:flex;align-items:center;gap:12px;min-width:245px;padding:13px 16px;border:1px solid #c8ddff;border-radius:20px;background:linear-gradient(110deg,#edf5ff,#f6f8ff);color:#1557db}
+#tariffModal .tariff-gift>span{font-size:25px;background:#dceaff;width:42px;height:42px;display:grid;place-items:center;border-radius:50%}
+#tariffModal .tariff-gift b,#tariffModal .tariff-gift small{display:block}
+#tariffModal .tariff-gift b{font-size:12px}#tariffModal .tariff-gift small{font-size:11px;color:#5b7194;margin-top:4px}
+#tariffModal .tariff-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:17px;margin-top:0;align-items:stretch}
+#tariffModal .tariff-option{min-width:0;display:flex;flex-direction:column;padding:21px 20px 17px;border:1px solid #d7e5fb;border-radius:21px;background:rgba(255,255,255,.96);box-shadow:0 12px 30px rgba(25,55,105,.07);transition:transform .2s,box-shadow .2s}
+#tariffModal .tariff-option:hover{transform:translateY(-3px);box-shadow:0 17px 34px rgba(25,55,105,.13)}
+#tariffModal .tariff-option.featured{transform:none;border:2px solid transparent;background:linear-gradient(145deg,#102e79 0%,#1934a7 55%,#5330b5 100%) padding-box,linear-gradient(120deg,#ff2da5,#287dff,#31e8f1) border-box;color:#fff;box-shadow:0 16px 35px rgba(35,53,155,.22)}
+#tariffModal .tariff-plan-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+#tariffModal .tariff-plan-top h3{margin:0;font-size:23px;color:inherit}
+#tariffModal .tariff-infinity{color:#2f78ff;font-size:29px;vertical-align:middle}
+#tariffModal .tariff-pro .tariff-infinity{color:#68b9ff}
+#tariffModal .tariff-discount{display:inline-flex;align-items:center;padding:5px 9px;border-radius:99px;background:#ff168b;color:white;font-size:9px;font-weight:900;white-space:nowrap}
+#tariffModal .tariff-discount-blue{background:#e6efff;color:#1559e8}
+#tariffModal .tariff-discount-green{background:#d8faed;color:#079765}
+#tariffModal .tariff-price{font-size:31px;font-weight:900;letter-spacing:-.7px;margin:12px 0 3px;color:inherit}
+#tariffModal .tariff-price small{font-size:12px;letter-spacing:0;font-weight:600;opacity:.75}
+#tariffModal .tariff-description{margin:0 0 14px;min-height:20px;font-size:12px;line-height:1.5;color:#647895;opacity:1}
+#tariffModal .tariff-pro .tariff-description{color:#d9e5ff}
+#tariffModal .tariff-benefits{padding:11px 12px;border:1px solid #d5e5ff;border-radius:14px;background:linear-gradient(120deg,#eef5ff,#e6f0ff);display:grid;gap:10px;margin-bottom:15px}
+#tariffModal .tariff-pro .tariff-benefits{border-color:#3c68dd;background:rgba(255,255,255,.07)}
+#tariffModal .tariff-business .tariff-benefits{border-color:#b8f1df;background:linear-gradient(120deg,#e7fff5,#dff9ef)}
+#tariffModal .tariff-benefits>div{display:flex;align-items:center;gap:9px;font-size:11px;line-height:1.4;color:#29466f}
+#tariffModal .tariff-pro .tariff-benefits>div{color:#fff}
+#tariffModal .tariff-benefits i{font-style:normal;flex:0 0 21px;width:21px;height:21px;border-radius:50%;display:grid;place-items:center;background:#cde0ff;color:#1760e9;font-size:11px}
+#tariffModal .tariff-pro .tariff-benefits i{background:#26c9ee;color:#fff}
+#tariffModal .tariff-business .tariff-benefits i{background:#31d59a;color:#fff}
+#tariffModal .tariff-choose{width:100%;min-height:44px;border:0;border-radius:13px;margin:0 0 13px;background:linear-gradient(100deg,#155eef,#2255e8);color:#fff;font-weight:850}
+#tariffModal .tariff-pro .tariff-choose{background:linear-gradient(100deg,#ff178d,#d21de5 60%,#8058ff)}
+#tariffModal .tariff-option ul{padding-left:18px;margin:0;color:#607391;font-size:11px;line-height:1.85;flex:1}
+#tariffModal .tariff-pro ul{color:#e0e8ff}
+#tariffModal .tariff-foot{margin-top:14px;padding-top:11px;border-top:1px solid #e0e9f7;font-size:10px;font-weight:900;letter-spacing:.6px;color:#185bea}
+#tariffModal .tariff-pro .tariff-foot{border-color:#ffffff3d;color:#b7e5ff}
+#tariffModal .tariff-business .tariff-foot{color:#07885c}
+@media(max-width:900px){#tariffModal .tariff-modal-heading{align-items:flex-start;flex-wrap:wrap}#tariffModal .tariff-gift{margin-left:67px;width:100%}#tariffModal .tariff-options{grid-template-columns:1fr}#tariffModal .tariff-option.featured{order:-1}}
+@media(max-width:560px){#tariffModal.modal{padding:8px;align-items:flex-start}#tariffModal .tariff-modal-card{padding:22px 14px 16px;margin:6px 0;max-height:none}#tariffModal .tariff-modal-heading{gap:10px;padding-right:35px}#tariffModal .tariff-heading-icon{width:42px;height:42px;flex-basis:42px;font-size:22px}#tariffModal .tariff-modal-heading h2{font-size:22px}#tariffModal .tariff-gift{margin-left:0;min-width:0;padding:10px}#tariffModal .tariff-option{padding:18px 15px}}
+</style>
+
 </head>
 <body>
 
 <div id="tariffModal" class="modal" aria-hidden="true" style="display:none;">
   <div class="modal-card tariff-modal-card">
     <button class="modal-close" onclick="closeTariffModal()">×</button>
-    <div class="eyebrow">ТАРИФТЕР</div>
-    <h2>Өзіңізге ыңғайлы тарифті таңдаңыз</h2>
-    <p class="muted">Тегін видео әрқашан қолжетімді. Толық курстар үшін тариф қажет.</p>
+    <div class="tariff-modal-heading">
+      <div class="tariff-heading-icon">♛</div>
+      <div>
+        <div class="eyebrow">ALPHA · ТАРИФТЕР</div>
+        <h2>Өзіңізге ыңғайлы тарифті таңдаңыз</h2>
+        <p class="muted">Білім жолыңа сай жоспарды таңдап, мүмкіндіктеріңді аш!</p>
+      </div>
+      <div class="tariff-gift"><span>🎁</span><div><b>Біліміңе жол аш!</b><small>Тегін сабақтар әрқашан қолжетімді</small></div></div>
+    </div>
 
     <div class="tariff-options">
-      <div class="tariff-option">
-        <span class="course-tag free">ТЕГІН</span>
-        <h3>Тегін</h3>
-        <div class="tariff-price">0 ₸</div>
-        <p>Тегін видео сабақтар</p>
-        <button class="btn primary" onclick="chooseTariff('free');closeTariffModal()">Тегін бастау</button>
-      </div>
+      <article class="tariff-option tariff-lite">
+        <div class="tariff-plan-top"><h3>Lite</h3><span class="tariff-discount tariff-discount-blue">Бастапқы деңгей</span></div>
+        <div class="tariff-price">0 ₸ <small>/ай</small></div>
+        <p class="tariff-description">Оқуды бастап, платформамен таныс</p>
+        <div class="tariff-benefits">
+          <div><i>⚡</i><span><b>Тегін</b> видео сабақтар</span></div>
+          <div><i>▶</i><span>Информатика және математика</span></div>
+          <div><i>▧</i><span>Тақырыптық материалдар</span></div>
+        </div>
+        <button class="btn tariff-choose" onclick="chooseTariff('free');closeTariffModal()">Тегін бастау</button>
+        <ul><li>Тегін видео сабақтарға қолжетімділік</li><li>Негізгі тақырыптарды қайталау</li></ul>
+        <div class="tariff-foot">ТЕГІН ОҚУҒА БАСТА</div>
+      </article>
 
-      <div class="tariff-option featured">
-        <span class="course-tag">START</span>
-        <h3>Online Start</h3>
-        <div class="tariff-price">7 000 ₸<small>/ай</small></div>
-        <p>Толық курс + тесттер + оқу жоспары</p>
-        <button class="btn primary" onclick="chooseTariff('start');closeTariffModal()">Таңдау</button>
-      </div>
+      <article class="tariff-option tariff-pro featured">
+        <div class="tariff-plan-top"><h3>Pro <span class="tariff-infinity">∞</span></h3><span class="tariff-discount">ҰСЫНЫЛАДЫ</span></div>
+        <div class="tariff-price">7 000 ₸ <small>/ай</small></div>
+        <p class="tariff-description">Толық онлайн дайындық</p>
+        <div class="tariff-benefits">
+          <div><i>⚡</i><span><b>Толық курс</b> материалдары</span></div>
+          <div><i>▶</i><span>Видео сабақтар мен тесттер</span></div>
+          <div><i>🎁</i><span><b>Жеке оқу жоспары</b></span></div>
+        </div>
+        <button class="btn tariff-choose" onclick="chooseTariff('start');closeTariffModal()">Тарифті таңдау</button>
+        <ul><li>Толық онлайн курс және тапсырмалар</li><li>Оқу жоспары мен прогресс</li><li>Төлем расталған соң ақылы материалдар ашылады</li></ul>
+        <div class="tariff-foot">ONLINE START</div>
+      </article>
 
-      <div class="tariff-option">
-        <span class="course-tag">PLUS</span>
-        <h3>Online Plus</h3>
-        <div class="tariff-price">12 000 ₸<small>/ай</small></div>
-        <p>Кеңейтілген материалдар + қателер талдауы</p>
-        <button class="btn primary" onclick="chooseTariff('plus');closeTariffModal()">Таңдау</button>
-      </div>
+      <article class="tariff-option tariff-business">
+        <div class="tariff-plan-top"><h3>Business <span class="tariff-infinity">∞</span></h3><span class="tariff-discount tariff-discount-green">КЕҢЕЙТІЛГЕН</span></div>
+        <div class="tariff-price">12 000 ₸ <small>/ай</small></div>
+        <p class="tariff-description">Кеңейтілген оқу мүмкіндіктері</p>
+        <div class="tariff-benefits">
+          <div><i>⚡</i><span><b>Кеңейтілген</b> материалдар</span></div>
+          <div><i>▶</i><span>Қателерді талдау және тесттер</span></div>
+          <div><i>▧</i><span>Жоспар мен аналитика</span></div>
+        </div>
+        <button class="btn tariff-choose" onclick="chooseTariff('plus');closeTariffModal()">Тарифті таңдау</button>
+        <ul><li>Қосымша материалдар және тапсырмалар</li><li>Нәтижелерді талдау</li><li>Төлем расталған соң ақылы материалдар ашылады</li></ul>
+        <div class="tariff-foot">ONLINE PLUS</div>
+      </article>
     </div>
   </div>
 </div>
