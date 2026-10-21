@@ -733,7 +733,12 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
 </div>
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const alphaSupabase = window.supabase.createClient(
+  'https://iuchrzphazitgycomtxv.supabase.co',
+  'sb_publishable_5_sK62cUTvvL--2mphuExQ_jroU-tRy'
+);
 let authMode='login';
 const $=id=>document.getElementById(id);
 
@@ -863,58 +868,95 @@ document.addEventListener('DOMContentLoaded',()=>{
     });
   }
 });
-function submitAuth(){
+async function submitAuth(){
   const email=$('email').value.trim().toLowerCase();
-  const pass=$('password').value.trim();
+  const pass=$('password').value;
   const firstName=$('firstName')?.value.trim()||'';
   const patronymic=$('patronymic')?.value.trim()||'';
   const surname=$('surname')?.value.trim()||'';
   const phone=$('phone').value.trim();
   const role=$('role').value;
-  const grade=$('grade').value;
+  const grade=$('grade')?.value||'';
   const childFirstName=$('childFirstName')?.value.trim()||'';
   const childSurname=$('childSurname')?.value.trim()||'';
   const childGrade=$('childGrade')?.value||'';
-  const name=[firstName,surname].filter(Boolean).join(' ') || firstName || surname;
+  const name=[firstName,patronymic,surname].filter(Boolean).join(' ');
 
   if(!email || !pass || (authMode==='register'&&(!firstName||!phone))){
     showError(authMode==='register'?'Email, құпиясөз, аты және телефон міндетті.':'Email және құпиясөз міндетті.');return;
   }
   if(!email.includes('@')){showError('Email дұрыс енгізілмеген.');return}
-  if(authMode==='register' && !/^\+7\s?\(\d{3}\)\s?\d{3}\s?\d{4}$/.test(phone)){
-    showError('Телефон нөмірін дұрыс енгізіңіз. Мысалы: +7 700 123 45 67');return;
+  if(pass.length<6){showError('Құпиясөз кемінде 6 таңбадан тұруы керек.');return}
+  if(authMode==='register' && !/^\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}\\s?\\d{4}$/.test(phone)){
+    showError('Телефон нөмірін дұрыс енгізіңіз. Мысалы: +7 (700) 123 45 67');return;
   }
   if(authMode==='register' && role==='parent' && (!childFirstName||!childSurname||!childGrade)){
     showError('Ата-ана үшін баланың аты, фамилиясы және сыныбы міндетті.');return;
   }
 
-  const users=getUsers();
-  if(authMode==='register'){
-    if(users.some(u=>u.email===email)){
-      showError('Бұл email бұрын тіркелген. Кіру бөлімінен кіріңіз.');return;
+  const submit=$('submitAuth');
+  if(submit){submit.disabled=true;submit.dataset.oldText=submit.textContent;submit.textContent='Күте тұрыңыз...'}
+  try {
+    let authData, authError;
+    if(authMode==='register'){
+      const childFullName=[childFirstName,childSurname].filter(Boolean).join(' ');
+      const result=await alphaSupabase.auth.signUp({
+        email,password:pass,
+        options:{data:{
+          full_name:name,first_name:firstName,patronymic,surname,phone,role,
+          grade:role==='parent'?'':grade,
+          child_full_name:role==='parent'?childFullName:'',
+          child_grade:role==='parent'?childGrade:'',
+          username:email
+        }}
+      });
+      authData=result.data; authError=result.error;
+      if(authError) throw authError;
+      if(!authData.user) throw new Error('Тіркелу аяқталмады. Қайта көріңіз.');
+      if(!authData.session){
+        showError('Аккаунт жасалды. Email поштаңызды ашып, растау сілтемесін басыңыз, содан кейін сайтқа кіріңіз.');
+        return;
+      }
+    } else {
+      const result=await alphaSupabase.auth.signInWithPassword({email,password:pass});
+      authData=result.data; authError=result.error;
+      if(authError) throw authError;
     }
+
+    const authUser=authData.user;
+    const meta=authUser.user_metadata||{};
+    let profile={};
+    const profileResult=await alphaSupabase.from('profiles')
+      .select('full_name,role,first_name,patronymic,surname,phone,grade,child_full_name,child_grade')
+      .eq('id',authUser.id).maybeSingle();
+    if(!profileResult.error && profileResult.data) profile=profileResult.data;
+
     const user={
-      id:'u_'+Date.now()+'_'+Math.random().toString(36).slice(2,8),
-      email,password:pass,name,firstName,patronymic,surname,phone,role,
-      grade:role==='parent'?(childGrade||''):grade,
-      child:role==='parent'?{firstName:childFirstName,surname:childSurname,grade:childGrade}:null,
-      createdAt:new Date().toISOString()
+      id:authUser.id,email:authUser.email,
+      name:profile.full_name||meta.full_name||meta.first_name||email,
+      firstName:profile.first_name||meta.first_name||'',
+      patronymic:profile.patronymic||meta.patronymic||'',
+      surname:profile.surname||meta.surname||'',
+      phone:profile.phone||meta.phone||'',
+      role:profile.role||meta.role||'student',
+      grade:profile.grade||meta.grade||'',
+      child:profile.child_full_name?{fullName:profile.child_full_name,grade:profile.child_grade||''}:null
     };
+    const users=getUsers().filter(u=>u.id!==user.id);
     users.push(user);
     saveUsers(users);
     syncCurrentUser(user);
     closeLogin();
     showApp(user.name,user.role);
-    toast(role==='parent'?'Ата-ана кабинеті ашылды! 👨‍👩‍👧':'Жеке профиліңіз ашылды! 🎓');
-    return;
+    toast(user.role==='parent'?'Ата-ана кабинеті ашылды! 👨‍👩‍👧':user.role==='teacher'?'Мұғалім кабинеті ашылды! 👨‍🏫':'Жеке профиліңіз ашылды! 🎓');
+  } catch(e) {
+    const msg=(e&&e.message)||'Белгісіз қате';
+    if(/invalid login credentials/i.test(msg)) showError('Email немесе құпиясөз қате.');
+    else if(/already registered/i.test(msg)) showError('Бұл email бұрын тіркелген. Кіру бөлімінен кіріңіз.');
+    else showError('Тіркелу/кіру қатесі: '+msg);
+  } finally {
+    if(submit){submit.disabled=false;submit.textContent=submit.dataset.oldText||'Жалғастыру →'}
   }
-
-  const user=users.find(u=>u.email===email && u.password===pass);
-  if(!user){showError('Email немесе құпиясөз қате.');return}
-  syncCurrentUser(user);
-  closeLogin();
-  showApp(user.name,user.role);
-  toast(user.role==='parent'?'Ата-ана кабинеті ашылды! 👨‍👩‍👧':user.role==='teacher'?'Мұғалім кабинеті ашылды! 👨‍🏫':'Жеке профиліңіз ашылды! 🎓');
 }
 function showError(t){$('loginError').textContent=t;$('loginError').style.display='block'}
 function showApp(name, role){
