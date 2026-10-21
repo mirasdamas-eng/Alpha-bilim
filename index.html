@@ -738,10 +738,18 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const alphaSupabase = window.supabase.createClient(
-  'https://iuchrzphazitgycomtxv.supabase.co',
-  'sb_publishable_5_sK62cUTvvL--2mphuExQ_jroU-tRy'
-);
+// Supabase SDK жүктелмей қалса да, Кіру/Тіркелу терезесі жұмыс істей береді.
+let alphaSupabase = null;
+try {
+  if (window.supabase && typeof window.supabase.createClient === 'function') {
+    alphaSupabase = window.supabase.createClient(
+      'https://iuchrzphazitgycomtxv.supabase.co',
+      'sb_publishable_5_sK62cUTvvL--2mphuExQ_jroU-tRy'
+    );
+  }
+} catch (e) {
+  console.error('ALPHA Supabase init error:', e);
+}
 let authMode='login';
 const $=id=>document.getElementById(id);
 
@@ -872,6 +880,10 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 });
 async function submitAuth(){
+  if (!alphaSupabase) {
+    showError('Кіру жүйесі жүктелмеді. Интернетті тексеріп, бетті Ctrl + F5 арқылы жаңартыңыз.');
+    return;
+  }
   const email=$('email').value.trim().toLowerCase();
   const pass=$('password').value;
   const firstName=$('firstName')?.value.trim()||'';
