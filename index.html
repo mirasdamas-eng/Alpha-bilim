@@ -1337,11 +1337,15 @@ function renderTestErrors(){
   host.innerHTML=results.map(r=>'<section style="padding:16px 0;border-bottom:1px solid #d7e6ff"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><div><h3 style="margin:0 0 6px">'+r.title+'</h3><p class="muted" style="margin:0">'+r.date+' · '+r.time+'</p></div><b style="color:#245dff">'+r.score+'/'+r.total+' балл ('+r.pct+'%)</b></div><div style="margin-top:12px">'+(r.errors.length?r.errors.map(e=>'<article style="background:#f4f7ff;border:1px solid #d7e6ff;border-radius:10px;padding:13px;margin:10px 0"><b>'+e.number+'. '+e.question+'</b><p style="margin:8px 0;color:#c0394b">Сенің жауабың: '+String.fromCharCode(65+e.chosen)+') '+e.chosenText+'</p><p style="margin:8px 0;color:#16804a">Дұрыс жауап: '+String.fromCharCode(65+e.correct)+') '+e.correctText+'</p><p class="muted" style="margin:8px 0">'+e.explanation+'</p></article>').join(''):'<p style="color:#16804a">Қате жоқ — өте жақсы!</p>')+'</div></section>').join('');
 }
 document.querySelectorAll('.menu button').forEach(btn=>btn.addEventListener('click',()=>{
+  const aliases={errors:'errorsView',plan:'planView',passport:'passport',olympiad:'olympiadView',exam:'examView',unt:'untView',teacher:'teacherDashboard'};
+  const targetId=aliases[btn.dataset.view]||btn.dataset.view;
+  const target=document.getElementById(targetId);
+  if(!target){console.warn('ALPHA navigation target missing:',targetId);return;}
   document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));
   btn.classList.add('active');
   document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
-  $(btn.dataset.view).classList.add('active');
-  if(btn.dataset.view==='errorsView')renderTestErrors();
+  target.classList.add('active');
+  if(targetId==='errorsView')renderTestErrors();
   window.scrollTo(0,0);
 }));
 function openTeacherTaskForm(){
@@ -1805,5 +1809,29 @@ function playFreeLesson(index){
 })();
 </script>
 
+<script>
+/* ALPHA navigation safety fallback: keeps navigation and the geometry test responsive. */
+document.addEventListener('click',function(event){
+  const testButton=event.target.closest('#geometryStartBtn');
+  if(testButton){
+    event.preventDefault();event.stopImmediatePropagation();
+    if(typeof window.startGeometryTest==='function')window.startGeometryTest();
+    else console.error('ALPHA geometry test script did not initialize.');
+    return;
+  }
+  const button=event.target.closest('.menu button');
+  if(!button)return;
+  const aliases={errors:'errorsView',plan:'planView',passport:'passport',olympiad:'olympiadView',exam:'examView',unt:'untView',teacher:'teacherDashboard'};
+  const id=aliases[button.dataset.view]||button.dataset.view;
+  const target=document.getElementById(id);
+  if(!target)return;
+  event.preventDefault();event.stopImmediatePropagation();
+  document.querySelectorAll('.menu button').forEach(item=>item.classList.toggle('active',item===button));
+  document.querySelectorAll('.view').forEach(view=>view.classList.remove('active'));
+  target.classList.add('active');
+  if(id==='errorsView'&&typeof window.renderTestErrors==='function')window.renderTestErrors();
+  window.scrollTo({top:0,behavior:'auto'});
+},true);
+</script>
 </body>
 </html>
