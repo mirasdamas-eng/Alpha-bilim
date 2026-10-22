@@ -451,6 +451,50 @@ footer{background:#f2f7ff;border-color:#dce8fb}
 .dark-panel .muted,.dark-card .muted,.tariff-dark .muted,.pricing-dark .muted {color:#dbeafe !important}
 </style>
 
+<style id="alpha-progress-fix-v2">
+/* Strongly scoped final styles for the student progress page */
+#progressView{padding:0!important}
+#progressView .alpha-progress-hero{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:24px!important;padding:30px!important;margin:18px 0!important;border-radius:24px!important;color:#fff!important;background:radial-gradient(circle at 85% 15%,#7892ff 0,transparent 34%),linear-gradient(120deg,#101d48,#263fc0 70%,#4268f5)!important;box-shadow:0 16px 38px #243fc022!important}
+#progressView .alpha-progress-kicker{font-size:11px;font-weight:850;letter-spacing:1.5px;color:#cbd8ff}
+#progressView .alpha-progress-score{font-size:clamp(34px,5vw,50px);font-weight:900;letter-spacing:-1.5px;margin:8px 0 3px}
+#progressView .alpha-progress-hero p{margin:0;color:#e0e7ff;font-size:13px}
+#progressView .alpha-progress-ring{width:112px;height:112px;border-radius:50%;display:grid;place-items:center;flex:none;background:conic-gradient(#91f5c8 var(--pct,0%),#ffffff35 0);position:relative}
+#progressView .alpha-progress-ring:before{content:"";position:absolute;inset:8px;border-radius:50%;background:#202f91}
+#progressView .alpha-progress-ring>div{position:relative;text-align:center;display:grid;gap:2px}
+#progressView .alpha-progress-ring b{font-size:23px}#progressView .alpha-progress-ring small{font-size:9px;color:#dbeafe}
+#progressView .alpha-progress-metrics{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:13px!important;margin:0 0 18px!important}
+#progressView .alpha-metric{background:#fff;border:1px solid #e7eaf3;border-radius:18px;padding:18px;box-shadow:0 6px 20px #14234a06;min-width:0}
+#progressView .alpha-metric span{display:block;font-size:12px;color:#69738a;font-weight:700}
+#progressView .alpha-metric b{display:block;font-size:28px;margin:9px 0 2px;color:#172554}
+#progressView .alpha-metric small{font-size:11px;color:#9098aa}
+#progressView .alpha-progress-columns{display:grid!important;grid-template-columns:minmax(0,1.4fr) minmax(270px,1fr)!important;gap:16px!important}
+#progressView .alpha-progress-columns>section{padding:22px!important;margin:0!important;min-width:0}
+#progressView .alpha-panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+#progressView .alpha-panel-head h3{margin:0 0 5px}
+#progressView .alpha-panel-head p{font-size:12px;color:#7a849a;margin:0}
+#progressView .alpha-chart-tag{background:#eef2ff;color:#3b4bc8;padding:7px 10px;border-radius:10px;font-size:11px;font-weight:800;white-space:nowrap}
+#progressView .alpha-week-chart{height:210px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:12px;align-items:end;padding:24px 2px 0}
+#progressView .alpha-day-col{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:8px;min-width:0}
+#progressView .alpha-day-bars{height:155px;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:5px;border-bottom:1px solid #edf0f7;padding:0}
+#progressView .alpha-bar{width:min(22px,42%);min-height:3px;border-radius:7px 7px 2px 2px;transition:height .3s}
+#progressView .alpha-bar-visit{background:linear-gradient(180deg,#9caeff,#5269ed)}
+#progressView .alpha-bar-result{background:linear-gradient(180deg,#6ee7b7,#0eaa79)}
+#progressView .alpha-day-label{font-size:10px;color:#7d879b;font-weight:700}
+#progressView .alpha-chart-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:18px;color:#7d879b;font-size:11px}
+#progressView .alpha-chart-legend span{display:flex;align-items:center;gap:6px}
+#progressView .alpha-chart-legend i{width:9px;height:9px;border-radius:3px;display:inline-block}
+#progressView .alpha-legend-visit{background:#6578ef}#progressView .alpha-legend-result{background:#10b981}
+#progressView .alpha-result-card{border-radius:15px;background:#f7f8ff;border:1px solid #e8eaff;padding:16px;margin-top:14px}
+#progressView .alpha-result-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+#progressView .alpha-result-score{font-size:27px;font-weight:900;color:#3447c8}
+#progressView .alpha-result-track{height:8px;border-radius:20px;background:#e3e7f7;overflow:hidden;margin:12px 0 8px}
+#progressView .alpha-result-track i{display:block;height:100%;border-radius:20px;background:linear-gradient(90deg,#5269ed,#10b981)}
+#progressView .alpha-progress-tip{display:flex;align-items:flex-start;gap:14px;margin-top:16px!important;background:linear-gradient(110deg,#f1f5ff,#f8faff);border-color:#e0e8ff}
+#progressView .alpha-tip-icon{width:42px;height:42px;border-radius:13px;background:#e0e7ff;display:grid;place-items:center;font-size:21px;flex:none}
+#progressView .alpha-progress-tip h3{margin:2px 0 7px}#progressView .alpha-progress-tip p{margin:0;color:#69738a;font-size:13px;line-height:1.7}
+@media(max-width:900px){#progressView .alpha-progress-metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressView .alpha-progress-columns{grid-template-columns:1fr!important}}
+@media(max-width:520px){#progressView .alpha-progress-hero{padding:22px 18px!important;border-radius:18px!important}#progressView .alpha-progress-ring{width:88px;height:88px}#progressView .alpha-progress-score{font-size:34px}#progressView .alpha-progress-metrics{gap:9px!important}#progressView .alpha-metric{padding:14px}#progressView .alpha-metric b{font-size:24px}#progressView .alpha-week-chart{gap:5px}#progressView .alpha-day-bars{gap:3px}#progressView .alpha-progress-tip{padding:16px}}
+</style>
 </head>
 <body>
 
@@ -1281,7 +1325,7 @@ function showError(t){$('loginError').textContent=t;$('loginError').style.displa
 function trackStudentVisit(){
   const id=localStorage.getItem('alphaCurrentUserId')||localStorage.getItem('alphaName')||'guest';
   if(!id||id==='guest')return;
-  const key='alphaVisits_'+id, today=new Date().toISOString().slice(0,10);
+  const key='alphaVisits_'+id, now=new Date(), today=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
   let days=[];try{days=JSON.parse(localStorage.getItem(key)||'[]')}catch(e){}
   if(!days.includes(today)){days.push(today);localStorage.setItem(key,JSON.stringify(days.slice(-90)));}
 }
@@ -1291,10 +1335,10 @@ async function renderStudentProgress(){
   let results=[];try{results=JSON.parse(localStorage.getItem(key)||'[]')}catch(e){}
   if(id!=='guest' && alphaSupabase){try{const {data:{user},error:userError}=await alphaSupabase.auth.getUser();if(!userError&&user?.id){const {data,error}=await alphaSupabase.from('alpha_diagnostic_results').select('id,title,score,total,pct,duration,completed_at').eq('user_id',user.id).order('completed_at',{ascending:false}).limit(30);if(!error&&Array.isArray(data)){results=data.map(r=>({...r,dateISO:r.completed_at,time:r.duration||''}));localStorage.setItem(key,JSON.stringify(results));}}}catch(e){console.warn('Progress diagnostics load error:',e);}}
   const visitKey='alphaVisits_'+id;let visits=[];try{visits=JSON.parse(localStorage.getItem(visitKey)||'[]')}catch(e){}
-  const dayKey=d=>{const x=new Date(d);return Number.isNaN(x.getTime())?'':x.toISOString().slice(0,10)};
+  const dayKey=d=>{if(!d)return '';const x=new Date(d);if(Number.isNaN(x.getTime()))return '';return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0')};
   const dateOf=r=>r.completed_at||r.dateISO||r.created_at||r.date||'';
   const normalized=results.map(r=>({...r,pct:Number(r.pct??(r.total?Math.round((Number(r.score)||0)/Number(r.total)*100):0)),dateKey:dayKey(dateOf(r))})).sort((a,b)=>new Date(dateOf(b))-new Date(dateOf(a)));
-  const latest=normalized[0],today=new Date().toISOString().slice(0,10),todayResult=normalized.find(r=>r.dateKey===today);
+  const latest=normalized[0],now=new Date(),today=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0'),todayResult=normalized.find(r=>r.dateKey===today);
   const set=(id,v)=>{const e=$(id);if(e)e.textContent=v};
   set('diagnosticCount',normalized.length);set('progressVisitDays',visits.filter(v=>v>=new Date(Date.now()-6*86400000).toISOString().slice(0,10)).length);
   let streak=0;for(let i=0;i<90;i++){const d=new Date();d.setDate(d.getDate()-i);if(visits.includes(d.toISOString().slice(0,10)))streak++;else if(i===0)continue;else break;}
@@ -1306,7 +1350,7 @@ async function renderStudentProgress(){
   const latestBox=$('progressLatestResult');
   if(latestBox){latestBox.innerHTML=latest?'<div class="alpha-result-card"><div class="alpha-result-top"><div><b>'+(String(latest.title||'Диагностика').replace(/[<>&"]/g,''))+'</b><p class="muted" style="font-size:11px;margin:5px 0 0">'+(dateOf(latest)?new Date(dateOf(latest)).toLocaleString('kk-KZ'):'')+'</p></div><div class="alpha-result-score">'+latest.pct+'%</div></div><div class="alpha-result-track"><i style="width:'+Math.max(0,Math.min(100,latest.pct))+'%"></i></div><small class="muted">'+(latest.score??0)+' / '+(latest.total??25)+' балл · '+(latest.time||latest.duration||'')+'</small></div>':'<p class="muted">Әзірге нәтиже жоқ. Диагностика тапсырсаң, мұнда баллың мен уақытың көрсетіледі.</p>';}
   const chart=$('progressWeekChart');
-  if(chart){const names=['Жс','Дс','Сс','Ср','Бс','Жм','Сб'];chart.innerHTML='';for(let i=6;i>=0;i--){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-i);const k=d.toISOString().slice(0,10),visit=visits.includes(k),dayResults=normalized.filter(r=>r.dateKey===k),pct=dayResults.length?Math.max(...dayResults.map(r=>r.pct)):0;const col=document.createElement('div');col.className='alpha-day-col'+(k===today?' today':'');col.innerHTML='<div class="alpha-day-bars" title="'+k+'"><div class="alpha-bar alpha-bar-visit" style="height:'+(visit?'100%':'4px')+'" title="'+(visit?'Сайтқа кірген':'Кіру болмаған')+'"></div><div class="alpha-bar alpha-bar-result" style="height:'+(dayResults.length?Math.max(8,pct*1.55)+'px':'4px')+'" title="'+(dayResults.length?'Нәтиже '+pct+'%':'Диагностика жоқ')+'"></div></div><span class="alpha-day-label">'+names[d.getDay()]+'</span>';chart.appendChild(col);}}
+  if(chart){const names=['Жс','Дс','Сс','Ср','Бс','Жм','Сб'];chart.innerHTML='';for(let i=6;i>=0;i--){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-i);const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'),visit=visits.includes(k),dayResults=normalized.filter(r=>r.dateKey===k),pct=dayResults.length?Math.max(...dayResults.map(r=>r.pct)):0;const col=document.createElement('div');col.className='alpha-day-col'+(k===today?' today':'');col.innerHTML='<div class="alpha-day-bars" title="'+k+'"><div class="alpha-bar alpha-bar-visit" style="height:'+(visit?'100%':'4px')+'" title="'+(visit?'Сайтқа кірген':'Кіру болмаған')+'"></div><div class="alpha-bar alpha-bar-result" style="height:'+(dayResults.length?Math.max(8,pct*1.55)+'px':'4px')+'" title="'+(dayResults.length?'Нәтиже '+pct+'%':'Диагностика жоқ')+'"></div></div><span class="alpha-day-label">'+names[d.getDay()]+'</span>';chart.appendChild(col);}}
 }
 
 function showApp(name, role){
