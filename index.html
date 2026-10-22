@@ -597,7 +597,6 @@ footer{background:#f2f7ff;border-color:#dce8fb}
     <button class="active" data-view="dashboard">🏠 Басты бет</button>
     <button data-view="lessonsView">📚 Менің сабақтарым</button>
     <button data-view="progressView">📈 Прогресс</button>
-    <button data-view="testsView">📝 Тесттер</button>
     <button data-view="plan">🎯 Менің жоспарым</button>
     <button data-view="passport">📊 Білім паспорты</button>
     <button data-view="errors">❌ Қателерім</button>
@@ -617,7 +616,6 @@ footer{background:#f2f7ff;border-color:#dce8fb}
   <div id="studentTasksMenu" class="menu" style="display:none;margin-top:10px">
     <button data-view="lessonsView">📚 Сабақтар</button>
     <button data-view="tasksView">📝 Тапсырмалар</button>
-    <button data-view="testsView">🧪 Тесттер</button>
     <button data-view="errorsView">❌ Қателер</button>
   </div>
   <div class="side-bottom"><button class="btn btn-light" style="width:100%" data-view="profileView">👤 Профиль</button></div>
@@ -765,22 +763,14 @@ footer{background:#f2f7ff;border-color:#dce8fb}
   </div></div>
 </div>
 
-<div id="testsView" class="view">
-  <div class="dash-head"><div><h1>Геометрия бойынша тест 📐</h1><p class="muted">Бір толық тест · 25 сұрақ · A, B және C деңгейлері. Барлық сұраққа жауап беріп, соңында қорытындыңды көр.</p></div></div>
-  <div class="panel"><div class="dash-head"><div><h2 style="color:#ffffff">Геометриялық фигуралар</h2></div><span class="pill">25 сұрақ</span></div>
-  <div id="geometryTestArea"></div>
-  <button class="btn btn-primary" id="geometryStartBtn" onclick="startGeometryTest()">Тестті бастау →</button>
-  </div>
-</div>
-
 <div id="errorsView" class="view">
-  <div class="dash-head"><div><h1>Қателерім ❌</h1><p class="muted">Қате жауаптар әр тесттің атауымен осында сақталады.</p></div></div>
+  <div class="dash-head"><div><h1>Қателерім ❌</h1><p class="muted">Диагностикадан кейінгі қате жауаптарың мен түсіндірмелерің осында сақталады.</p></div></div>
   <div id="testErrorsContent" class="panel"><p class="muted">Тест тапсырғаннан кейін қате жауаптарың осы жерде көрінеді.</p></div>
 </div>
 
 <div id="progressView" class="view">
   <div class="dash-head"><div><h1>Прогресс</h1><p class="muted">Оқу нәтижелерің мен пәндер бойынша прогресс.</p></div></div>
-  <div class="stats"><div class="stat"><span>Жалпы прогресс</span><b>78%</b></div><div class="stat"><span>Орындалған сабақ</span><b>12</b></div><div class="stat"><span>Тест саны</span><b>8</b></div><div class="stat"><span>Осы айдағы өсу</span><b class="good">+9%</b></div></div>
+  <div class="stats"><div class="stat"><span>Жалпы прогресс</span><b>78%</b></div><div class="stat"><span>Орындалған сабақ</span><b>12</b></div><div class="stat"><span>Диагностика саны</span><b id="diagnosticCount">0</b></div><div class="stat"><span>Осы айдағы өсу</span><b class="good">+9%</b></div></div>
   <div class="dash-grid">
     <div class="panel"><h3>Пәндер бойынша прогресс</h3>
       <div class="subject"><div class="subject-icon">➗</div><div class="subject-main"><b>Математика</b><small>Мақсат: 90%</small></div><b>78%</b></div>
