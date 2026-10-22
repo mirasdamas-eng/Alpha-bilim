@@ -1455,6 +1455,15 @@ function startGeometryTest(){
   render();
   page.scrollTo(0,0);
 }
+function startDiagnosticTest(){
+  const userId=localStorage.getItem('alphaCurrentUserId');
+  if(!userId || userId==='guest'){
+    toast('Алдымен өз аккаунтыңызға кіріңіз.');
+    openLogin('login');
+    return;
+  }
+  startGeometryTest();
+}
 function startTest(){startGeometryTest()}
 function sendMessage(){const m=$('message').value.trim();if(!m){toast('Алдымен хабарлама жазыңыз');return}$('message').value='';toast('Хабарлама мұғалімге жіберілді ✓')}
 function searchContent(v){if(v.trim())toast('Іздеу: '+v)}
