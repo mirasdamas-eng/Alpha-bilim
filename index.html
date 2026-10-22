@@ -1330,10 +1330,30 @@ document.querySelector('.side-bottom [data-view="profileView"]')?.addEventListen
   document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));
   window.scrollTo(0,0);
 });
-function renderTestErrors(){
+async function renderTestErrors(){
   const host=$('testErrorsContent');if(!host)return;
-  const key='alphaTestResults_'+(localStorage.getItem('alphaCurrentUserId')||localStorage.getItem('alphaName')||'guest');
+  const userId=localStorage.getItem('alphaCurrentUserId');
+  const key='alphaTestResults_'+(userId||localStorage.getItem('alphaName')||'guest');
   let results=[];try{results=JSON.parse(localStorage.getItem(key)||'[]')}catch(e){}
+  // Қолданушы аккаунтына кірген болса, сервердегі жеке нәтижелерді жүктейміз.
+  if(userId && alphaSupabase){
+    try{
+      const {data:{user},error:userError}=await alphaSupabase.auth.getUser();
+      if(!userError && user?.id){
+        const {data,error}=await alphaSupabase.from('alpha_diagnostic_results')
+          .select('id,title,score,total,pct,duration,errors,completed_at')
+          .eq('user_id',user.id).order('completed_at',{ascending:false}).limit(30);
+        if(!error && Array.isArray(data) && data.length){
+          results=data.map(r=>({
+            id:r.id,title:r.title,score:r.score,total:r.total,pct:r.pct,
+            time:r.duration||'',date:r.completed_at?new Date(r.completed_at).toLocaleString('kk-KZ'):'',
+            errors:r.errors||[]
+          }));
+          localStorage.setItem(key,JSON.stringify(results));
+        }else if(error){console.warn('ALPHA diagnostic results load error:',error);}
+      }
+    }catch(e){console.warn('ALPHA diagnostic results load error:',e);}
+  }
   if(!results.length){host.innerHTML='<p class="muted">Әзірге тапсырылған тест жоқ. Тестті аяқтағаннан кейін оның атауы осында шығады.</p>';return;}
   const esc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   host.innerHTML=results.map((r,i)=>{
