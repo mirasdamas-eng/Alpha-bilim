@@ -414,6 +414,29 @@ footer{background:#f2f7ff;border-color:#dce8fb}
 }
 </style>
 
+
+<style>
+/* Contrast fix: readable light text on dark ALPHA panels */
+[style*="#10264b"],[style*="#102e79"],[style*="#1934a7"],[style*="#151a3b"],
+[style*="#10264B"],[style*="#102E79"],[style*="#1934A7"],[style*="#151A3B"],
+[style*="linear-gradient(135deg,#102"],[style*="linear-gradient(135deg, #102"],
+.dark-panel,.dark-card,.tariff-dark,.tariff-section,.pricing-dark {
+  color:#f8fafc !important;
+}
+[style*="#10264b"] h1,[style*="#10264b"] h2,[style*="#10264b"] h3,[style*="#10264b"] p,[style*="#10264b"] li,[style*="#10264b"] span,
+[style*="#102e79"] h1,[style*="#102e79"] h2,[style*="#102e79"] h3,[style*="#102e79"] p,[style*="#102e79"] li,[style*="#102e79"] span,
+[style*="#1934a7"] h1,[style*="#1934a7"] h2,[style*="#1934a7"] h3,[style*="#1934a7"] p,[style*="#1934a7"] li,[style*="#1934a7"] span,
+[style*="#151a3b"] h1,[style*="#151a3b"] h2,[style*="#151a3b"] h3,[style*="#151a3b"] p,[style*="#151a3b"] li,[style*="#151a3b"] span,
+.dark-panel h1,.dark-panel h2,.dark-panel h3,.dark-panel p,.dark-panel li,.dark-panel span,
+.dark-card h1,.dark-card h2,.dark-card h3,.dark-card p,.dark-card li,.dark-card span,
+.tariff-dark h1,.tariff-dark h2,.tariff-dark h3,.tariff-dark p,.tariff-dark li,.tariff-dark span,
+.pricing-dark h1,.pricing-dark h2,.pricing-dark h3,.pricing-dark p,.pricing-dark li,.pricing-dark span {
+  color:#f8fafc !important;
+}
+[style*="#10264b"] .muted,[style*="#102e79"] .muted,[style*="#1934a7"] .muted,
+.dark-panel .muted,.dark-card .muted,.tariff-dark .muted,.pricing-dark .muted {color:#dbeafe !important}
+</style>
+
 </head>
 <body>
 
