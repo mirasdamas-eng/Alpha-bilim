@@ -1330,11 +1330,18 @@ document.querySelector('.side-bottom [data-view="profileView"]')?.addEventListen
   document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));
   window.scrollTo(0,0);
 });
+function renderTestErrors(){
+  const host=$('testErrorsContent');if(!host)return;
+  const key='alphaTestResults_'+(localStorage.getItem('alphaCurrentUserId')||localStorage.getItem('alphaName')||'guest');let results=[];try{results=JSON.parse(localStorage.getItem(key)||'[]')}catch(e){}
+  if(!results.length){host.innerHTML='<p class="muted">Әзірге тапсырылған тест жоқ. Тест аяқталған соң нәтижелер осы жерде сақталады.</p>';return}
+  host.innerHTML=results.map(r=>'<section style="padding:16px 0;border-bottom:1px solid #d7e6ff"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><div><h3 style="margin:0 0 6px">'+r.title+'</h3><p class="muted" style="margin:0">'+r.date+' · '+r.time+'</p></div><b style="color:#245dff">'+r.score+'/'+r.total+' балл ('+r.pct+'%)</b></div><div style="margin-top:12px">'+(r.errors.length?r.errors.map(e=>'<article style="background:#f4f7ff;border:1px solid #d7e6ff;border-radius:10px;padding:13px;margin:10px 0"><b>'+e.number+'. '+e.question+'</b><p style="margin:8px 0;color:#c0394b">Сенің жауабың: '+String.fromCharCode(65+e.chosen)+') '+e.chosenText+'</p><p style="margin:8px 0;color:#16804a">Дұрыс жауап: '+String.fromCharCode(65+e.correct)+') '+e.correctText+'</p><p class="muted" style="margin:8px 0">'+e.explanation+'</p></article>').join(''):'<p style="color:#16804a">Қате жоқ — өте жақсы!</p>')+'</div></section>').join('');
+}
 document.querySelectorAll('.menu button').forEach(btn=>btn.addEventListener('click',()=>{
   document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));
   btn.classList.add('active');
   document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
   $(btn.dataset.view).classList.add('active');
+  if(btn.dataset.view==='errorsView')renderTestErrors();
   window.scrollTo(0,0);
 }));
 function openTeacherTaskForm(){
