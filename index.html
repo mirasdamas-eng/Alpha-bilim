@@ -1338,28 +1338,6 @@ function renderTestErrors(){
     host.innerHTML='<p class="muted">Әзірге тапсырылған тест жоқ. Тестті аяқтағаннан кейін оның атауы мен қателер талдауы осында шығады.</p>';
     return;
   }
-  host.innerHTML=results.map((r,i)=>{
-    const title=String(r.title||'Тест').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    const detailsId='testErrorDetails_'+i;
-    const errorItems=(Array.isArray(r.errors)?r.errors:[]).map(e=>{
-      const q=String(e.question||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-      const chosen=String(e.chosenText??'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-      const correct=String(e.correctText??'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-      const explanation=String(e.explanation||'Түсіндірме берілмеген.').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-      const chosenLetter=Number.isInteger(e.chosen)?String.fromCharCode(65+e.chosen):'—';
-      const correctLetter=Number.isInteger(e.correct)?String.fromCharCode(65+e.correct):'—';
-      return '<article style="border:1px solid #d9c8ea;border-radius:12px;padding:16px;margin:12px 0;background:var(--card,#fff);color:var(--text,#172033)">'+
-        '<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:#7b3bb0;font-size:13px"><span>Сұрақ '+e.number+'</span><span>Қате жауап</span></div>'+
-        '<h4 style="margin:12px 0;font-size:16px">'+e.number+'. '+q+'</h4>'+
-        '<div style="border-top:1px solid #e7dcef;padding-top:12px"><div style="font-size:12px;color:#8b70a3;margin-bottom:6px">Сенің жауабың</div><div style="color:#c0394b;font-weight:600">'+chosenLetter+') '+chosen+'</div></div>'+
-        '<div style="margin-top:12px;border-top:1px solid #e7dcef;padding-top:12px"><div style="font-size:12px;color:#8b70a3;margin-bottom:6px">Дұрыс жауап</div><div style="color:#16804a;font-weight:700">'+correctLetter+') '+correct+'</div></div>'+
-        '<div style="margin-top:12px;border-top:1px solid #e7dcef;padding-top:12px"><div style="font-size:12px;color:#8b70a3;margin-bottom:6px">Талдауы</div><p style="margin:0;line-height:1.6;white-space:pre-wrap">'+explanation+'</p></div></article>';
-    }).join('');
-    return '<section style="padding:16px 0;border-bottom:1px solid #d9c8ea">'+
-      '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">'+
-      '<div><h3 style="margin:0 0 6px">'+title+'</h3><p class="muted" style="margin:0">'+String(r.date||'')+' · '+String(r.time||'')+'</p></div>'+
-      '<b style="color:#7b3bb0">'+Number(r.score)||0;
-  }).join('');
   // Build cards separately so each completed test can expand its own answer analysis.
   host.innerHTML=results.map((r,i)=>{
     const title=String(r.title||'Тест').replace(/</g,'&lt;').replace(/>/g,'&gt;');
