@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="kk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Тест қателерін талдау — ALPHA</title>
+<style>
+:root{--bg:#f8f6fc;--card:#fff;--ink:#17132a;--muted:#8d7aa6;--line:#e7dcef;--purple:#762fa0;--blue:#245dff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Arial,sans-serif}
+header{min-height:62px;background:#fff;box-shadow:0 4px 18px #24103b0d;display:flex;align-items:center;justify-content:space-between;padding:12px max(20px,calc((100% - 1100px)/2));gap:18px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800}.logo{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#4c8cff,#245dff);color:white;display:grid;place-items:center;font-size:19px}
+.back{border:1px solid var(--line);background:#fff;color:var(--purple);padding:9px 14px;border-radius:10px;text-decoration:none;white-space:nowrap}
+main{max-width:1000px;margin:28px auto;padding:0 18px 50px}.crumb{font-size:13px;color:var(--muted);margin-bottom:8px}h1{font-size:25px;margin:0 0 18px}h2{font-size:19px;margin:0 0 14px}.summary,.question{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:20px;margin-bottom:16px;box-shadow:0 5px 16px #25103b06}
+.metrics{display:flex;gap:36px;flex-wrap:wrap}.metric{min-width:140px}.label{font-size:13px;color:var(--muted)}.value{font-weight:800;font-size:21px;margin-top:4px}
+.qtop{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--purple);font-size:13px;border-bottom:1px solid var(--line);padding-bottom:12px}
+.question-title{font-size:17px;font-weight:700;margin:14px 0 18px}.answer{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-top:10px}.bad{color:#c0394b;font-weight:700}.good{color:#16804a;font-weight:700}.analysis{margin-top:14px;border-radius:10px;background:#f4effa;padding:14px 16px}.analysis strong{display:block;margin-bottom:5px}.empty{padding:20px;border-radius:12px;background:white;border:1px solid var(--line)}
+footer{text-align:center;color:var(--muted);padding:20px;font-size:13px}@media(max-width:600px){header{padding:12px 14px}.brand{gap:7px}main{margin-top:20px}.summary,.question{padding:15px}.metrics{gap:20px}.value{font-size:19px}}
+</style></head>
+<body><header><div class="brand"><span class="logo">A</span><span>ALPHA</span><span style="font-weight:500;color:var(--purple)">Тест талдауы</span></div><a class="back" href="index.html">← Тесттерге қайту</a></header>
+<main><div class="crumb">Қателерім　›　Тест қателерін талдау</div><h1 id="testTitle">Тест қателерін талдау</h1><section class="summary" id="summary">Нәтиже жүктелуде…</section><div id="questions"></div></main><footer>© ALPHA · Оқу нәтижелерін талдау</footer>
+<script>
+(function(){
+ const $=id=>document.getElementById(id);
+ const esc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+ const user=localStorage.getItem('alphaCurrentUserId')||localStorage.getItem('alphaName')||'guest';
+ let results=[];try{results=JSON.parse(localStorage.getItem('alphaTestResults_'+user)||'[]')}catch(e){}
+ const idx=Number(new URLSearchParams(location.search).get('result')||0),r=results[idx];
+ if(!r){$('testTitle').textContent='Тест нәтижесі табылмады';$('summary').innerHTML='<div class="empty">Бұл тест нәтижесі осы браузерде табылмады. ALPHA сайтына кіріп, «Қателерім» бөлімінен қайта таңда.</div>';return}
+ const score=Number(r.score)||0,total=Number(r.total)||25,pct=Number(r.pct)||0;
+ $('testTitle').textContent=r.title||'Тест';
+ $('summary').innerHTML='<div class="metrics"><div class="metric"><div class="label">Алған балл</div><div class="value">'+score+' / '+total+'</div></div><div class="metric"><div class="label">Нәтиже</div><div class="value">'+pct+'%</div></div><div class="metric"><div class="label">Уақыт</div><div class="value">'+esc(r.time||'—')+'</div></div></div>';
+ const errors=Array.isArray(r.errors)?r.errors:[];
+ if(!errors.length){$('questions').innerHTML='<div class="empty"><h2>Қате жауап жоқ 🎉</h2>Бұл тесттегі барлық жауап дұрыс. Талдауды қажет ететін қате табылмады.</div>';return}
+ $('questions').innerHTML='<h2>Қате жауаптарды талдау ('+errors.length+')</h2>'+errors.map((e,i)=>{
+   const chosen=Number.isInteger(e.chosen)?String.fromCharCode(65+e.chosen):'—';
+   const correct=Number.isInteger(e.correct)?String.fromCharCode(65+e.correct):'—';
+   return '<article class="question"><div class="qtop"><span>Сұрақ '+esc(e.number||i+1)+' / '+errors.length+'</span><span>'+esc(e.level||'')+' деңгейі</span></div><div class="question-title">'+esc(e.question||'Сұрақ мәтіні жоқ')+'</div><div class="answer"><div class="label">Сенің жауабың</div><div class="bad">'+chosen+') '+esc(e.chosenText||'Жауап берілмеген')+'</div></div><div class="answer"><div class="label">Дұрыс жауап</div><div class="good">'+correct+') '+esc(e.correctText||'')+'</div></div><div class="analysis"><strong>Талдауы</strong><div>'+esc(e.explanation||'Бұл сұраққа түсіндірме әзірге қосылмаған.')+'</div></div></article>';
+ }).join('');
+})();
+</script></body></html>
