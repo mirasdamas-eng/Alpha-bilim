@@ -63,6 +63,20 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
 .toast{position:fixed;right:20px;bottom:20px;background:#151a3b;color:#fff;padding:14px 18px;border-radius:13px;box-shadow:var(--shadow);display:none;z-index:200}
 @media(max-width:900px){.hero-grid,.dash-grid{grid-template-columns:1fr}.features{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr 1fr}.pricing{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}.passport{grid-template-columns:1fr 1fr}.nav-links{display:none}.app-layout{grid-template-columns:1fr}.sidebar{display:none}}
 @media(max-width:560px){.hero{padding-top:45px}.features,.steps,.pricing,.stats,.passport{grid-template-columns:1fr}.hero h1{letter-spacing:-2px}.content{padding:18px}.topbar{padding:0 15px}.search{display:none}.cta{padding:35px 20px}.footer-inner{flex-direction:column}}
+
+/* ALPHA student progress dashboard */
+.alpha-progress-hero{display:flex;align-items:center;justify-content:space-between;gap:22px;padding:28px 30px;margin:18px 0;border-radius:24px;color:#fff;background:radial-gradient(circle at 85% 15%,#537dff 0,transparent 34%),linear-gradient(120deg,#101d48,#263fc0 70%,#4268f5);box-shadow:0 16px 38px #243fc022}
+.alpha-progress-kicker{font-size:11px;font-weight:850;letter-spacing:1.5px;color:#cbd8ff}
+.alpha-progress-score{font-size:clamp(32px,5vw,48px);font-weight:900;letter-spacing:-1.5px;margin:8px 0 3px}.alpha-progress-hero p{margin:0;color:#e0e7ff;font-size:13px}
+.alpha-progress-ring{width:112px;height:112px;border-radius:50%;display:grid;place-items:center;flex:none;background:conic-gradient(#91f5c8 var(--pct,0%),#ffffff35 0);position:relative}
+.alpha-progress-ring:before{content:"";position:absolute;inset:8px;border-radius:50%;background:#202f91}.alpha-progress-ring>div{position:relative;text-align:center;display:grid;gap:2px}.alpha-progress-ring b{font-size:23px}.alpha-progress-ring small{font-size:9px;color:#dbeafe}
+.alpha-progress-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:18px}.alpha-metric{background:#fff;border:1px solid #e7eaf3;border-radius:18px;padding:18px;box-shadow:0 6px 20px #14234a06}.alpha-metric span{display:block;font-size:12px;color:#69738a;font-weight:700}.alpha-metric b{display:block;font-size:28px;letter-spacing:-.5px;margin:9px 0 2px;color:#172554}.alpha-metric small{font-size:11px;color:#9098aa}
+.alpha-progress-columns{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(270px,1fr);gap:16px}.alpha-chart-panel,.alpha-today-panel{min-width:0}.alpha-panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.alpha-panel-head h3{margin-bottom:5px}.alpha-panel-head p{font-size:12px;color:#7a849a;margin:0}.alpha-chart-tag{background:#eef2ff;color:#3b4bc8;padding:7px 10px;border-radius:10px;font-size:11px;font-weight:800;white-space:nowrap}
+.alpha-week-chart{height:210px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:12px;align-items:end;padding:24px 2px 0}.alpha-day-col{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:8px;min-width:0}.alpha-day-bars{height:155px;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:5px;border-bottom:1px solid #edf0f7;padding-bottom:0}.alpha-bar{width:min(22px,42%);min-height:3px;border-radius:7px 7px 2px 2px;transition:height .3s}.alpha-bar-visit{background:linear-gradient(180deg,#9caeff,#5269ed)}.alpha-bar-result{background:linear-gradient(180deg,#6ee7b7,#0eaa79)}.alpha-day-label{font-size:10px;color:#7d879b;font-weight:700}.alpha-day-col.today .alpha-day-label{color:#3447c8}.alpha-chart-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:18px;color:#7d879b;font-size:11px}.alpha-chart-legend span{display:flex;align-items:center;gap:6px}.alpha-chart-legend i{width:9px;height:9px;border-radius:3px;display:inline-block}.alpha-legend-visit{background:#6578ef}.alpha-legend-result{background:#10b981}
+.alpha-result-card{border-radius:15px;background:#f7f8ff;border:1px solid #e8eaff;padding:16px;margin-top:14px}.alpha-result-top{display:flex;justify-content:space-between;align-items:center;gap:12px}.alpha-result-score{font-size:27px;font-weight:900;color:#3447c8}.alpha-result-track{height:8px;border-radius:20px;background:#e3e7f7;overflow:hidden;margin:12px 0 8px}.alpha-result-track i{display:block;height:100%;border-radius:20px;background:linear-gradient(90deg,#5269ed,#10b981)}.alpha-progress-tip{display:flex;align-items:flex-start;gap:14px;margin-top:16px;background:linear-gradient(110deg,#f1f5ff,#f8faff);border-color:#e0e8ff}.alpha-tip-icon{width:42px;height:42px;border-radius:13px;background:#e0e7ff;display:grid;place-items:center;font-size:21px;flex:none}.alpha-progress-tip h3{margin:2px 0 7px}.alpha-progress-tip p{margin:0;color:#69738a;font-size:13px;line-height:1.7}
+@media(max-width:900px){.alpha-progress-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.alpha-progress-columns{grid-template-columns:1fr}}
+@media(max-width:520px){.alpha-progress-hero{padding:22px 18px;border-radius:18px}.alpha-progress-ring{width:88px;height:88px}.alpha-progress-score{font-size:34px}.alpha-progress-metrics{gap:9px}.alpha-metric{padding:14px}.alpha-metric b{font-size:24px}.alpha-week-chart{gap:5px}.alpha-day-bars{gap:3px}.alpha-progress-tip{padding:16px}}
+
 </style>
 
 <style>
@@ -769,17 +783,22 @@ footer{background:#f2f7ff;border-color:#dce8fb}
 </div>
 
 <div id="progressView" class="view">
-  <div class="dash-head"><div><h1>Прогресс</h1><p class="muted">Оқу нәтижелерің мен пәндер бойынша прогресс.</p></div></div>
-  <div class="stats"><div class="stat"><span>Жалпы прогресс</span><b>78%</b></div><div class="stat"><span>Орындалған сабақ</span><b>12</b></div><div class="stat"><span>Диагностика саны</span><b id="diagnosticCount">0</b></div><div class="stat"><span>Осы айдағы өсу</span><b class="good">+9%</b></div></div>
-  <div class="dash-grid">
-    <div class="panel"><h3>Пәндер бойынша прогресс</h3>
-      <div class="subject"><div class="subject-icon">➗</div><div class="subject-main"><b>Математика</b><small>Мақсат: 90%</small></div><b>78%</b></div>
-      <div class="subject"><div class="subject-icon">⚡</div><div class="subject-main"><b>Физика</b><small>Мақсат: 80%</small></div><b class="warn">54%</b></div>
-      <div class="subject"><div class="subject-icon">📝</div><div class="subject-main"><b>Қазақ тілі</b><small>Мақсат: 90%</small></div><b class="good">87%</b></div>
-      <div class="subject"><div class="subject-icon">🇬🇧</div><div class="subject-main"><b>Ағылшын</b><small>Мақсат: 85%</small></div><b>71%</b></div>
-    </div>
-    <div class="panel"><h3>Бүгінгі жоспар</h3><div class="list-card"><div class="list-item"><div class="left">🎥 <span>Квадрат теңдеулер</span></div><span class="pill">Видео</span></div><div class="list-item"><div class="left">📝 <span>Математика тесті</span></div><span class="pill">20 сұрақ</span></div><div class="list-item"><div class="left">🔁 <span>Қате тақырыптарды қайталау</span></div><span class="pill">15 мин</span></div></div></div>
+  <div class="dash-head"><div><h1>Менің прогресім 📈</h1><p class="muted">Нақты оқу белсенділігің мен диагностика нәтижелерің. Күн сайын кіріп, тұрақты дайындалсаң, өсуің осы жерде көрінеді.</p></div><button class="btn btn-primary" onclick="startDiagnosticTest()">🔬 Диагностика тапсыру</button></div>
+  <div class="alpha-progress-hero">
+    <div><span class="alpha-progress-kicker">БҮГІНГІ НӘТИЖЕ</span><div class="alpha-progress-score" id="progressTodayScore">—</div><p id="progressTodayCaption">Бүгін диагностика тапсырылмаған</p></div>
+    <div class="alpha-progress-ring" id="progressRing"><div><b id="progressRingPct">0%</b><small>соңғы нәтиже</small></div></div>
   </div>
+  <div class="alpha-progress-metrics">
+    <div class="alpha-metric"><span>🔬 Диагностика</span><b id="diagnosticCount">0</b><small>тапсырылған саны</small></div>
+    <div class="alpha-metric"><span>📅 Кіру күндері</span><b id="progressVisitDays">0</b><small>соңғы 7 күнде</small></div>
+    <div class="alpha-metric"><span>🔥 Қатарынан</span><b id="progressStreak">0 күн</b><small>күнделікті белсенділік</small></div>
+    <div class="alpha-metric"><span>🏆 Ең жақсы нәтиже</span><b id="progressBestScore">—</b><small>диагностика бойынша</small></div>
+  </div>
+  <div class="alpha-progress-columns">
+    <section class="panel alpha-chart-panel"><div class="alpha-panel-head"><div><h3>Апталық белсенділік</h3><p>Сайтқа кірген күндер мен диагностика нәтижелері</p></div><span class="alpha-chart-tag">7 күн</span></div><div id="progressWeekChart" class="alpha-week-chart"></div><div class="alpha-chart-legend"><span><i class="alpha-legend-visit"></i> Кіру</span><span><i class="alpha-legend-result"></i> Диагностика нәтижесі</span></div></section>
+    <section class="panel alpha-today-panel"><h3>Соңғы диагностика</h3><div id="progressLatestResult"><p class="muted">Әзірге нәтиже жоқ. Диагностика тапсырсаң, мұнда баллың мен уақытың көрсетіледі.</p></div><button class="btn btn-light" style="margin-top:12px" onclick="document.querySelector('#studentMenu [data-view=errors]')?.click()">Қателерді талдау →</button></section>
+  </div>
+  <section class="panel alpha-progress-tip"><div class="alpha-tip-icon">💡</div><div><h3>Прогресті қалай жақсартуға болады?</h3><p>Күн сайын кіріп, 15–20 минут сабақ оқы. Диагностикадан кейін қате сұрақтарды қайталап, бірнеше күннен соң қайта тапсыр. Графикте тұрақты белсенділік пен нәтиженің өзгеруі көрінеді.</p></div></section>
 </div>
 
 <!-- ===== STUDENT SPECIAL SECTIONS ===== -->
@@ -986,13 +1005,7 @@ footer{background:#f2f7ff;border-color:#dce8fb}
 <div id="lessons" class="view"><div class="dash-head"><div><h1>Менің сабақтарым</h1><p class="muted">Информатика және математика сабақтары.</p></div></div>
 <div class="features"><div class="feature"><div class="icon">💻</div><h3>Информатика</h3><p>Информатика пәнінің сабақтары мен оқу материалдары.</p><button class="btn btn-primary" onclick="toast('Информатика сабақтары ашылды')">Сабақтарды көру</button></div><div class="feature"><div class="icon">➗</div><h3>Математика</h3><p>Математика пәнінің сабақтары мен оқу материалдары.</p><button class="btn btn-primary" onclick="toast('Математика сабақтары ашылды')">Сабақтарды көру</button></div></div></div>
 
-<div id="tests" class="view"><div class="dash-head"><div><h1>Тесттер</h1><p class="muted">Диагностикалық, тақырыптық, БЖБ, ТЖБ және ҰБТ тесттері.</p></div></div>
-<div class="table-wrap"><table class="table"><tr><th>Тест</th><th>Түрі</th><th>Сұрақ</th><th>Нәтиже</th><th></th></tr>
-<tr><td>Математика базасы</td><td>Диагностикалық</td><td>30</td><td>78%</td><td><button class="btn btn-primary" onclick="startTest()">Бастау</button></td></tr>
-<tr><td>Квадрат теңдеулер</td><td>Тақырыптық</td><td>20</td><td>—</td><td><button class="btn btn-primary" onclick="startTest()">Бастау</button></td></tr>
-<tr><td>БЖБ — Алгебра</td><td>БЖБ</td><td>25</td><td>—</td><td><button class="btn btn-primary" onclick="startTest()">Бастау</button></td></tr>
-<tr><td>ҰБТ математика</td><td>Пробный</td><td>40</td><td>—</td><td><button class="btn btn-primary" onclick="startTest()">Бастау</button></td></tr>
-</table></div></div>
+<!-- Бөлек оқушыға арналған «Тесттер» бөлімі алынды: диагностика басты батырмадан ашылады. -->
 
 <div id="plan" class="view"><div class="dash-head"><div><h1>Менің оқу жоспарым</h1><p class="muted">AI талдауы негізінде құрылған апталық жоспар.</p></div></div>
 <div class="panel"><div class="list-card">
@@ -1265,6 +1278,36 @@ async function submitAuth(){
   }
 }
 function showError(t){$('loginError').textContent=t;$('loginError').style.display='block'}
+function trackStudentVisit(){
+  const id=localStorage.getItem('alphaCurrentUserId')||localStorage.getItem('alphaName')||'guest';
+  if(!id||id==='guest')return;
+  const key='alphaVisits_'+id, today=new Date().toISOString().slice(0,10);
+  let days=[];try{days=JSON.parse(localStorage.getItem(key)||'[]')}catch(e){}
+  if(!days.includes(today)){days.push(today);localStorage.setItem(key,JSON.stringify(days.slice(-90)));}
+}
+function renderStudentProgress(){
+  const id=localStorage.getItem('alphaCurrentUserId')||localStorage.getItem('alphaName')||'guest';
+  const key='alphaTestResults_'+id;
+  let results=[];try{results=JSON.parse(localStorage.getItem(key)||'[]')}catch(e){}
+  const visitKey='alphaVisits_'+id;let visits=[];try{visits=JSON.parse(localStorage.getItem(visitKey)||'[]')}catch(e){}
+  const dayKey=d=>{const x=new Date(d);return Number.isNaN(x.getTime())?'':x.toISOString().slice(0,10)};
+  const dateOf=r=>r.completed_at||r.dateISO||r.created_at||r.date||'';
+  const normalized=results.map(r=>({...r,pct:Number(r.pct??(r.total?Math.round((Number(r.score)||0)/Number(r.total)*100):0)),dateKey:dayKey(dateOf(r))})).sort((a,b)=>new Date(dateOf(b))-new Date(dateOf(a)));
+  const latest=normalized[0],today=new Date().toISOString().slice(0,10),todayResult=normalized.find(r=>r.dateKey===today);
+  const set=(id,v)=>{const e=$(id);if(e)e.textContent=v};
+  set('diagnosticCount',normalized.length);set('progressVisitDays',visits.filter(v=>v>=new Date(Date.now()-6*86400000).toISOString().slice(0,10)).length);
+  let streak=0;for(let i=0;i<90;i++){const d=new Date();d.setDate(d.getDate()-i);if(visits.includes(d.toISOString().slice(0,10)))streak++;else if(i===0)continue;else break;}
+  set('progressStreak',streak+' күн');set('progressBestScore',normalized.length?Math.max(...normalized.map(r=>r.pct))+'%':'—');
+  set('progressTodayScore',todayResult?todayResult.pct+'%':'—');
+  set('progressTodayCaption',todayResult?'Бүгінгі нәтиже: '+(todayResult.score??'—')+' / '+(todayResult.total??25)+' балл':'Бүгін диагностика тапсырылмаған');
+  set('progressRingPct',latest?latest.pct+'%':'0%');
+  const ring=$('progressRing');if(ring)ring.style.setProperty('--pct',(latest?latest.pct:0)+'%');
+  const latestBox=$('progressLatestResult');
+  if(latestBox){latestBox.innerHTML=latest?'<div class="alpha-result-card"><div class="alpha-result-top"><div><b>'+(String(latest.title||'Диагностика').replace(/[<>&"]/g,''))+'</b><p class="muted" style="font-size:11px;margin:5px 0 0">'+(dateOf(latest)?new Date(dateOf(latest)).toLocaleString('kk-KZ'):'')+'</p></div><div class="alpha-result-score">'+latest.pct+'%</div></div><div class="alpha-result-track"><i style="width:'+Math.max(0,Math.min(100,latest.pct))+'%"></i></div><small class="muted">'+(latest.score??0)+' / '+(latest.total??25)+' балл · '+(latest.time||latest.duration||'')+'</small></div>':'<p class="muted">Әзірге нәтиже жоқ. Диагностика тапсырсаң, мұнда баллың мен уақытың көрсетіледі.</p>';}
+  const chart=$('progressWeekChart');
+  if(chart){const names=['Жс','Дс','Сс','Ср','Бс','Жм','Сб'];chart.innerHTML='';for(let i=6;i>=0;i--){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-i);const k=d.toISOString().slice(0,10),visit=visits.includes(k),dayResults=normalized.filter(r=>r.dateKey===k),pct=dayResults.length?Math.max(...dayResults.map(r=>r.pct)):0;const col=document.createElement('div');col.className='alpha-day-col'+(k===today?' today':'');col.innerHTML='<div class="alpha-day-bars" title="'+k+'"><div class="alpha-bar alpha-bar-visit" style="height:'+(visit?'100%':'4px')+'" title="'+(visit?'Сайтқа кірген':'Кіру болмаған')+'"></div><div class="alpha-bar alpha-bar-result" style="height:'+(dayResults.length?Math.max(8,pct*1.55)+'px':'4px')+'" title="'+(dayResults.length?'Нәтиже '+pct+'%':'Диагностика жоқ')+'"></div></div><span class="alpha-day-label">'+names[d.getDay()]+'</span>';chart.appendChild(col);}}
+}
+
 function showApp(name, role){
   const current=getCurrentUser();
   if(current){
@@ -1276,6 +1319,7 @@ function showApp(name, role){
   }
   $('landing').style.display='none';
   $('app').style.display='block';
+  trackStudentVisit();
   $('userName').textContent=name||'Оқушы';
   if($('profileFullName')) $('profileFullName').textContent=[current?.firstName,current?.patronymic,current?.surname].filter(Boolean).join(' ')||name||'—';
   if($('profileEmail')) $('profileEmail').textContent=current?.email||'—';
@@ -1364,6 +1408,7 @@ document.querySelectorAll('.menu button').forEach(btn=>btn.addEventListener('cli
   document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
   target.classList.add('active');
   if(targetId==='errorsView')renderTestErrors();
+  if(targetId==='progressView')renderStudentProgress();
   window.scrollTo(0,0);
 }));
 function openTeacherTaskForm(){
@@ -1474,7 +1519,7 @@ function startDiagnosticTest(){
   }
   startGeometryTest();
 }
-function startTest(){startGeometryTest()}
+function startTest(){startDiagnosticTest()}
 function sendMessage(){const m=$('message').value.trim();if(!m){toast('Алдымен хабарлама жазыңыз');return}$('message').value='';toast('Хабарлама мұғалімге жіберілді ✓')}
 function searchContent(v){if(v.trim())toast('Іздеу: '+v)}
 window.addEventListener('keydown',e=>{if(e.key==='Escape')closeLogin()});
