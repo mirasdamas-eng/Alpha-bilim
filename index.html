@@ -743,11 +743,12 @@ footer{background:#f2f7ff;border-color:#dce8fb}
 </div>
 
 <div id="testsView" class="view">
-  <div class="dash-head"><div><h1>Тесттер 🧪</h1><p class="muted">Бақылау және дайындық тесттері.</p></div></div>
-  <div class="panel"><div class="list-card">
-    <div class="list-item"><span>📝 20 сұрақтық математика тесті</span><button class="btn btn-light" onclick="startTest()">Бастау</button></div>
-    <div class="list-item"><span>📝 Физика бойынша тест</span><button class="btn btn-light" onclick="startTest()">Бастау</button></div>
-  </div></div>
+  <div class="dash-head"><div><h1>Геометрия тесттері 📐</h1><p class="muted">«Геометриялық фигуралар» видео сабағына арналған A және B деңгейлері.</p></div></div>
+  <div class="features" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:18px">
+    <article class="feature"><div class="icon">🟢</div><h3>A деңгейі — Негізгі</h3><p>Фигуралар, қабырғалар, бұрыштар және периметр бойынша 5 сұрақ.</p><button class="btn btn-primary" onclick="startGeometryTest('A')">A деңгейін бастау →</button></article>
+    <article class="feature"><div class="icon">🔵</div><h3>B деңгейі — Күрделі</h3><p>Периметр, аудан және геометриялық ойлау бойынша 5 сұрақ.</p><button class="btn btn-primary" onclick="startGeometryTest('B')">B деңгейін бастау →</button></article>
+  </div>
+  <div id="geometryTestArea"></div>
 </div>
 
 <div id="errorsView" class="view">
@@ -1348,7 +1349,43 @@ function addTeacherTask(){
   toast('Тапсырма оқушыларға қосылды ✓');
 }
 
-function startTest(){toast('Тест интерфейсі демо режимінде ашылды. Нақты сұрақтар базасын кейін қосуға болады.')}
+const GEOMETRY_TESTS = {
+  A: [
+    {q:'Үшбұрыштың неше қабырғасы бар?',a:['2','3','4','5'],c:1,e:'Үшбұрыштың 3 қабырғасы және 3 төбесі бар.'},
+    {q:'Төрт қабырғасы тең және төрт бұрышы тік фигура қалай аталады?',a:['Үшбұрыш','Шеңбер','Шаршы','Бесбұрыш'],c:2,e:'Шаршының барлық қабырғалары тең, бұрыштары 90°.'},
+    {q:'Шеңбердің ортасынан шетіне дейінгі кесінді қалай аталады?',a:['Диаметр','Радиус','Периметр','Қабырға'],c:1,e:'Радиус — шеңбердің центрінен шеңберге дейінгі кесінді.'},
+    {q:'Қай фигураның бұрыштары болмайды?',a:['Тік төртбұрыш','Үшбұрыш','Шаршы','Шеңбер'],c:3,e:'Шеңбердің бұрыштары мен қабырғалары жоқ.'},
+    {q:'Қабырғасы 4 см шаршының периметрі қанша?',a:['8 см','12 см','16 см','20 см'],c:2,e:'Периметр: 4 × 4 = 16 см.'}
+  ],
+  B: [
+    {q:'Тік төртбұрыштың ұзындығы 8 см, ені 3 см. Периметрі қанша?',a:['11 см','22 см','24 см','16 см'],c:1,e:'P = 2 × (8 + 3) = 22 см.'},
+    {q:'Қабырғасы 6 см шаршының ауданы қанша?',a:['12 см²','24 см²','36 см²','18 см²'],c:2,e:'Шаршы ауданы: S = 6 × 6 = 36 см².'},
+    {q:'Үшбұрыштың екі бұрышы 50° және 60°. Үшінші бұрышы неше градус?',a:['60°','70°','80°','90°'],c:1,e:'Үшбұрыш бұрыштарының қосындысы 180°: 180° − 50° − 60° = 70°.'},
+    {q:'Периметрі 28 см шаршының бір қабырғасы қанша?',a:['6 см','7 см','8 см','14 см'],c:1,e:'Шаршы қабырғасы: 28 ÷ 4 = 7 см.'},
+    {q:'Тік төртбұрыштың ауданы 35 см², ұзындығы 7 см. Ені қанша?',a:['4 см','5 см','6 см','7 см'],c:1,e:'Ені = аудан ÷ ұзындық = 35 ÷ 7 = 5 см.'}
+  ]
+};
+let activeGeometryLevel = 'A';
+function startGeometryTest(level){
+  activeGeometryLevel = level;
+  const area = document.getElementById('geometryTestArea');
+  const questions = GEOMETRY_TESTS[level];
+  area.innerHTML = '<div class="panel"><div class="dash-head"><div><h2>'+level+' деңгейі — Геометрия</h2><p class="muted">Әр сұраққа бір жауап таңда. Соңында нәтижені көресің.</p></div><span class="pill">'+questions.length+' сұрақ</span></div><form id="geometryQuizForm">'+questions.map((item,i)=>'<fieldset style="border:1px solid var(--line);border-radius:15px;padding:16px;margin:14px 0"><legend style="font-weight:800;padding:0 6px">'+(i+1)+'. '+item.q+'</legend>'+item.a.map((option,j)=>'<label style="display:flex;gap:10px;align-items:center;padding:8px 4px;cursor:pointer"><input type="radio" name="gq'+i+'" value="'+j+'" required> '+option+'</label>').join('')+'</fieldset>').join('')+'<button class="btn btn-primary" type="submit">Нәтижені тексеру →</button> <button class="btn btn-light" type="button" onclick="document.getElementById(\'geometryTestArea\').innerHTML=\'\'">Жабу</button></form><div id="geometryResult" style="margin-top:16px"></div></div>';
+  document.getElementById('geometryQuizForm').addEventListener('submit',function(ev){
+    ev.preventDefault();
+    let score=0;
+    const result=questions.map((item,i)=>{
+      const selected=this.querySelector('input[name="gq'+i+'"]:checked');
+      const correct=selected && Number(selected.value)===item.c;
+      if(correct)score++;
+      return '<div style="padding:12px;border-radius:12px;margin:9px 0;background:'+(correct?'#ecfdf3':'#fff1f2')+'"><b>'+(correct?'✓ Дұрыс':'✗ Қате')+'. '+item.q+'</b><p style="margin:6px 0">Дұрыс жауап: <b>'+item.a[item.c]+'</b></p><small>'+item.e+'</small></div>';
+    }).join('');
+    document.getElementById('geometryResult').innerHTML='<h3>Нәтиже: '+score+' / '+questions.length+' ('+Math.round(score/questions.length*100)+'%)</h3><p class="muted">'+(score===questions.length?'Тамаша! Барлық сұраққа дұрыс жауап бердің!':score>=3?'Жақсы нәтиже! Қате жауаптарды қайталап шық.':'Видео сабақты қайта қарап, тағы бір рет байқап көр.')+'</p>'+result+'<button class="btn btn-primary" onclick="startGeometryTest(\''+level+'\')">Қайта тапсыру ↻</button>';
+    document.getElementById('geometryResult').scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  area.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function startTest(){startGeometryTest('A')}
 function sendMessage(){const m=$('message').value.trim();if(!m){toast('Алдымен хабарлама жазыңыз');return}$('message').value='';toast('Хабарлама мұғалімге жіберілді ✓')}
 function searchContent(v){if(v.trim())toast('Іздеу: '+v)}
 window.addEventListener('keydown',e=>{if(e.key==='Escape')closeLogin()});
