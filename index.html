@@ -1335,38 +1335,37 @@ function renderTestErrors(){
   const key='alphaTestResults_'+(localStorage.getItem('alphaCurrentUserId')||localStorage.getItem('alphaName')||'guest');
   let results=[];try{results=JSON.parse(localStorage.getItem(key)||'[]')}catch(e){}
   if(!results.length){
-    host.innerHTML='<p class="muted">Әзірге тапсырылған тест жоқ. Тестті аяқтағаннан кейін оның атауы мен қателер талдауы осында шығады.</p>';
+    host.innerHTML='<p class="muted">Әзірге тапсырылған тест жоқ. Тестті аяқтағаннан кейін оның атауы осында шығады.</p>';
     return;
   }
-  // Build cards separately so each completed test can expand its own answer analysis.
-  host.innerHTML=results.map((r,i)=>{
-    const title=String(r.title||'Тест').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    const detailsId='testErrorDetails_'+i;
-    const score=Number(r.score)||0, total=Number(r.total)||25, pct=Number(r.pct)||0;
+  const esc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const list=results.map((r,i)=>{
+    const title=esc(r.title||'Тест'),score=Number(r.score)||0,total=Number(r.total)||25,pct=Number(r.pct)||0;
+    return '<section style="padding:18px;margin:12px 0;border:1px solid #d9c8ea;border-radius:14px;background:var(--card,#fff)">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">'+
+      '<div><h3 style="margin:0 0 6px">'+title+'</h3><p class="muted" style="margin:0">'+esc(r.date||'')+' · '+esc(r.time||'')+'</p></div>'+
+      '<b style="color:#7b3bb0;font-size:18px">'+score+' / '+total+' балл ('+pct+'%)</b></div>'+
+      '<button type="button" data-open-error="'+i+'" style="margin-top:14px;border:0;border-radius:9px;background:#245dff;color:#fff;padding:11px 16px;font-weight:700;cursor:pointer">Тест қателерін талдау →</button></section>';
+  }).join('');
+  host.innerHTML='<div id="testErrorList">'+list+'</div><div id="testErrorDetail" style="display:none"></div>';
+  host.querySelectorAll('[data-open-error]').forEach(btn=>btn.addEventListener('click',()=>{
+    const r=results[Number(btn.dataset.openError)];if(!r)return;
     const errors=Array.isArray(r.errors)?r.errors:[];
-    const details=errors.length?errors.map(e=>{
-      const esc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const detail=$('testErrorDetail'),listEl=$('testErrorList');if(!detail||!listEl)return;
+    const items=errors.length?errors.map(e=>{
       const chosenLetter=Number.isInteger(e.chosen)?String.fromCharCode(65+e.chosen):'—';
       const correctLetter=Number.isInteger(e.correct)?String.fromCharCode(65+e.correct):'—';
-      return '<article style="border:1px solid #d9c8ea;border-radius:12px;padding:16px;margin:12px 0;background:#fff;color:#172033">'+
+      return '<article style="border:1px solid #d9c8ea;border-radius:12px;padding:18px;margin:14px 0;background:var(--card,#fff)">'+
         '<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:#7b3bb0;font-size:13px"><span>Сұрақ '+esc(e.number)+'</span><span>Қате жауап</span></div>'+
-        '<h4 style="margin:12px 0;font-size:16px">'+esc(e.question)+'</h4>'+
-        '<div style="border-top:1px solid #e7dcef;padding-top:12px"><div style="font-size:12px;color:#8b70a3;margin-bottom:6px">Сенің жауабың</div><div style="color:#c0394b;font-weight:600">'+chosenLetter+') '+esc(e.chosenText)+'</div></div>'+
-        '<div style="margin-top:12px;border-top:1px solid #e7dcef;padding-top:12px"><div style="font-size:12px;color:#8b70a3;margin-bottom:6px">Дұрыс жауап</div><div style="color:#16804a;font-weight:700">'+correctLetter+') '+esc(e.correctText)+'</div></div>'+
-        '<div style="margin-top:12px;border-top:1px solid #e7dcef;padding-top:12px"><div style="font-size:12px;color:#8b70a3;margin-bottom:6px">Талдауы</div><p style="margin:0;line-height:1.6;white-space:pre-wrap">'+esc(e.explanation||'Талдау әзірге жоқ.')+'</p></div></article>';
-    }).join(''):'<p class="muted">Бұл тестте қате жауап жоқ. Жарайсың!</p>';
-    return '<section style="padding:16px;margin:12px 0;border:1px solid #d9c8ea;border-radius:14px;background:var(--card,#fff)">'+
-      '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">'+
-      '<div><h3 style="margin:0 0 6px">'+title+'</h3><p class="muted" style="margin:0">'+String(r.date||'')+' · '+String(r.time||'')+'</p></div>'+
-      '<b style="color:#7b3bb0;font-size:18px">'+score+' / '+total+' балл ('+pct+'%)</b></div>'+
-      '<button type="button" data-error-toggle="'+detailsId+'" style="margin-top:14px;border:0;border-radius:9px;background:#245dff;color:#fff;padding:11px 16px;font-weight:700;cursor:pointer">Тест қателерін талдау</button>'+
-      '<div id="'+detailsId+'" style="display:none;margin-top:14px">'+details+'</div></section>';
-  }).join('');
-  host.querySelectorAll('[data-error-toggle]').forEach(btn=>btn.addEventListener('click',()=>{
-    const panel=document.getElementById(btn.dataset.errorToggle);if(!panel)return;
-    const opening=panel.style.display==='none';
-    panel.style.display=opening?'block':'none';
-    btn.textContent=opening?'Талдауды жасыру':'Тест қателерін талдау';
+        '<h3 style="margin:12px 0 16px;font-size:17px">'+esc(e.question)+'</h3>'+
+        '<div style="border-top:1px solid #e7dcef;padding-top:12px"><div class="muted" style="font-size:13px;margin-bottom:6px">Сенің жауабың</div><div style="color:#c0394b;font-weight:700">'+chosenLetter+') '+esc(e.chosenText||'Жауап берілмеген')+'</div></div>'+
+        '<div style="margin-top:14px;border-top:1px solid #e7dcef;padding-top:12px"><div class="muted" style="font-size:13px;margin-bottom:6px">Дұрыс жауап</div><div style="color:#16804a;font-weight:700">'+correctLetter+') '+esc(e.correctText)+'</div></div>'+
+        '<div style="margin-top:14px;border-top:1px solid #e7dcef;padding-top:12px"><div class="muted" style="font-size:13px;margin-bottom:6px">Талдауы</div><p style="margin:0;line-height:1.7;white-space:pre-wrap">'+esc(e.explanation||'Бұл сұраққа түсіндірме әзірге қосылмаған.')+'</p></div></article>';
+    }).join(''):'<div class="panel"><h3>Қате жауап жоқ 🎉</h3><p class="muted">Бұл тесттегі жауаптарыңның бәрі дұрыс.</p></div>';
+    detail.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px"><div><p class="muted" style="margin:0 0 6px">Қателерім / Тест талдауы</p><h2 style="margin:0">'+esc(r.title||'Тест')+'</h2></div><button type="button" id="backToErrorTests" style="border:1px solid #d9c8ea;border-radius:9px;background:transparent;color:inherit;padding:10px 14px;cursor:pointer">← Тесттерге қайту</button></div>'+
+      '<div class="panel" style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><div><span class="muted">Алған балл</span><h3 style="margin:6px 0 0">'+(Number(r.score)||0)+' / '+(Number(r.total)||25)+'</h3></div><div><span class="muted">Нәтиже</span><h3 style="margin:6px 0 0">'+(Number(r.pct)||0)+'%</h3></div><div><span class="muted">Уақыт</span><h3 style="margin:6px 0 0">'+esc(r.time||'—')+'</h3></div></div></div>'+items;
+    listEl.style.display='none';detail.style.display='block';window.scrollTo(0,0);
+    $('backToErrorTests')?.addEventListener('click',()=>{detail.style.display='none';listEl.style.display='block';window.scrollTo(0,0)});
   }));
 }
 document.querySelectorAll('.menu button').forEach(btn=>btn.addEventListener('click',()=>{
