@@ -1978,5 +1978,19 @@ document.addEventListener('click',function(event){
   window.scrollTo({top:0,behavior:'auto'});
 },true);
 </script>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  const subject=localStorage.getItem('alphaOpenFreeSubject');
+  const lessonRaw=localStorage.getItem('alphaOpenFreeLesson');
+  if(!subject)return;
+  localStorage.removeItem('alphaOpenFreeSubject');
+  localStorage.removeItem('alphaOpenFreeLesson');
+  const nav=document.querySelector('[data-view="lessonsView"]');
+  if(nav)nav.click();
+  if(typeof openFreeSubject==='function')openFreeSubject(subject);
+  const lesson=Number(lessonRaw||0);
+  if(Number.isInteger(lesson)&&typeof playFreeLesson==='function')playFreeLesson(lesson);
+});
+</script>
 </body>
 </html>
