@@ -1459,7 +1459,7 @@ async function renderTestErrors(){
   }));
 }
 document.querySelectorAll('.menu button').forEach(btn=>btn.addEventListener('click',()=>{
-  const aliases={errors:'errorsView',plan:'planView',passport:'passport',olympiad:'olympiadView',exam:'examView',unt:'untView',teacher:'teacherDashboard'};
+  const aliases={errors:'errorsView',plan:'planView',passport:'passport',olympiad:'olympiadView',exam:'examView',unt:'untView',teacher:'teacher'};
   const targetId=aliases[btn.dataset.view]||btn.dataset.view;
   const target=document.getElementById(targetId);
   if(!target){console.warn('ALPHA navigation target missing:',targetId);return;}
@@ -1982,7 +1982,7 @@ document.addEventListener('click',function(event){
   }
   const button=event.target.closest('.menu button');
   if(!button)return;
-  const aliases={errors:'errorsView',plan:'planView',passport:'passport',olympiad:'olympiadView',exam:'examView',unt:'untView',teacher:'teacherDashboard'};
+  const aliases={errors:'errorsView',plan:'planView',passport:'passport',olympiad:'olympiadView',exam:'examView',unt:'untView',teacher:'teacher'};
   const id=aliases[button.dataset.view]||button.dataset.view;
   const target=document.getElementById(id);
   if(!target)return;
