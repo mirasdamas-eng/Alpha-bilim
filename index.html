@@ -1373,53 +1373,39 @@ function addTeacherTask(){
 
 const GEOMETRY_QUESTIONS = [["A","Үшбұрыштың неше қабырғасы бар?",["2","3","4","5"],1,"Үшбұрыштың 3 қабырғасы бар."],["A","Төрт қабырғасы тең және барлық бұрыштары тік фигура?",["Ромб","Шаршы","Трапеция","Үшбұрыш"],1,"Шаршының төрт қабырғасы тең және бұрыштары 90°."],["A","Шеңбердің центрінен шетіне дейінгі кесінді қалай аталады?",["Диаметр","Хорда","Радиус","Доға"],2,"Бұл кесінді радиус деп аталады."],["A","Тік бұрыш неше градус?",["45°","90°","180°","360°"],1,"Тік бұрыш 90°-қа тең."],["A","Қабырғасы 5 см шаршының периметрі?",["10 см","15 см","20 см","25 см"],2,"P = 4 × 5 = 20 см."],["A","Тік төртбұрыштың неше төбесі бар?",["3","4","5","6"],1,"Тік төртбұрыштың 4 төбесі бар."],["A","Қай фигураның қабырғалары жоқ?",["Шаршы","Үшбұрыш","Шеңбер","Тік төртбұрыш"],2,"Шеңбердің түзу қабырғалары болмайды."],["A","Бір түзудің бойындағы жазыңқы бұрыш қанша?",["90°","120°","180°","360°"],2,"Жазыңқы бұрыш 180°."],["A","Қабырғасы 3 см шаршының ауданы?",["6 см²","9 см²","12 см²","Нұсқаларда жоқ"],1,"S = 3 × 3 = 9 см²."],["A","Бес қабырғасы бар көпбұрыш қалай аталады?",["Алтыбұрыш","Төртбұрыш","Бесбұрыш","Үшбұрыш"],2,"Бес қабырғалы көпбұрыш — бесбұрыш."],["B","Ұзындығы 8 см, ені 3 см тік төртбұрыштың периметрі?",["11 см","22 см","24 см","16 см"],1,"P = 2 × (8 + 3) = 22 см."],["B","Қабырғасы 6 см шаршының ауданы?",["12 см²","24 см²","36 см²","18 см²"],2,"S = 6 × 6 = 36 см²."],["B","Үшбұрыштың екі бұрышы 50° және 60°. Үшіншісі?",["60°","70°","80°","90°"],1,"180° − 50° − 60° = 70°."],["B","Периметрі 28 см шаршының қабырғасы?",["6 см","7 см","8 см","14 см"],1,"28 ÷ 4 = 7 см."],["B","Ауданы 35 см², ұзындығы 7 см тік төртбұрыштың ені?",["4 см","5 см","6 см","7 см"],1,"35 ÷ 7 = 5 см."],["B","Радиусы 4 см шеңбердің диаметрі?",["2 см","4 см","8 см","16 см"],2,"Диаметр радиустан екі есе үлкен: 2 × 4 = 8 см."],["B","Тік төртбұрыштың ұзындығы 9 см, ені 4 см. Ауданы?",["13 см²","26 см²","36 см²","18 см²"],2,"S = 9 × 4 = 36 см²."],["B","Үшбұрыштың бұрыштары 40° және 40°. Үшінші бұрышы?",["80°","90°","100°","120°"],2,"180° − 40° − 40° = 100°."],["B","Қабырғасы 7 см шаршының периметрі?",["14 см","21 см","28 см","49 см"],2,"P = 4 × 7 = 28 см."],["B","Қайсысы доғал бұрыш?",["35°","90°","120°","180°"],2,"Доғал бұрыш 90°-тан үлкен, 180°-тан кіші."],["C","Тік төртбұрыштың периметрі 34 см, ұзындығы 10 см. Ені?",["5 см","7 см","14 см","17 см"],1,"2(10 + ені)=34, сондықтан ені 7 см."],["C","Үшбұрыш қабырғалары 5 см, 6 см және 8 см. Периметрі?",["13 см","19 см","24 см","30 см"],1,"P = 5 + 6 + 8 = 19 см."],["C","Шаршының ауданы 64 см². Периметрі?",["16 см","24 см","32 см","64 см"],2,"Қабырғасы √64 = 8 см; P = 4 × 8 = 32 см."],["C","Тік төртбұрыштың ауданы 72 см², ені 8 см. Периметрі?",["17 см","26 см","34 см","36 см"],2,"Ұзындығы 72 ÷ 8 = 9 см; P = 2(9 + 8) = 34 см."],["C","Үшбұрыштың бұрыштары x, 2x және 3x. Ең үлкен бұрыш қанша?",["30°","60°","90°","120°"],2,"6x = 180°, x = 30°. Ең үлкен бұрыш 3x = 90°."]];
 function startGeometryTest(){
-  const area=document.getElementById('geometryTestArea');
-  const startBtn=document.getElementById('geometryStartBtn');
-  startBtn.style.display='none';
+  const existing=document.getElementById('geometryFullPage');
+  if(existing) existing.remove();
   let current=0;
   const selected=Array(GEOMETRY_QUESTIONS.length).fill(null);
-  area.innerHTML='<div id="geometryQuizShell" style="border:1px solid var(--line);border-radius:16px;padding:18px;background:var(--panel,#fff)"><div id="geometryQuestionNav" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px"></div><div style="height:1px;background:var(--line);margin:12px 0 18px"></div><form id="geometryQuizForm"><div id="geometryQuestionCard"></div><div style="display:flex;justify-content:space-between;gap:12px;margin-top:20px"><button type="button" class="btn btn-light" id="geometryPrevBtn">← Артқа</button><button type="button" class="btn btn-primary" id="geometryNextBtn">Келесі →</button><button type="submit" class="btn btn-primary" id="geometryFinishBtn" style="display:none">Тестті аяқтау</button></div></form></div><div id="geometryResult"></div>';
-  const nav=document.getElementById('geometryQuestionNav');
-  GEOMETRY_QUESTIONS.forEach((item,i)=>{
-    const b=document.createElement('button');b.type='button';b.textContent=String(i+1);b.dataset.index=i;
-    b.style.cssText='min-width:42px;height:42px;border:0;border-radius:8px;background:#eee4f5;color:#76529a;font-weight:700;cursor:pointer';
-    b.addEventListener('click',()=>{saveCurrent();current=i;renderQuestion()});nav.appendChild(b);
-  });
-  function saveCurrent(){
-    const picked=document.querySelector('input[name="geometryAnswer"]:checked');
-    if(picked)selected[current]=Number(picked.value);
-  }
-  function renderQuestion(){
+  const page=document.createElement('div');
+  page.id='geometryFullPage';
+  page.style.cssText='position:fixed;inset:0;z-index:99999;background:#fbf9fd;color:#21162b;overflow-y:auto;font-family:inherit';
+  page.innerHTML='<header style="height:62px;background:#fff;box-shadow:0 3px 18px #21162b12;display:flex;align-items:center;padding:0 max(24px,calc((100vw - 1320px)/2));gap:30px"><b style="font-size:22px;color:#6d2c91">A</b><span style="font-weight:700">ALPHA</span><span style="color:#6d2c91">Тесттер</span><button id="geometryExitBtn" style="margin-left:auto;border:1px solid #e5d8ee;background:#fff;border-radius:10px;padding:10px 14px;cursor:pointer;color:#5d287c">← Тесттерге қайту</button></header><main style="max-width:1320px;margin:34px auto;padding:0 24px 44px"><div style="font-size:13px;color:#9b7abb;margin-bottom:12px">Тесттер　›　Геометрия</div><h1 style="font-size:24px;margin:0 0 18px;color:#241632">Геометрия бойынша тест</h1><section id="geometryFullQuiz" style="background:#fff;border:1px solid #e5d8ee;border-radius:14px;padding:20px 24px;box-shadow:0 5px 18px #21162b08"></section></main>';
+  document.body.appendChild(page);
+  page.querySelector('#geometryExitBtn').addEventListener('click',()=>page.remove());
+  const quiz=page.querySelector('#geometryFullQuiz');
+  function render(){
     const item=GEOMETRY_QUESTIONS[current];
-    nav.querySelectorAll('button').forEach((b,i)=>{
-      b.style.background=i===current?'#6d2c91':selected[i]!==null?'#d8f3df':'#eee4f5';
-      b.style.color=i===current||selected[i]!==null?'#fff':'#76529a';
-    });
-    document.getElementById('geometryQuestionCard').innerHTML='<div style="display:flex;justify-content:space-between;gap:12px;color:#9b7abb;font-size:13px;margin-bottom:12px"><span>'+currentLabel()+'</span><b style="color:#6d2c91">1 сұрақ · 1 балл</b></div><h3 style="font-size:18px;line-height:1.6;color:var(--text,#171323);margin:0 0 18px">'+(current+1)+'. ['+item[0]+' деңгейі] '+item[1]+'</h3><div style="border-top:1px solid var(--line);padding-top:16px"><div style="font-size:13px;color:#9b7abb;margin-bottom:12px">Бір дұрыс жауапты таңдаңыз</div>'+item[2].map((a,j)=>'<label style="display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:8px;padding:12px;margin:10px 0;cursor:pointer;color:var(--text,#171323);background:'+(selected[current]===j?'#f3e8ff':'transparent')+'"><input type="radio" name="geometryAnswer" value="'+j+'" '+(selected[current]===j?'checked':'')+' style="accent-color:#6d2c91;width:18px;height:18px"> '+String.fromCharCode(65+j)+') '+a+'</label>').join('')+'</div>';
-    document.getElementById('geometryPrevBtn').style.visibility=current===0?'hidden':'visible';
-    document.getElementById('geometryNextBtn').style.display=current===GEOMETRY_QUESTIONS.length-1?'none':'inline-flex';
-    document.getElementById('geometryFinishBtn').style.display=current===GEOMETRY_QUESTIONS.length-1?'inline-flex':'none';
-    document.getElementById('geometryQuestionCard').querySelectorAll('input').forEach(input=>input.addEventListener('change',()=>{selected[current]=Number(input.value);renderQuestion()}));
+    quiz.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:8px;padding-bottom:16px;border-bottom:1px solid #e5d8ee">'+GEOMETRY_QUESTIONS.map((q,i)=>'<button type="button" data-q="'+i+'" style="min-width:42px;height:42px;border:0;border-radius:8px;background:'+(i===current?'#6d2c91':selected[i]!==null?'#d8f3df':'#eee4f5')+';color:'+(i===current?'#fff':selected[i]!==null?'#166534':'#8d70a9')+';font-weight:700;cursor:pointer">'+(i+1)+'</button>').join('')+'</div><div style="display:flex;justify-content:space-between;gap:12px;margin:26px 0 12px;font-size:13px;color:#9b7abb"><span>Сұрақ '+(current+1)+' / '+GEOMETRY_QUESTIONS.length+' · '+item[0]+' деңгейі</span><b style="color:#6d2c91">1 балл</b></div><h2 style="font-size:19px;line-height:1.65;color:#21162b;margin:0 0 18px">'+(current+1)+'. '+item[1]+'</h2><div style="border-top:1px solid #e5d8ee;padding-top:14px;color:#9b7abb;font-size:13px;margin-bottom:10px">Бір дұрыс жауапты таңдаңыз</div>'+item[2].map((a,j)=>'<label style="display:flex;align-items:center;gap:10px;border:1px solid #e5d8ee;border-radius:8px;padding:12px;margin:10px 0;cursor:pointer;color:#21162b;background:'+(selected[current]===j?'#f5edfc':'#fff')+'"><input type="radio" name="geometryFullAnswer" value="'+j+'" '+(selected[current]===j?'checked':'')+' style="accent-color:#6d2c91;width:18px;height:18px"> <span>'+String.fromCharCode(65+j)+') '+a+'</span></label>').join('')+'<div style="display:flex;justify-content:space-between;gap:12px;margin-top:22px"><button type="button" id="geometryFullPrev" style="border:1px solid #e5d8ee;background:#fff;color:#6d2c91;border-radius:10px;padding:10px 16px;cursor:pointer" '+(current===0?'disabled':'')+'>← Артқа</button>'+(current===GEOMETRY_QUESTIONS.length-1?'<button type="button" id="geometryFullFinish" style="border:0;background:#6d2c91;color:#fff;border-radius:10px;padding:11px 18px;font-weight:700;cursor:pointer">Тестті аяқтау</button>':'<button type="button" id="geometryFullNext" style="border:0;background:#6d2c91;color:#fff;border-radius:10px;padding:11px 18px;font-weight:700;cursor:pointer">Келесі →</button>')+'</div>';
+    quiz.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>{save();current=Number(b.dataset.q);render()}));
+    quiz.querySelectorAll('input[name="geometryFullAnswer"]').forEach(inp=>inp.addEventListener('change',()=>{selected[current]=Number(inp.value);render()}));
+    quiz.querySelector('#geometryFullPrev')?.addEventListener('click',()=>{save();current--;render()});
+    quiz.querySelector('#geometryFullNext')?.addEventListener('click',()=>{save();if(selected[current]===null){alert('Алдымен жауапты таңдаңыз.');return}current++;render()});
+    quiz.querySelector('#geometryFullFinish')?.addEventListener('click',finish);
   }
-  function currentLabel(){return 'Сұрақ '+(current+1)+' / '+GEOMETRY_QUESTIONS.length}
-  document.getElementById('geometryPrevBtn').addEventListener('click',()=>{saveCurrent();if(current>0){current--;renderQuestion()}});
-  document.getElementById('geometryNextBtn').addEventListener('click',()=>{saveCurrent();if(selected[current]===null){alert('Жалғастыру үшін жауапты таңдаңыз.');return}if(current<GEOMETRY_QUESTIONS.length-1){current++;renderQuestion()}});
-  document.getElementById('geometryQuizForm').addEventListener('submit',function(ev){
-    ev.preventDefault();saveCurrent();
-    const missing=selected.findIndex(v=>v===null);
-    if(missing!==-1){current=missing;renderQuestion();alert((missing+1)+'-сұраққа жауап беріңіз.');return}
-    let score=0,a=0,b=0,c=0;const answers=[];
-    GEOMETRY_QUESTIONS.forEach((item,i)=>{
-      const val=selected[i],ok=val===item[3];if(ok){score++;if(item[0]==='A')a++;else if(item[0]==='B')b++;else c++}
-      answers.push('<div style="padding:12px;border-radius:12px;margin:8px 0;background:'+(ok?'#ecfdf3':'#fff1f2')+';color:#182033"><b>'+(i+1)+'. '+(ok?'✓ Дұрыс':'✗ Қате')+' — '+item[1]+'</b><p style="margin:5px 0">Сенің жауабың: '+String.fromCharCode(65+val)+') '+item[2][val]+'</p><p style="margin:5px 0">Дұрыс жауап: <b>'+String.fromCharCode(65+item[3])+') '+item[2][item[3]]+'</b></p><small>'+item[4]+'</small></div>');
-    });
+  function save(){const v=quiz.querySelector('input[name="geometryFullAnswer"]:checked');if(v)selected[current]=Number(v.value)}
+  function finish(){
+    save();const missing=selected.findIndex(v=>v===null);if(missing!==-1){current=missing;render();alert((missing+1)+'-сұраққа жауап беріңіз.');return}
+    let score=0,a=0,b=0,c=0;
+    const rows=GEOMETRY_QUESTIONS.map((q,i)=>{const ok=selected[i]===q[3];if(ok){score++;if(q[0]==='A')a++;else if(q[0]==='B')b++;else c++}
+      return '<article style="padding:14px;border-radius:10px;margin:10px 0;background:'+(ok?'#ecfdf3':'#fff1f2')+';color:#21162b"><b>'+(i+1)+'. '+(ok?'✓ Дұрыс':'✗ Қате')+' — '+q[1]+'</b><p>Сенің жауабың: '+String.fromCharCode(65+selected[i])+') '+q[2][selected[i]]+'</p><p>Дұрыс жауап: <b>'+String.fromCharCode(65+q[3])+') '+q[2][q[3]]+'</b></p><small>'+q[4]+'</small></article>'}).join('');
     const pct=Math.round(score/GEOMETRY_QUESTIONS.length*100);
-    document.getElementById('geometryQuizShell').style.display='none';
-    document.getElementById('geometryResult').innerHTML='<div class="panel" style="margin-top:20px;color:var(--text,#171323)"><h2>📊 Тест қорытындысы</h2><div style="font-size:34px;font-weight:900;color:#6d2c91">'+score+' / '+GEOMETRY_QUESTIONS.length+'</div><p>'+pct+'% дұрыс жауап · '+score+' дұрыс, '+(GEOMETRY_QUESTIONS.length-score)+' қате</p><div class="stats"><div class="stat"><span>A деңгейі (10)</span><b>'+a+'/10</b></div><div class="stat"><span>B деңгейі (10)</span><b>'+b+'/10</b></div><div class="stat"><span>C деңгейі (5)</span><b>'+c+'/5</b></div></div><p><b>Бағалау:</b> '+(pct>=90?'Өте жақсы!':pct>=75?'Жақсы нәтиже!':pct>=50?'Қанағаттанарлық. Қате тақырыптарды қайтала.':'Видео сабақты қайта қарап, тағы жаттық.')+'</p><h3>Жауаптар мен түсіндірмелер</h3>'+answers.join('')+'<button class="btn btn-primary" onclick="startGeometryTest()">Қайта тапсыру ↻</button></div>';
-    document.getElementById('geometryResult').scrollIntoView({behavior:'smooth',block:'start'});
-  });
-  renderQuestion();
-  area.scrollIntoView({behavior:'smooth',block:'start'});
+    quiz.innerHTML='<div style="text-align:center;padding:24px 0 18px"><div style="width:92px;height:92px;border:5px solid #d8f3df;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;font-size:23px;font-weight:800;color:#6d2c91">'+pct+'%</div><h2 style="font-size:25px;margin:0 0 8px">Тест қорытындысы</h2><div style="font-size:38px;font-weight:900;color:#6d2c91">'+score+' / 25</div><p>'+score+' дұрыс жауап · '+(25-score)+' қате жауап</p></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:20px 0"><div style="background:#f7f1fc;padding:16px;border-radius:10px">A деңгейі<br><b>'+a+' / 10</b></div><div style="background:#f7f1fc;padding:16px;border-radius:10px">B деңгейі<br><b>'+b+' / 10</b></div><div style="background:#f7f1fc;padding:16px;border-radius:10px">C деңгейі<br><b>'+c+' / 5</b></div></div><p><b>'+(pct>=90?'Өте жақсы!':pct>=75?'Жақсы нәтиже!':pct>=50?'Жақсы, әлі де жаттығу керек.':'Видео сабақтарды қайталап, қайта жаттығып көр.')+'</b></p><h3>Жауаптар мен түсіндірмелер</h3>'+rows+'<button id="geometryFullRetry" style="border:0;background:#6d2c91;color:#fff;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer">Қайта тапсыру ↻</button>';
+    quiz.querySelector('#geometryFullRetry').addEventListener('click',()=>{current=0;selected.fill(null);render()});
+    page.scrollTo({top:0,behavior:'smooth'});
+  }
+  render();
+  page.scrollTo(0,0);
 }
 function startTest(){startGeometryTest()}
 function sendMessage(){const m=$('message').value.trim();if(!m){toast('Алдымен хабарлама жазыңыз');return}$('message').value='';toast('Хабарлама мұғалімге жіберілді ✓')}
