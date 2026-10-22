@@ -1373,6 +1373,7 @@ function startGeometryTest(){
   const existing=document.getElementById('geometryFullPage');
   if(existing) existing.remove();
   let current=0;
+  const startedAt=Date.now();
   const selected=Array(GEOMETRY_QUESTIONS.length).fill(null);
   const page=document.createElement('div');
   page.id='geometryFullPage';
@@ -1394,10 +1395,12 @@ function startGeometryTest(){
   function finish(){
     save();const missing=selected.findIndex(v=>v===null);if(missing!==-1){current=missing;render();alert((missing+1)+'-сұраққа жауап беріңіз.');return}
     let score=0,a=0,b=0,c=0;
-    const rows=GEOMETRY_QUESTIONS.map((q,i)=>{const ok=selected[i]===q[3];if(ok){score++;if(q[0]==='A')a++;else if(q[0]==='B')b++;else c++}
-      return '<article style="padding:14px;border-radius:10px;margin:10px 0;background:'+(ok?'#ecfdf3':'#fff1f2')+';color:#102448"><b>'+(i+1)+'. '+(ok?'✓ Дұрыс':'✗ Қате')+' — '+q[1]+'</b><p>Сенің жауабың: '+String.fromCharCode(65+selected[i])+') '+q[2][selected[i]]+'</p><p>Дұрыс жауап: <b>'+String.fromCharCode(65+q[3])+') '+q[2][q[3]]+'</b></p><small>'+q[4]+'</small></article>'}).join('');
+    const errors=GEOMETRY_QUESTIONS.map((q,i)=>({number:i+1,level:q[0],question:q[1],chosen:selected[i],chosenText:q[2][selected[i]],correct:q[3],correctText:q[2][q[3]],explanation:q[4]})).filter(x=>x.chosen!==x.correct);
+    const elapsed=Math.max(0,Math.floor((Date.now()-startedAt)/1000));const timeText=String(Math.floor(elapsed/60)).padStart(2,'0')+':'+String(elapsed%60).padStart(2,'0');
     const pct=Math.round(score/GEOMETRY_QUESTIONS.length*100);
-    quiz.innerHTML='<div style="text-align:center;padding:24px 0 18px"><div style="width:92px;height:92px;border:5px solid #dbeafe;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;font-size:23px;font-weight:800;color:#245dff">'+pct+'%</div><h2 style="font-size:25px;margin:0 0 8px">Тест қорытындысы</h2><div style="font-size:38px;font-weight:900;color:#245dff">'+score+' / 25</div><p>'+score+' дұрыс жауап · '+(25-score)+' қате жауап</p></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:20px 0"><div style="background:#f7f1fc;padding:16px;border-radius:10px">A деңгейі<br><b>'+a+' / 10</b></div><div style="background:#f7f1fc;padding:16px;border-radius:10px">B деңгейі<br><b>'+b+' / 10</b></div><div style="background:#f7f1fc;padding:16px;border-radius:10px">C деңгейі<br><b>'+c+' / 5</b></div></div><p><b>'+(pct>=90?'Өте жақсы!':pct>=75?'Жақсы нәтиже!':pct>=50?'Жақсы, әлі де жаттығу керек.':'Видео сабақтарды қайталап, қайта жаттығып көр.')+'</b></p><h3>Жауаптар мен түсіндірмелер</h3>'+rows+'<button id="geometryFullRetry" style="border:0;background:#245dff;color:#fff;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer">Қайта тапсыру ↻</button>';
+    const result={title:'Геометрия бойынша тест',score,total:GEOMETRY_QUESTIONS.length,pct,time:timeText,date:new Date().toLocaleString('kk-KZ'),errors};
+    try{const key='alphaTestResults_'+(localStorage.getItem('alphaCurrentUserId')||localStorage.getItem('alphaName')||'guest');const saved=JSON.parse(localStorage.getItem(key)||'[]');saved.unshift(result);localStorage.setItem(key,JSON.stringify(saved.slice(0,30)));}catch(e){}
+    quiz.innerHTML='<div style="text-align:center;padding:24px 0 18px"><div style="width:92px;height:92px;border:5px solid #dbeafe;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;font-size:23px;font-weight:800;color:#245dff">'+pct+'%</div><h2 style="font-size:25px;margin:0 0 8px">Тест қорытындысы</h2><div style="font-size:38px;font-weight:900;color:#245dff">'+score+' / '+GEOMETRY_QUESTIONS.length+'</div><p>Жинаған балл: <b>'+score+' / '+GEOMETRY_QUESTIONS.length+'</b></p><p>⏱ Тапсыру уақыты: <b>'+timeText+'</b></p><p style="color:#5375a5">Қате жауаптардың талдауы «Қателерім» бөлімінде сақталды.</p></div><button id="geometryFullRetry" style="border:0;background:#245dff;color:#fff;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer">Қайта тапсыру ↻</button>
     quiz.querySelector('#geometryFullRetry').addEventListener('click',()=>{current=0;selected.fill(null);render()});
     page.scrollTo({top:0,behavior:'smooth'});
   }
