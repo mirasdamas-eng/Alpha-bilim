@@ -661,7 +661,7 @@ footer{background:#f2f7ff;border-color:#dce8fb}
     <button data-view="olympiad">🏆 Олимпиада</button>
     <button data-view="exam">🎓 Емтихан</button>
     <button data-view="unt">🚀 ҰБТ</button>
-    <button data-view="teacher">💬 Мұғаліммен байланыс</button>
+    <button data-view="teacher">❓ Мұғалімге сұрақ қою</button>
   </div>
   <div id="teacherMenu" class="menu" style="display:none">
     <button class="active" data-view="teacherDashboard">🏠 Басты бет</button>
@@ -1074,7 +1074,7 @@ footer{background:#f2f7ff;border-color:#dce8fb}
 
 <div id="unt" class="view"><div class="dash-head"><div><h1>ҰБТ</h1><p class="muted">10–11 сыныпқа арналған арнайы дайындық.</p></div></div><div class="stats"><div class="stat"><span>Соңғы пробный</span><b>92/140</b></div><div class="stat"><span>Математика</span><b>31/45</b></div><div class="stat"><span>Оқу сауаттылығы</span><b>8/10</b></div><div class="stat"><span>Өсу</span><b class="good">+12%</b></div></div><div class="panel" style="margin-top:18px"><h3>Келесі қадам</h3><p class="muted">Әлсіз тақырыптарды қайталап, пробный тест тапсыру ұсынылады.</p><button class="btn btn-primary" onclick="startTest()">Пробный тестті бастау</button></div></div>
 
-<div id="teacher" class="view"><div class="dash-head"><div><h1>Мұғаліммен байланыс</h1><p class="muted">Сұрағыңды мұғалімге жібер.</p></div></div><div class="panel"><h3>Мұғалім: Айдана Серікқызы</h3><p class="muted">Математика • Алгебра • ҰБТ</p><textarea id="message" style="width:100%;min-height:120px;border:1px solid var(--line);border-radius:14px;padding:14px;resize:vertical" placeholder="Сұрағыңызды жазыңыз..."></textarea><button class="btn btn-primary" style="margin-top:12px" onclick="sendMessage()">Жіберу</button></div></div>
+<div id="teacher" class="view"><div class="dash-head"><div><h1>Мұғалімге сұрақ қою ❓</h1><p class="muted">Түсінбеген тақырыбың немесе есеп бойынша сұрағыңды жаз.</p></div></div><div class="panel"><h3>Мұғалімге сұрағыңды жаз</h3><p class="muted">Математика, алгебра немесе ҰБТ тапсырмасы туралы сұрақ қоюға болады.</p><label for="message" style="display:block;font-weight:700;margin:12px 0 8px">Сұрағың</label><textarea id="message" style="width:100%;min-height:140px;border:1px solid var(--line);border-radius:14px;padding:14px;resize:vertical" placeholder="Мысалы: x + 3 > 7 теңсіздігін қалай шешемін?"></textarea><button class="btn btn-primary" style="margin-top:12px" onclick="sendMessage()">❓ Сұрақ қою</button></div></div>
 
 </div></main></div></div>
 
@@ -1567,7 +1567,7 @@ function startDiagnosticTest(){
   startGeometryTest();
 }
 function startTest(){startDiagnosticTest()}
-function sendMessage(){const m=$('message').value.trim();if(!m){toast('Алдымен хабарлама жазыңыз');return}$('message').value='';toast('Хабарлама мұғалімге жіберілді ✓')}
+function sendMessage(){const m=$('message').value.trim();if(!m){toast('Алдымен сұрағыңды жаз');return}toast('Сұрағың дайын. Мұғалімге нақты жіберу үшін хабарлама жіберу жүйесін қосу қажет.')}
 function searchContent(v){if(v.trim())toast('Іздеу: '+v)}
 window.addEventListener('keydown',e=>{if(e.key==='Escape')closeLogin()});
 
