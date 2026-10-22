@@ -1518,7 +1518,7 @@ function startGeometryTest(){
     const errors=GEOMETRY_QUESTIONS.map((q,i)=>({number:i+1,level:q[0],question:q[1],chosen:selected[i],chosenText:q[2][selected[i]],correct:q[3],correctText:q[2][q[3]],explanation:q[4]})).filter(x=>x.chosen!==x.correct);
     const elapsed=Math.max(0,Math.floor((Date.now()-startedAt)/1000));const timeText=String(Math.floor(elapsed/60)).padStart(2,'0')+':'+String(elapsed%60).padStart(2,'0');
     const pct=Math.round(score/GEOMETRY_QUESTIONS.length*100);
-    const result={title:'Геометрия бойынша тест',score,total:GEOMETRY_QUESTIONS.length,pct,time:timeText,date:new Date().toLocaleString('kk-KZ'),errors};
+    const result={title:'Диагностика',score,total:GEOMETRY_QUESTIONS.length,pct,time:timeText,date:new Date().toLocaleString('kk-KZ'),dateISO:new Date().toISOString(),errors};
     try{
       const userId=localStorage.getItem('alphaCurrentUserId');
       if(!userId || userId==='guest') throw new Error('Диагностика сақтау үшін аккаунтқа кіріңіз.');
