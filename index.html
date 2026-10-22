@@ -1332,9 +1332,64 @@ document.querySelector('.side-bottom [data-view="profileView"]')?.addEventListen
 });
 function renderTestErrors(){
   const host=$('testErrorsContent');if(!host)return;
-  const key='alphaTestResults_'+(localStorage.getItem('alphaCurrentUserId')||localStorage.getItem('alphaName')||'guest');let results=[];try{results=JSON.parse(localStorage.getItem(key)||'[]')}catch(e){}
-  if(!results.length){host.innerHTML='<p class="muted">Әзірге тапсырылған тест жоқ. Тест аяқталған соң нәтижелер осы жерде сақталады.</p>';return}
-  host.innerHTML=results.map(r=>'<section style="padding:16px 0;border-bottom:1px solid #d7e6ff"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><div><h3 style="margin:0 0 6px">'+r.title+'</h3><p class="muted" style="margin:0">'+r.date+' · '+r.time+'</p></div><b style="color:#245dff">'+r.score+'/'+r.total+' балл ('+r.pct+'%)</b></div><div style="margin-top:12px">'+(r.errors.length?r.errors.map(e=>'<article style="background:#f4f7ff;border:1px solid #d7e6ff;border-radius:10px;padding:13px;margin:10px 0"><b>'+e.number+'. '+e.question+'</b><p style="margin:8px 0;color:#c0394b">Сенің жауабың: '+String.fromCharCode(65+e.chosen)+') '+e.chosenText+'</p><p style="margin:8px 0;color:#16804a">Дұрыс жауап: '+String.fromCharCode(65+e.correct)+') '+e.correctText+'</p><p class="muted" style="margin:8px 0">'+e.explanation+'</p></article>').join(''):'<p style="color:#16804a">Қате жоқ — өте жақсы!</p>')+'</div></section>').join('');
+  const key='alphaTestResults_'+(localStorage.getItem('alphaCurrentUserId')||localStorage.getItem('alphaName')||'guest');
+  let results=[];try{results=JSON.parse(localStorage.getItem(key)||'[]')}catch(e){}
+  if(!results.length){
+    host.innerHTML='<p class="muted">Әзірге тапсырылған тест жоқ. Тестті аяқтағаннан кейін оның атауы мен қателер талдауы осында шығады.</p>';
+    return;
+  }
+  host.innerHTML=results.map((r,i)=>{
+    const title=String(r.title||'Тест').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const detailsId='testErrorDetails_'+i;
+    const errorItems=(Array.isArray(r.errors)?r.errors:[]).map(e=>{
+      const q=String(e.question||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const chosen=String(e.chosenText??'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const correct=String(e.correctText??'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const explanation=String(e.explanation||'Түсіндірме берілмеген.').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const chosenLetter=Number.isInteger(e.chosen)?String.fromCharCode(65+e.chosen):'—';
+      const correctLetter=Number.isInteger(e.correct)?String.fromCharCode(65+e.correct):'—';
+      return '<article style="border:1px solid #d9c8ea;border-radius:12px;padding:16px;margin:12px 0;background:var(--card,#fff);color:var(--text,#172033)">'+
+        '<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:#7b3bb0;font-size:13px"><span>Сұрақ '+e.number+'</span><span>Қате жауап</span></div>'+
+        '<h4 style="margin:12px 0;font-size:16px">'+e.number+'. '+q+'</h4>'+
+        '<div style="border-top:1px solid #e7dcef;padding-top:12px"><div style="font-size:12px;color:#8b70a3;margin-bottom:6px">Сенің жауабың</div><div style="color:#c0394b;font-weight:600">'+chosenLetter+') '+chosen+'</div></div>'+
+        '<div style="margin-top:12px;border-top:1px solid #e7dcef;padding-top:12px"><div style="font-size:12px;color:#8b70a3;margin-bottom:6px">Дұрыс жауап</div><div style="color:#16804a;font-weight:700">'+correctLetter+') '+correct+'</div></div>'+
+        '<div style="margin-top:12px;border-top:1px solid #e7dcef;padding-top:12px"><div style="font-size:12px;color:#8b70a3;margin-bottom:6px">Талдауы</div><p style="margin:0;line-height:1.6;white-space:pre-wrap">'+explanation+'</p></div></article>';
+    }).join('');
+    return '<section style="padding:16px 0;border-bottom:1px solid #d9c8ea">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">'+
+      '<div><h3 style="margin:0 0 6px">'+title+'</h3><p class="muted" style="margin:0">'+String(r.date||'')+' · '+String(r.time||'')+'</p></div>'+
+      '<b style="color:#7b3bb0">'+Number(r.score)||0;
+  }).join('');
+  // Build cards separately so each completed test can expand its own answer analysis.
+  host.innerHTML=results.map((r,i)=>{
+    const title=String(r.title||'Тест').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const detailsId='testErrorDetails_'+i;
+    const score=Number(r.score)||0, total=Number(r.total)||25, pct=Number(r.pct)||0;
+    const errors=Array.isArray(r.errors)?r.errors:[];
+    const details=errors.length?errors.map(e=>{
+      const esc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      const chosenLetter=Number.isInteger(e.chosen)?String.fromCharCode(65+e.chosen):'—';
+      const correctLetter=Number.isInteger(e.correct)?String.fromCharCode(65+e.correct):'—';
+      return '<article style="border:1px solid #d9c8ea;border-radius:12px;padding:16px;margin:12px 0;background:#fff;color:#172033">'+
+        '<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:#7b3bb0;font-size:13px"><span>Сұрақ '+esc(e.number)+'</span><span>Қате жауап</span></div>'+
+        '<h4 style="margin:12px 0;font-size:16px">'+esc(e.question)+'</h4>'+
+        '<div style="border-top:1px solid #e7dcef;padding-top:12px"><div style="font-size:12px;color:#8b70a3;margin-bottom:6px">Сенің жауабың</div><div style="color:#c0394b;font-weight:600">'+chosenLetter+') '+esc(e.chosenText)+'</div></div>'+
+        '<div style="margin-top:12px;border-top:1px solid #e7dcef;padding-top:12px"><div style="font-size:12px;color:#8b70a3;margin-bottom:6px">Дұрыс жауап</div><div style="color:#16804a;font-weight:700">'+correctLetter+') '+esc(e.correctText)+'</div></div>'+
+        '<div style="margin-top:12px;border-top:1px solid #e7dcef;padding-top:12px"><div style="font-size:12px;color:#8b70a3;margin-bottom:6px">Талдауы</div><p style="margin:0;line-height:1.6;white-space:pre-wrap">'+esc(e.explanation||'Талдау әзірге жоқ.')+'</p></div></article>';
+    }).join(''):'<p class="muted">Бұл тестте қате жауап жоқ. Жарайсың!</p>';
+    return '<section style="padding:16px;margin:12px 0;border:1px solid #d9c8ea;border-radius:14px;background:var(--card,#fff)">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">'+
+      '<div><h3 style="margin:0 0 6px">'+title+'</h3><p class="muted" style="margin:0">'+String(r.date||'')+' · '+String(r.time||'')+'</p></div>'+
+      '<b style="color:#7b3bb0;font-size:18px">'+score+' / '+total+' балл ('+pct+'%)</b></div>'+
+      '<button type="button" data-error-toggle="'+detailsId+'" style="margin-top:14px;border:0;border-radius:9px;background:#245dff;color:#fff;padding:11px 16px;font-weight:700;cursor:pointer">Тест қателерін талдау</button>'+
+      '<div id="'+detailsId+'" style="display:none;margin-top:14px">'+details+'</div></section>';
+  }).join('');
+  host.querySelectorAll('[data-error-toggle]').forEach(btn=>btn.addEventListener('click',()=>{
+    const panel=document.getElementById(btn.dataset.errorToggle);if(!panel)return;
+    const opening=panel.style.display==='none';
+    panel.style.display=opening?'block':'none';
+    btn.textContent=opening?'Талдауды жасыру':'Тест қателерін талдау';
+  }));
 }
 document.querySelectorAll('.menu button').forEach(btn=>btn.addEventListener('click',()=>{
   const aliases={errors:'errorsView',plan:'planView',passport:'passport',olympiad:'olympiadView',exam:'examView',unt:'untView',teacher:'teacherDashboard'};
