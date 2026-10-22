@@ -657,7 +657,7 @@ footer{background:#f2f7ff;border-color:#dce8fb}
     <button data-view="progressView">📈 Прогресс</button>
     <button data-view="plan">🎯 Менің жоспарым</button>
     <button data-view="passport">📊 Білім паспорты</button>
-    <button data-view="errors">❌ Қателерім</button>
+    <button data-view="errors">❌ Қателерді түзету</button>
     <button data-view="olympiad">🏆 Олимпиада</button>
     <button data-view="exam">🎓 Емтихан</button>
     <button data-view="unt">🚀 ҰБТ</button>
@@ -822,7 +822,7 @@ footer{background:#f2f7ff;border-color:#dce8fb}
 </div>
 
 <div id="errorsView" class="view">
-  <div class="dash-head"><div><h1>Қателерім ❌</h1><p class="muted">Диагностикадан кейінгі қате жауаптарың мен түсіндірмелерің осында сақталады.</p></div></div>
+  <div class="dash-head"><div><h1>Қателерді түзету ❌</h1><p class="muted">Диагностикадан кейін қате жауаптарыңды, дұрыс жауаптарды және түсіндірмелерді осы жерден қарап, тақырыпты қайталай аласың.</p></div></div>
   <div id="testErrorsContent" class="panel"><p class="muted">Тест тапсырғаннан кейін қате жауаптарың осы жерде көрінеді.</p></div>
 </div>
 
@@ -1437,7 +1437,8 @@ async function renderTestErrors(){
   const esc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   host.innerHTML=results.map((r,i)=>{
     const title=esc(r.title||'Тест'),score=Number(r.score)||0,total=Number(r.total)||25,pct=Number(r.pct)||0;
-    return '<section style="padding:18px;margin:12px 0;border:1px solid #d9c8ea;border-radius:14px;background:var(--card,#fff)"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div><h3 style="margin:0 0 6px">'+title+'</h3><p class="muted" style="margin:0">'+esc(r.date||'')+' · '+esc(r.time||'')+'</p></div><b style="color:#7b3bb0;font-size:18px">'+score+' / '+total+' балл ('+pct+'%)</b></div><button type="button" data-open-error="'+i+'" style="margin-top:14px;border:0;border-radius:9px;background:#245dff;color:#fff;padding:11px 16px;font-weight:700;cursor:pointer">Тест қателерін талдау →</button></section>';
+    const errorCount=Array.isArray(r.errors)?r.errors.length:0;
+    return '<section style="padding:18px;margin:12px 0;border:1px solid #d9c8ea;border-radius:14px;background:var(--card,#fff)"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div><h3 style="margin:0 0 6px">'+title+'</h3><p class="muted" style="margin:0">'+esc(r.date||'')+' · '+esc(r.time||'')+'</p><p style="margin:8px 0 0;color:'+(errorCount?'#c0394b':'#16804a')+';font-weight:700">'+(errorCount?'❌ Қате жауап саны: '+errorCount:'✓ Қате жауап жоқ')+'</p></div><b style="color:#7b3bb0;font-size:18px">'+score+' / '+total+' балл ('+pct+'%)</b></div><button type="button" data-open-error="'+i+'" style="margin-top:14px;border:0;border-radius:9px;background:#245dff;color:#fff;padding:11px 16px;font-weight:700;cursor:pointer">'+(errorCount?'Қателерді түзету және талдау →':'Нәтижені қарау →')+'</button></section>';
   }).join('');
   host.querySelectorAll('[data-open-error]').forEach(btn=>btn.addEventListener('click',()=>{
     window.location.href='error-analysis.html?result='+encodeURIComponent(Number(btn.dataset.openError));
