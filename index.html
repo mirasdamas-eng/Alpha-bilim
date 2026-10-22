@@ -1074,7 +1074,21 @@ footer{background:#f2f7ff;border-color:#dce8fb}
 
 <div id="unt" class="view"><div class="dash-head"><div><h1>ҰБТ</h1><p class="muted">10–11 сыныпқа арналған арнайы дайындық.</p></div></div><div class="stats"><div class="stat"><span>Соңғы пробный</span><b>92/140</b></div><div class="stat"><span>Математика</span><b>31/45</b></div><div class="stat"><span>Оқу сауаттылығы</span><b>8/10</b></div><div class="stat"><span>Өсу</span><b class="good">+12%</b></div></div><div class="panel" style="margin-top:18px"><h3>Келесі қадам</h3><p class="muted">Әлсіз тақырыптарды қайталап, пробный тест тапсыру ұсынылады.</p><button class="btn btn-primary" onclick="startTest()">Пробный тестті бастау</button></div></div>
 
-<div id="teacher" class="view"><div class="dash-head"><div><h1>Мұғалімге сұрақ қою ❓</h1><p class="muted">Түсінбеген тақырыбың немесе есеп бойынша сұрағыңды жаз.</p></div></div><div class="panel"><h3>Мұғалімге сұрағыңды жаз</h3><p class="muted">Математика, алгебра немесе ҰБТ тапсырмасы туралы сұрақ қоюға болады.</p><label for="message" style="display:block;font-weight:700;margin:12px 0 8px">Сұрағың</label><textarea id="message" style="width:100%;min-height:140px;border:1px solid var(--line);border-radius:14px;padding:14px;resize:vertical" placeholder="Мысалы: x + 3 > 7 теңсіздігін қалай шешемін?"></textarea><button class="btn btn-primary" style="margin-top:12px" onclick="sendMessage()">❓ Сұрақ қою</button></div></div>
+<div id="teacher" class="view">
+  <div class="dash-head"><div><h1>❓ Мұғалімге сұрақ қою</h1><p class="muted">Түсінбеген тапсырмаңды жіберіп, көмек сұра.</p></div></div>
+  <div class="dash-grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:18px">
+    <div class="panel" style="background:linear-gradient(135deg,#eef5ff,#fff);border:1px solid #d7e6ff"><div style="font-size:30px">📝</div><h3>Есепті түсінбей қалдың ба?</h3><p class="muted">Есептің шартын жазып, мұғалімнен түсіндіруді сұра.</p></div>
+    <div class="panel" style="background:linear-gradient(135deg,#effcf5,#fff);border:1px solid #cdeedd"><div style="font-size:30px">📷</div><h3>Сурет арқылы сұрақ</h3><p class="muted">Егер есеп суретте болса, сұраққа оны тіркеп жіберуге болады. (Сурет жіберу функциясы кейін қосылады.)</p></div>
+  </div>
+  <div class="panel"><h3>Сұрағыңды жаз</h3><p class="muted">Мысалы: «x + 3 > 7 теңсіздігін неге x > 4 деп шешеміз?»</p>
+    <label for="message" style="display:block;font-weight:700;margin:12px 0 8px">Пән</label>
+    <select id="questionSubject" style="width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--card,#fff);color:var(--text,#172033)"><option>Математика</option><option>Информатика</option><option>Физика</option><option>ҰБТ</option><option>Басқа пән</option></select>
+    <label for="message" style="display:block;font-weight:700;margin:12px 0 8px">Сұрағың</label>
+    <textarea id="message" style="width:100%;min-height:140px;border:1px solid var(--line);border-radius:14px;padding:14px;resize:vertical" placeholder="Сұрағыңды осында жаз..."></textarea>
+    <button class="btn btn-primary" style="margin-top:12px" onclick="sendMessage()">📨 Сұрақты жіберуге дайындау</button>
+    <p class="muted" style="font-size:12px;margin-top:10px">Ескерту: мұғалімге нақты жеткізу үшін сайтқа хабарламаларды сақтау/жіберу жүйесін қосу қажет.</p>
+  </div>
+</div>
 
 </div></main></div></div>
 
@@ -1567,7 +1581,7 @@ function startDiagnosticTest(){
   startGeometryTest();
 }
 function startTest(){startDiagnosticTest()}
-function sendMessage(){const m=$('message').value.trim();if(!m){toast('Алдымен сұрағыңды жаз');return}toast('Сұрағың дайын. Мұғалімге нақты жіберу үшін хабарлама жіберу жүйесін қосу қажет.')}
+function sendMessage(){const m=$('message').value.trim();if(!m){toast('Алдымен сұрағыңды жаз');return}const subject=$('questionSubject')?.value||'Жалпы';const text='ALPHA — мұғалімге сұрақ\\nПән: '+subject+'\\nОқушы: '+(document.getElementById('userName')?.textContent||localStorage.getItem('alphaName')||'Оқушы')+'\\nСұрақ: '+m;const url='https://wa.me/?text='+encodeURIComponent(text);window.open(url,'_blank','noopener,noreferrer');toast('Сұрағыңды WhatsApp арқылы жіберуге дайындадық')}
 function searchContent(v){if(v.trim())toast('Іздеу: '+v)}
 window.addEventListener('keydown',e=>{if(e.key==='Escape')closeLogin()});
 
