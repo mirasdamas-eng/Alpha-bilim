@@ -632,7 +632,7 @@ footer{background:#f2f7ff;border-color:#dce8fb}
       <h1>Сәлем, <span id="helloName">оқушы</span>! 👋</h1>
       <p class="muted">Курстарды таңда, сабақтарды баста және нәтижелеріңді бақыла.</p>
     </div>
-    <button class="btn btn-primary" onclick="toast('Диагностика тесті жақында ашылады')">Диагностика тапсыру</button>
+    <button class="btn btn-primary" onclick="startDiagnosticTest()">🔬 Диагностика тапсыру</button>
   </div>
 
   <div class="my-courses">
@@ -1419,7 +1419,35 @@ function startGeometryTest(){
     const elapsed=Math.max(0,Math.floor((Date.now()-startedAt)/1000));const timeText=String(Math.floor(elapsed/60)).padStart(2,'0')+':'+String(elapsed%60).padStart(2,'0');
     const pct=Math.round(score/GEOMETRY_QUESTIONS.length*100);
     const result={title:'Геометрия бойынша тест',score,total:GEOMETRY_QUESTIONS.length,pct,time:timeText,date:new Date().toLocaleString('kk-KZ'),errors};
-    try{const key='alphaTestResults_'+(localStorage.getItem('alphaCurrentUserId')||localStorage.getItem('alphaName')||'guest');const saved=JSON.parse(localStorage.getItem(key)||'[]');saved.unshift(result);localStorage.setItem(key,JSON.stringify(saved.slice(0,30)));}catch(e){}
+    try{
+      const userId=localStorage.getItem('alphaCurrentUserId');
+      if(!userId || userId==='guest') throw new Error('Диагностика сақтау үшін аккаунтқа кіріңіз.');
+      const key='alphaTestResults_'+userId;
+      const saved=JSON.parse(localStorage.getItem(key)||'[]');
+      saved.unshift(result);
+      localStorage.setItem(key,JSON.stringify(saved.slice(0,30)));
+      if(alphaSupabase){
+        alphaSupabase.auth.getUser().then(({data,error})=>{
+          if(error) throw error;
+          const authUser=data?.user;
+          if(!authUser?.id) return;
+          return alphaSupabase.from('alpha_diagnostic_results').insert({
+            user_id:authUser.id,
+            title:result.title,
+            score:result.score,
+            total:result.total,
+            pct:result.pct,
+            duration:result.time,
+            answers:GEOMETRY_QUESTIONS.map((q,i)=>({number:i+1,question:q[1],chosen:selected[i],chosenText:q[2][selected[i]],correct:q[3],correctText:q[2][q[3]],isCorrect:selected[i]===q[3]})),
+            errors:result.errors,
+            completed_at:new Date().toISOString()
+          }).then(({error:saveError})=>{
+            if(saveError){console.error('ALPHA diagnostic save error:',saveError);toast('Нәтиже осы құрылғыда сақталды, серверге сақтау қатесі болды.');}
+            else toast('Диагностика нәтижесі жеке профиліңізге сақталды ✓');
+          });
+        }).catch(err=>{console.error('ALPHA diagnostic save error:',err);});
+      }
+    }catch(e){console.error('ALPHA diagnostic local save error:',e);}
     quiz.innerHTML='<div style="text-align:center;padding:24px 0 18px"><div style="width:92px;height:92px;border:5px solid #dbeafe;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;font-size:23px;font-weight:800;color:#245dff">'+pct+'%</div><h2 style="font-size:25px;margin:0 0 8px">Тест қорытындысы</h2><div style="font-size:38px;font-weight:900;color:#245dff">'+score+' / '+GEOMETRY_QUESTIONS.length+'</div><p>Жинаған балл: <b>'+score+' / '+GEOMETRY_QUESTIONS.length+'</b></p><p>⏱ Тапсыру уақыты: <b>'+timeText+'</b></p><p style="color:#5375a5">Қате жауаптардың талдауы «Қателерім» бөлімінде сақталды.</p></div><button id="geometryFullRetry" style="border:0;background:#245dff;color:#fff;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer">Қайта тапсыру ↻</button>';
     quiz.querySelector('#geometryFullRetry').addEventListener('click',()=>{current=0;selected.fill(null);render()});
     page.scrollTo({top:0,behavior:'smooth'});
