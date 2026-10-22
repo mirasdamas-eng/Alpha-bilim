@@ -1285,10 +1285,11 @@ function trackStudentVisit(){
   let days=[];try{days=JSON.parse(localStorage.getItem(key)||'[]')}catch(e){}
   if(!days.includes(today)){days.push(today);localStorage.setItem(key,JSON.stringify(days.slice(-90)));}
 }
-function renderStudentProgress(){
+async function renderStudentProgress(){
   const id=localStorage.getItem('alphaCurrentUserId')||localStorage.getItem('alphaName')||'guest';
   const key='alphaTestResults_'+id;
   let results=[];try{results=JSON.parse(localStorage.getItem(key)||'[]')}catch(e){}
+  if(id!=='guest' && alphaSupabase){try{const {data:{user},error:userError}=await alphaSupabase.auth.getUser();if(!userError&&user?.id){const {data,error}=await alphaSupabase.from('alpha_diagnostic_results').select('id,title,score,total,pct,duration,completed_at').eq('user_id',user.id).order('completed_at',{ascending:false}).limit(30);if(!error&&Array.isArray(data)){results=data.map(r=>({...r,dateISO:r.completed_at,time:r.duration||''}));localStorage.setItem(key,JSON.stringify(results));}}}catch(e){console.warn('Progress diagnostics load error:',e);}}
   const visitKey='alphaVisits_'+id;let visits=[];try{visits=JSON.parse(localStorage.getItem(visitKey)||'[]')}catch(e){}
   const dayKey=d=>{const x=new Date(d);return Number.isNaN(x.getTime())?'':x.toISOString().slice(0,10)};
   const dateOf=r=>r.completed_at||r.dateISO||r.created_at||r.date||'';
