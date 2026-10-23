@@ -1986,8 +1986,7 @@ document.addEventListener('click',function(event){
   const id=aliases[button.dataset.view]||button.dataset.view;
   const target=document.getElementById(id);
   if(!target)return;
-  event.preventDefault();event.stopImmediatePropagation();
-  document.querySelectorAll('.menu button').forEach(item=>item.classList.toggle('active',item===button));
+  return; // Let the original menu handler run its section-specific loading logic.
   document.querySelectorAll('.view').forEach(view=>view.classList.remove('active'));
   target.classList.add('active');
   if(id==='errorsView'&&typeof window.renderTestErrors==='function')window.renderTestErrors();
