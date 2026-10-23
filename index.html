@@ -1063,7 +1063,7 @@ footer{background:#f2f7ff;border-color:#dce8fb}
 
 <div id="passport" class="view"><div class="dash-head"><div><h1>Digital Bilim Passport</h1><p class="muted">Пәндер бойынша қазіргі нәтиже мен мақсат.</p></div></div>
 <div class="passport"><div class="p"><small>Математика</small><b>78%</b><span class="good">Мақсат 90%</span></div><div class="p"><small>Физика</small><b class="warn">54%</b><span>Мақсат 80%</span></div><div class="p"><small>Қазақ тілі</small><b class="good">87%</b><span>Мақсат 90%</span></div><div class="p"><small>Ағылшын</small><b>71%</b><span>Мақсат 85%</span></div></div>
-<div class="panel" style="margin-top:18px"><h3>AI талдауы 🤖</h3><p class="muted">Физикадан нәтижені көтеру қажет. Әсіресе «Механика» тақырыбына назар аудар. Келесі аптаға 3 қосымша тапсырма ұсынылды.</p><button class="btn btn-primary" onclick="toast('Жеке тапсырмалар қосылды')">Ұсынылған тапсырмаларды ашу</button></div></div>
+<div class="panel" style="margin-top:18px"><h3>AI талдауы 🤖</h3><p class="muted">Соңғы диагностика нәтижесіне сүйеніп, жеке түсіндірме мен оқу ұсыныстарын ал.</p><button id="runAIAnalysisBtn" class="btn btn-primary" onclick="runAIAnalysis()">AI талдауын алу</button><div id="aiAnalysisResult" style="display:none;white-space:pre-wrap;line-height:1.7;margin-top:16px;padding:14px;border-radius:12px;background:var(--card, #f6f8fb);overflow-wrap:anywhere"></div></div></div>
 
 <div id="errors" class="view"><div class="dash-head"><div><h1>Қателерім</h1><p class="muted">Қате кеткен сұрақтарды қайта қарап, білімдегі олқылықтарды жой.</p></div></div>
 <div class="list-card"><div class="list-item"><div class="left">❌ <span><b>Квадрат теңдеулер</b><br><small class="muted">Дискриминантты есептеу</small></span></div><button class="btn btn-light" onclick="toast('Тақырып қайта ашылды')">Қайталау</button></div><div class="list-item"><div class="left">❌ <span><b>Физика — механика</b><br><small class="muted">Жылдамдық формуласын қолдану</small></span></div><button class="btn btn-light" onclick="toast('Тақырып қайта ашылды')">Қайталау</button></div></div></div>
@@ -2006,6 +2006,55 @@ document.addEventListener('DOMContentLoaded',function(){
   const lesson=Number(lessonRaw||0);
   if(Number.isInteger(lesson)&&typeof playFreeLesson==='function')playFreeLesson(lesson);
 });
+</script>
+
+<script>
+async function runAIAnalysis(){
+  const button=document.getElementById('runAIAnalysisBtn');
+  const output=document.getElementById('aiAnalysisResult');
+  if(!button||!output)return;
+  if(!alphaSupabase){toast('Supabase байланысы қолжетімсіз. Бетті жаңартып көр.');return;}
+  button.disabled=true;
+  button.textContent='AI талдап жатыр...';
+  output.style.display='block';
+  output.textContent='Соңғы диагностика нәтижесі жүктеліп жатыр...';
+  try{
+    const {data:authData,error:authError}=await alphaSupabase.auth.getUser();
+    if(authError||!authData?.user?.id)throw new Error('Алдымен аккаунтыңа кір.');
+    const {data:rows,error:loadError}=await alphaSupabase
+      .from('alpha_diagnostic_results')
+      .select('title,score,total,answers,errors,completed_at')
+      .eq('user_id',authData.user.id)
+      .order('completed_at',{ascending:false})
+      .limit(1);
+    if(loadError)throw new Error('Диагностика нәтижесін жүктеу мүмкін болмады. Қайта кіріп көр.');
+    const result=rows&&rows[0];
+    if(!result)throw new Error('Әзірге сақталған диагностика жоқ. Алдымен тест тапсыр.');
+    const source=Array.isArray(result.answers)&&result.answers.length?result.answers:(Array.isArray(result.errors)?result.errors:[]);
+    if(!source.length)throw new Error('Бұл нәтижеде талдауға арналған жауаптар жоқ. Жаңа диагностика тапсырып көр.');
+    const questions=source.map(q=>({
+      question:q.question||('Сұрақ '+(q.number||'')),
+      chosenAnswer:q.chosenText||(q.chosen===undefined?'Жауап белгісіз':String(q.chosen)),
+      correctAnswer:q.correctText||(q.correct===undefined?'Дұрыс жауап белгісіз':String(q.correct)),
+      isCorrect:typeof q.isCorrect==='boolean'?q.isCorrect:(q.chosen!==undefined&&q.correct!==undefined?q.chosen===q.correct:false),
+      explanation:q.explanation||''
+    }));
+    output.textContent='AI жауап дайындап жатыр...';
+    const {data,error}=await alphaSupabase.functions.invoke('alpha-ai-analysis',{
+      body:{subject:result.title||'Диагностика',score:result.score,total:result.total,questions}
+    });
+    if(error)throw new Error('AI қызметіне қосылу сәтсіз болды. Сессияны жаңартып, қайта көр.');
+    if(!data||!data.analysis)throw new Error(data?.error||'AI талдауын алу мүмкін болмады.');
+    output.textContent=data.analysis;
+    toast('AI талдауы дайын ✓');
+  }catch(error){
+    output.textContent=error?.message||'Белгісіз қате шықты.';
+    toast(output.textContent);
+  }finally{
+    button.disabled=false;
+    button.textContent='AI талдауын қайта алу';
+  }
+}
 </script>
 </body>
 </html>
