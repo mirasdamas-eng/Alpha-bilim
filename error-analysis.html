@@ -20,8 +20,17 @@ footer{text-align:center;color:var(--muted);padding:20px;font-size:13px}@media(m
  const $=id=>document.getElementById(id);
  const esc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
  const user=localStorage.getItem('alphaCurrentUserId')||localStorage.getItem('alphaName')||'guest';
+ const idx=Number(new URLSearchParams(location.search).get('result')||0);
  let results=[];try{results=JSON.parse(localStorage.getItem('alphaTestResults_'+user)||'[]')}catch(e){}
- const idx=Number(new URLSearchParams(location.search).get('result')||0),r=results[idx];
+ // Аккаунт кілті сәйкес келмесе, осы браузерде сақталған басқа ALPHA тест нәтижелерін де тексереміз.
+ if(!results[idx]){
+   for(let k=0;k<localStorage.length;k++){
+     const key=localStorage.key(k);
+     if(!key||!key.startsWith('alphaTestResults_'))continue;
+     try{const candidate=JSON.parse(localStorage.getItem(key)||'[]');if(Array.isArray(candidate)&&candidate[idx]&&Array.isArray(candidate[idx].errors)){results=candidate;break;}}catch(e){}
+   }
+ }
+ const r=results[idx];
  if(!r){$('testTitle').textContent='Тест нәтижесі табылмады';$('summary').innerHTML='<div class="empty">Бұл тест нәтижесі осы браузерде табылмады. ALPHA сайтына кіріп, «Қателерім» бөлімінен қайта таңда.</div>';return}
  const score=Number(r.score)||0,total=Number(r.total)||25,pct=Number(r.pct)||0;
  $('testTitle').textContent=r.title||'Тест';
