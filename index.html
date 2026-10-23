@@ -2078,8 +2078,21 @@ async function runAIAnalysis(){
     const {data,error}=await alphaSupabase.functions.invoke('alpha-ai-analysis',{
       body:{subject:result.title||'Диагностика',score:result.score,total:result.total,questions}
     });
-    if(error)throw new Error('AI қызметіне қосылу сәтсіз болды. Сессияны жаңартып, қайта көр.');
-    if(!data||!data.analysis)throw new Error(data?.error||'AI талдауын алу мүмкін болмады. API төлем лимитін де тексер.');
+    if(error){
+      let serverMessage='';
+      try{
+        const ctx=error.context;
+        if(ctx && typeof ctx.json==='function'){
+          const body=await ctx.json();
+          serverMessage=body?.error||body?.message||'';
+        }else if(ctx && typeof ctx.text==='function'){
+          serverMessage=await ctx.text();
+        }
+      }catch(_){}
+      if(!serverMessage)serverMessage=error.message||'';
+      throw new Error(serverMessage||'AI қызметіне қосылу сәтсіз болды. Қайта кіріп, тағы байқап көр.');
+    }
+    if(!data||!data.analysis)throw new Error(data?.error||'AI талдауын алу мүмкін болмады. OpenAI API кредиттері мен лимитін тексер.');
     output.textContent='Тақырып: '+(result.title||'Диагностика')+'\nНәтиже: '+(result.score??'?')+'/'+(result.total??'?')+'\n\n'+data.analysis;
     toast('Таңдалған тесттің AI талдауы дайын ✓');
   }catch(error){
