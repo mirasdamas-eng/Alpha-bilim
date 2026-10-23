@@ -1440,23 +1440,24 @@ async function renderTestErrors(){
           results=data.map(r=>({
             id:r.id,title:r.title,score:r.score,total:r.total,pct:r.pct,
             time:r.duration||'',date:r.completed_at?new Date(r.completed_at).toLocaleString('kk-KZ'):'',
-            errors:r.errors||[]
+            errors:Array.isArray(r.errors)?r.errors:[]
           }));
           localStorage.setItem(key,JSON.stringify(results));
         }else if(error){console.warn('ALPHA diagnostic results load error:',error);}
       }
     }catch(e){console.warn('ALPHA diagnostic results load error:',e);}
   }
-  if(!results.length){host.innerHTML='<p class="muted">Әзірге тапсырылған тест жоқ. Тестті аяқтағаннан кейін оның атауы осында шығады.</p>';return;}
-  const esc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  if(!results.length){
+    host.innerHTML='<p class="muted">Әзірге тапсырылған тест жоқ. Диагностиканы аяқтағаннан кейін қателеріңнің талдауы осында шығады.</p>';
+    return;
+  }
+  const esc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   host.innerHTML=results.map((r,i)=>{
-    const title=esc(r.title||'Тест'),score=Number(r.score)||0,total=Number(r.total)||25,pct=Number(r.pct)||0;
-    const errorCount=Array.isArray(r.errors)?r.errors.length:0;
-    return '<section style="padding:18px;margin:12px 0;border:1px solid #d9c8ea;border-radius:14px;background:var(--card,#fff)"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div><h3 style="margin:0 0 6px">'+title+'</h3><p class="muted" style="margin:0">'+esc(r.date||'')+' · '+esc(r.time||'')+'</p><p style="margin:8px 0 0;color:'+(errorCount?'#c0394b':'#16804a')+';font-weight:700">'+(errorCount?'❌ Қате жауап саны: '+errorCount:'✓ Қате жауап жоқ')+'</p></div><b style="color:#7b3bb0;font-size:18px">'+score+' / '+total+' балл ('+pct+'%)</b></div><button type="button" data-open-error="'+i+'" style="margin-top:14px;border:0;border-radius:9px;background:#245dff;color:#fff;padding:11px 16px;font-weight:700;cursor:pointer">'+(errorCount?'Қателерді түзету және талдау →':'Нәтижені қарау →')+'</button></section>';
+    const title=esc(r.title||'Диагностика'),score=Number(r.score)||0,total=Number(r.total)||25,pct=Number(r.pct)||0;
+    const errors=Array.isArray(r.errors)?r.errors:[];
+    const analysis=errors.length?'<div style="margin-top:18px"><h4 style="margin:0 0 12px">Қате жауаптарды талдау ('+errors.length+')</h4>'+errors.map((e,j)=>'<article style="padding:15px;margin:10px 0;border:1px solid #f0cbd1;border-radius:12px;background:var(--card,#fff)"><b>'+(j+1)+'. '+esc(e.question||'Сұрақ мәтіні жоқ')+'</b><p style="margin:10px 0;color:#c0394b"><b>Сенің жауабың:</b> '+esc(e.chosenText||'Жауап берілмеген')+'</p><p style="margin:10px 0;color:#16804a"><b>Дұрыс жауап:</b> '+esc(e.correctText||'Көрсетілмеген')+'</p><div style="padding:12px;border-radius:9px;background:rgba(36,93,255,.07)"><b>Талдауы:</b><p style="margin:5px 0 0">'+esc(e.explanation||'Бұл сұраққа түсіндірме әзірге қосылмаған.')+'</p></div></article>').join('')+'</div>':'<p style="margin-top:14px;color:#16804a;font-weight:700">✓ Қате жауап жоқ — барлық сұрақ дұрыс!</p>';
+    return '<section style="padding:18px;margin:12px 0;border:1px solid #d9c8ea;border-radius:14px;background:var(--card,#fff)"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div><h3 style="margin:0 0 6px">'+title+'</h3><p class="muted" style="margin:0">'+esc(r.date||'')+' · '+esc(r.time||'')+'</p><p style="margin:8px 0 0;color:'+(errors.length?'#c0394b':'#16804a')+';font-weight:700">'+(errors.length?'❌ Қате жауап саны: '+errors.length:'✓ Қате жауап жоқ')+'</p></div><b style="color:#7b3bb0;font-size:18px">'+score+' / '+total+' балл ('+pct+'%)</b></div>'+analysis+'</section>';
   }).join('');
-  host.querySelectorAll('[data-open-error]').forEach(btn=>btn.addEventListener('click',()=>{
-    window.location.href='error-analysis.html?result='+encodeURIComponent(Number(btn.dataset.openError));
-  }));
 }
 document.querySelectorAll('.menu button').forEach(btn=>btn.addEventListener('click',()=>{
   const aliases={errors:'errorsView',plan:'planView',passport:'passport',olympiad:'olympiadView',exam:'examView',unt:'untView',teacher:'teacher'};
