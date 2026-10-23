@@ -1063,7 +1063,7 @@ footer{background:#f2f7ff;border-color:#dce8fb}
 
 <div id="passport" class="view"><div class="dash-head"><div><h1>Digital Bilim Passport</h1><p class="muted">Пәндер бойынша қазіргі нәтиже мен мақсат.</p></div></div>
 <div class="passport"><div class="p"><small>Математика</small><b>78%</b><span class="good">Мақсат 90%</span></div><div class="p"><small>Физика</small><b class="warn">54%</b><span>Мақсат 80%</span></div><div class="p"><small>Қазақ тілі</small><b class="good">87%</b><span>Мақсат 90%</span></div><div class="p"><small>Ағылшын</small><b>71%</b><span>Мақсат 85%</span></div></div>
-<div class="panel" style="margin-top:18px"><h3>AI талдауы 🤖</h3><p class="muted">Соңғы диагностика нәтижесіне сүйеніп, жеке түсіндірме мен оқу ұсыныстарын ал.</p><button id="runAIAnalysisBtn" class="btn btn-primary" onclick="runAIAnalysis()">AI талдауын алу</button><div id="aiAnalysisResult" style="display:none;white-space:pre-wrap;line-height:1.7;margin-top:16px;padding:14px;border-radius:12px;background:var(--card, #f6f8fb);overflow-wrap:anywhere"></div></div></div>
+<div class="panel" style="margin-top:18px"><h3>AI талдауы 🤖</h3><p class="muted">Тапсырған тестіңді таңда. AI сол тақырыптағы нақты жауаптарың мен қателеріңді талдайды.</p><div class="field"><label for="aiAnalysisTestSelect">Тест / тақырып</label><select id="aiAnalysisTestSelect" style="width:100%;border:1px solid var(--line);padding:13px;border-radius:12px;background:#fff"><option value="">Тест нәтижелері жүктеледі...</option></select></div><button id="loadAIAnalysisTestsBtn" class="btn btn-light" onclick="loadAIAnalysisTests()">Тесттерді жаңарту</button> <button id="runAIAnalysisBtn" class="btn btn-primary" onclick="runAIAnalysis()">Таңдалған тестті талдау</button><div id="aiAnalysisResult" style="display:none;white-space:pre-wrap;line-height:1.7;margin-top:16px;padding:14px;border-radius:12px;background:var(--card, #f6f8fb);overflow-wrap:anywhere"></div></div></div>
 
 <div id="errors" class="view"><div class="dash-head"><div><h1>Қателерім</h1><p class="muted">Қате кеткен сұрақтарды қайта қарап, білімдегі олқылықтарды жой.</p></div></div>
 <div class="list-card"><div class="list-item"><div class="left">❌ <span><b>Квадрат теңдеулер</b><br><small class="muted">Дискриминантты есептеу</small></span></div><button class="btn btn-light" onclick="toast('Тақырып қайта ашылды')">Қайталау</button></div><div class="list-item"><div class="left">❌ <span><b>Физика — механика</b><br><small class="muted">Жылдамдық формуласын қолдану</small></span></div><button class="btn btn-light" onclick="toast('Тақырып қайта ашылды')">Қайталау</button></div></div></div>
@@ -2009,34 +2009,69 @@ document.addEventListener('DOMContentLoaded',function(){
 </script>
 
 <script>
+let alphaAIResultsCache = [];
+function alphaEscapeText(value){
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+async function loadAIAnalysisTests(){
+  const select=document.getElementById('aiAnalysisTestSelect');
+  const refresh=document.getElementById('loadAIAnalysisTestsBtn');
+  if(!select)return;
+  if(!alphaSupabase){select.innerHTML='<option value="">Supabase байланысы жоқ</option>';toast('Supabase байланысы қолжетімсіз.');return;}
+  if(refresh){refresh.disabled=true;refresh.textContent='Жүктелуде...';}
+  select.innerHTML='<option value="">Тест нәтижелері жүктелуде...</option>';
+  try{
+    const {data:authData,error:authError}=await alphaSupabase.auth.getUser();
+    if(authError||!authData?.user?.id)throw new Error('Алдымен аккаунтыңа кір.');
+    const {data,error}=await alphaSupabase.from('alpha_diagnostic_results')
+      .select('id,title,score,total,pct,answers,errors,completed_at')
+      .eq('user_id',authData.user.id).order('completed_at',{ascending:false}).limit(50);
+    if(error)throw new Error('Тест нәтижелерін жүктеу мүмкін болмады. Қайта кіріп көр.');
+    alphaAIResultsCache=Array.isArray(data)?data:[];
+    if(!alphaAIResultsCache.length){
+      select.innerHTML='<option value="">Сақталған тест жоқ — алдымен диагностика тапсыр</option>';
+      return;
+    }
+    select.innerHTML=alphaAIResultsCache.map((r,i)=>{
+      const title=r.title||'Диагностика';
+      const score=Number(r.score)||0,total=Number(r.total)||0;
+      const date=r.completed_at?new Date(r.completed_at).toLocaleString('kk-KZ'):'';
+      return '<option value="'+alphaEscapeText(r.id)+'">'+alphaEscapeText(title)+' — '+score+'/'+total+(date?' · '+alphaEscapeText(date):'')+'</option>';
+    }).join('');
+    const requested=select.dataset.requestedId;
+    if(requested&&alphaAIResultsCache.some(r=>r.id===requested))select.value=requested;
+  }catch(error){
+    select.innerHTML='<option value="">'+alphaEscapeText(error?.message||'Қате шықты')+'</option>';
+    toast(error?.message||'Тест нәтижелерін жүктеу қатесі');
+  }finally{
+    if(refresh){refresh.disabled=false;refresh.textContent='Тесттерді жаңарту';}
+  }
+}
 async function runAIAnalysis(){
   const button=document.getElementById('runAIAnalysisBtn');
   const output=document.getElementById('aiAnalysisResult');
-  if(!button||!output)return;
+  const select=document.getElementById('aiAnalysisTestSelect');
+  if(!button||!output||!select)return;
   if(!alphaSupabase){toast('Supabase байланысы қолжетімсіз. Бетті жаңартып көр.');return;}
   button.disabled=true;
   button.textContent='AI талдап жатыр...';
   output.style.display='block';
-  output.textContent='Соңғы диагностика нәтижесі жүктеліп жатыр...';
+  output.textContent='Таңдалған тест жүктеліп, талдауға дайындалып жатыр...';
   try{
     const {data:authData,error:authError}=await alphaSupabase.auth.getUser();
     if(authError||!authData?.user?.id)throw new Error('Алдымен аккаунтыңа кір.');
-    const {data:rows,error:loadError}=await alphaSupabase
-      .from('alpha_diagnostic_results')
-      .select('title,score,total,answers,errors,completed_at')
-      .eq('user_id',authData.user.id)
-      .order('completed_at',{ascending:false})
-      .limit(1);
-    if(loadError)throw new Error('Диагностика нәтижесін жүктеу мүмкін болмады. Қайта кіріп көр.');
-    const result=rows&&rows[0];
-    if(!result)throw new Error('Әзірге сақталған диагностика жоқ. Алдымен тест тапсыр.');
-    const source=Array.isArray(result.answers)&&result.answers.length?result.answers:(Array.isArray(result.errors)?result.errors:[]);
-    if(!source.length)throw new Error('Бұл нәтижеде талдауға арналған жауаптар жоқ. Жаңа диагностика тапсырып көр.');
-    const questions=source.map(q=>({
-      question:q.question||('Сұрақ '+(q.number||'')),
+    if(!alphaAIResultsCache.length)await loadAIAnalysisTests();
+    const result=alphaAIResultsCache.find(r=>r.id===select.value);
+    if(!result)throw new Error('Талдау үшін тест таңда. Қажет болса, «Тесттерді жаңарту» батырмасын бас.');
+    const answers=Array.isArray(result.answers)?result.answers:[];
+    const errors=Array.isArray(result.errors)?result.errors:[];
+    const source=answers.length?answers:errors;
+    if(!source.length)throw new Error('Бұл тестте жауаптар сақталмаған. Тестті қайта тапсырып көр.');
+    const questions=source.map((q,i)=>({
+      question:q.question||('Сұрақ '+(q.number||i+1)),
       chosenAnswer:q.chosenText||(q.chosen===undefined?'Жауап белгісіз':String(q.chosen)),
       correctAnswer:q.correctText||(q.correct===undefined?'Дұрыс жауап белгісіз':String(q.correct)),
-      isCorrect:typeof q.isCorrect==='boolean'?q.isCorrect:(q.chosen!==undefined&&q.correct!==undefined?q.chosen===q.correct:false),
+      isCorrect:typeof q.isCorrect==='boolean'?q.isCorrect:(q.chosen!==undefined&&q.correct!==undefined?String(q.chosen)===String(q.correct):false),
       explanation:q.explanation||''
     }));
     output.textContent='AI жауап дайындап жатыр...';
@@ -2044,17 +2079,21 @@ async function runAIAnalysis(){
       body:{subject:result.title||'Диагностика',score:result.score,total:result.total,questions}
     });
     if(error)throw new Error('AI қызметіне қосылу сәтсіз болды. Сессияны жаңартып, қайта көр.');
-    if(!data||!data.analysis)throw new Error(data?.error||'AI талдауын алу мүмкін болмады.');
-    output.textContent=data.analysis;
-    toast('AI талдауы дайын ✓');
+    if(!data||!data.analysis)throw new Error(data?.error||'AI талдауын алу мүмкін болмады. API төлем лимитін де тексер.');
+    output.textContent='Тақырып: '+(result.title||'Диагностика')+'\nНәтиже: '+(result.score??'?')+'/'+(result.total??'?')+'\n\n'+data.analysis;
+    toast('Таңдалған тесттің AI талдауы дайын ✓');
   }catch(error){
     output.textContent=error?.message||'Белгісіз қате шықты.';
     toast(output.textContent);
   }finally{
     button.disabled=false;
-    button.textContent='AI талдауын қайта алу';
+    button.textContent='Таңдалған тестті талдау';
   }
 }
+document.addEventListener('DOMContentLoaded',()=>{
+  const select=document.getElementById('aiAnalysisTestSelect');
+  if(select)loadAIAnalysisTests();
+});
 </script>
 </body>
 </html>
