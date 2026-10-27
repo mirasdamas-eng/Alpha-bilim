@@ -1300,7 +1300,9 @@ async function submitAuth(){
       if(authError) throw authError;
       if(!authData.user) throw new Error('Тіркелу аяқталмады. Қайта көріңіз.');
       if(!authData.session){
-        showError('Тіркелу сұранысы қабылданды, бірақ Supabase email растауды талап етіп тұр. Бірден кіру үшін Supabase → Authentication → Sign In / Providers → Email ішінен Confirm email параметрін өшіріп, Save басу қажет. Содан кейін қайта тіркеліңіз.');
+        showError('Аккаунтыңыз Supabase жүйесінде сақталды. Email-ге келген растау сілтемесін ашыңыз (Spam/Junk бумасын да тексеріңіз), содан кейін «Кіру» бөлімінен кіріңіз. Қайта тіркелудің қажеті жоқ — аккаунтыңыз өшірілмейді.');
+        const message=$('loginError');
+        if(message){message.style.color='#067647';message.style.background='#ecfdf3';message.style.border='1px solid #abefc6';message.style.padding='12px';message.style.borderRadius='12px';message.style.lineHeight='1.5';}
         return;
       }
     } else {
