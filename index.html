@@ -1949,13 +1949,18 @@ function playFreeLesson(index){
       }
       if(result.error) throw result.error;
       if(mode === 'register' && !result.data.session) {
-        // Try an immediate password sign-in; this succeeds when email confirmation is disabled.
-        const immediate = await supa.auth.signInWithPassword({ email, password });
-        if (immediate.error || !immediate.data?.session) {
-          showError('Тіркелу сұранысы қабылданды, бірақ Supabase email растауын талап етіп тұр. Бірден кіру үшін Supabase → Authentication → Sign In / Providers → Email → Confirm email параметрін өшіріп, Save басыңыз. Содан кейін осы email мен құпиясөз арқылы қайта кіріңіз.');
-          return;
+        // Supabase has created the Auth user and the DB trigger creates its profile.
+        // Do not treat pending email confirmation as a failed registration or retry signup.
+        showError('Аккаунтыңыз Supabase жүйесінде сақталды. Email-ге келген растау сілтемесін ашыңыз (Spam/Junk бумасын да тексеріңіз), содан кейін «Кіру» бөлімінен кіріңіз. Қайта тіркелудің қажеті жоқ — аккаунтыңыз өшірілмейді.');
+        if(error){
+          error.style.color='#067647';
+          error.style.background='#ecfdf3';
+          error.style.border='1px solid #abefc6';
+          error.style.padding='12px';
+          error.style.borderRadius='12px';
+          error.style.lineHeight='1.5';
         }
-        result = { data: immediate.data, error: null };
+        return;
       }
       const authUser = result.data.user;
       const meta = authUser?.user_metadata || {};
@@ -1992,7 +1997,10 @@ function playFreeLesson(index){
     } catch(e) {
       const msg = String(e?.message || 'Белгісіз қате');
       if(/invalid login credentials/i.test(msg)) showError('Email немесе құпиясөз қате.');
-      else if(/already registered/i.test(msg)) showError('Бұл email бұрын тіркелген. Кіру бөлімінен кіріңіз.');
+      else if(/already registered|already exists|user exists/i.test(msg)) showError('Бұл email бойынша аккаунт бұрыннан бар. Қайта тіркелмеңіз: «Кіру» бөліміне өтіп, сол email мен құпиясөзді енгізіңіз. Егер email расталмаған болса, поштадағы растау сілтемесін ашыңыз.');
+      else if(/email not confirmed/i.test(msg)) showError('Аккаунтыңыз сақталған, бірақ email әлі расталмаған. Поштаңыздағы растау сілтемесін ашып, содан кейін кіріңіз.');
+      else if(/password should be at least/i.test(msg)) showError('Құпиясөз кемінде 6 таңбадан тұруы керек.');
+      else if(/rate limit|too many requests/i.test(msg)) showError('Тіркелу сұраныстары тым жиі жіберілді. Біраз күтіп, кейін қайта көріңіз. Бұрын тіркелген болсаңыз, қайта тіркелмей «Кіру» бөлімін қолданыңыз.');
       else showError('Кіру/тіркелу қатесі: ' + msg);
     } finally {
       if(button){button.disabled=false;button.textContent='Жалғастыру →';}
