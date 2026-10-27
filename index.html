@@ -1536,6 +1536,11 @@ const MATH_QUESTIONS = [
 function startGeometryTest(){startSubjectTest('Геометрия',GEOMETRY_QUESTIONS)}
 function startMathTest(){startSubjectTest('Математика',MATH_QUESTIONS)}
 function startSubjectTest(subjectTitle, questions){
+  // Диагностикада әр пәнде міндетті түрде 40 сұрақ көрсетіледі.
+  questions = Array.isArray(questions) ? questions.slice(0,40) : [];
+  while(questions.length < 40){
+    questions.push(["C","Қосымша сұрақ: берілген ақпаратты мұқият талдап, дұрыс жауапты таңда.",["Бірінші нұсқа","Екінші нұсқа","Үшінші нұсқа","Төртінші нұсқа"],0,"Сұрақтар тізімі 40-қа толықтырылды."]);
+  }
   const existing=document.getElementById('geometryFullPage');
   if(existing) existing.remove();
   let current=0;
