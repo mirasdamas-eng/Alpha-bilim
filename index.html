@@ -1526,7 +1526,7 @@ function startGeometryTest(){
     quiz.querySelector('#geometryFullFinish')?.addEventListener('click',finish);
   }
   function save(){const v=quiz.querySelector('input[name="geometryFullAnswer"]:checked');if(v)selected[current]=Number(v.value)}
-  function finish(){
+  async function finish(){
     save();const missing=selected.findIndex(v=>v===null);if(missing!==-1){current=missing;render();alert((missing+1)+'-сұраққа жауап беріңіз.');return}
     let score=0,a=0,b=0,c=0;
     GEOMETRY_QUESTIONS.forEach((q,i)=>{if(selected[i]===q[3]){score++;if(q[0]==='A')a++;else if(q[0]==='B')b++;else if(q[0]==='C')c++;}});
@@ -1541,28 +1541,21 @@ function startGeometryTest(){
       const saved=JSON.parse(localStorage.getItem(key)||'[]');
       saved.unshift(result);
       localStorage.setItem(key,JSON.stringify(saved.slice(0,30)));
-      if(alphaSupabase){
-        alphaSupabase.auth.getUser().then(({data,error})=>{
-          if(error) throw error;
-          const authUser=data?.user;
-          if(!authUser?.id) return;
-          return alphaSupabase.from('alpha_diagnostic_results').insert({
-            user_id:authUser.id,
-            title:result.title,
-            score:result.score,
-            total:result.total,
-            pct:result.pct,
-            duration:result.time,
-            answers:GEOMETRY_QUESTIONS.map((q,i)=>({number:i+1,question:q[1],chosen:selected[i],chosenText:q[2][selected[i]],correct:q[3],correctText:q[2][q[3]],isCorrect:selected[i]===q[3]})),
-            errors:result.errors,
-            completed_at:new Date().toISOString()
-          }).then(({error:saveError})=>{
-            if(saveError){console.error('ALPHA diagnostic save error:',saveError);toast('Нәтиже осы құрылғыда сақталды, серверге сақтау қатесі болды.');}
-            else toast('Диагностика нәтижесі жеке профиліңізге сақталды ✓');
-          });
-        }).catch(err=>{console.error('ALPHA diagnostic save error:',err);});
-      }
-    }catch(e){console.error('ALPHA diagnostic local save error:',e);}
+      if(!alphaSupabase) throw new Error('Supabase қызметі қосылмаған');
+      const {data:{user:authUser},error:userError}=await alphaSupabase.auth.getUser();
+      if(userError) throw userError;
+      if(!authUser?.id) throw new Error('Supabase аккаунты табылмады');
+      const {error:saveError}=await alphaSupabase.from('alpha_diagnostic_results').insert({
+        user_id:authUser.id,title:result.title,score:result.score,total:result.total,pct:result.pct,
+        duration:result.time,
+        answers:GEOMETRY_QUESTIONS.map((q,i)=>({number:i+1,question:q[1],chosen:selected[i],chosenText:q[2][selected[i]],correct:q[3],correctText:q[2][q[3]],isCorrect:selected[i]===q[3]})),
+        errors:result.errors,completed_at:result.dateISO
+      });
+      if(saveError) throw saveError;
+      toast('Диагностика нәтижесі серверге сақталды ✓');
+      if(typeof renderTestErrors==='function') await renderTestErrors();
+      if(typeof renderStudentProgress==='function') await renderStudentProgress();
+    }catch(e){console.error('ALPHA diagnostic save error:',e);toast('Нәтиже құрылғыда сақталды, бірақ серверге сақтау сәтсіз болды. Қайта кіріп, Supabase баптауын тексеріңіз.');}
     const errorHtml=errors.length?'<section style="margin:20px 0;text-align:left"><h2 style="font-size:21px;margin-bottom:12px">Қате жауаптарды талдау ('+errors.length+')</h2>'+errors.map(e=>'<article style="border:1px solid #f1c8ce;border-radius:12px;padding:16px;margin:12px 0;background:#fff"><b style="display:block;margin-bottom:10px">'+e.number+'. '+String(e.question).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</b><p style="color:#c0394b;margin:8px 0"><b>Сенің жауабың:</b> '+String.fromCharCode(65+e.chosen)+') '+String(e.chosenText).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</p><p style="color:#16804a;margin:8px 0"><b>Дұрыс жауап:</b> '+String.fromCharCode(65+e.correct)+') '+String(e.correctText).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</p><div style="background:#f3f7ff;padding:12px;border-radius:9px"><b>Түсіндірме:</b> '+String(e.explanation||'Түсіндірме әзірге қосылмаған.').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div></article>').join('')+'</section>':'<div style="margin:18px 0;padding:16px;border-radius:12px;background:#eafaf1;color:#16804a">Керемет! Қате жауап жоқ 🎉</div>';    quiz.innerHTML='<div style="text-align:center;padding:24px 0 18px"><div style="width:92px;height:92px;border:5px solid #dbeafe;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;font-size:23px;font-weight:800;color:#245dff">'+pct+'%</div><h2 style="font-size:25px;margin:0 0 8px">Тест қорытындысы</h2><div style="font-size:38px;font-weight:900;color:#245dff">'+score+' / '+GEOMETRY_QUESTIONS.length+'</div><p>Жинаған балл: <b>'+score+' / '+GEOMETRY_QUESTIONS.length+'</b></p><p>⏱ Тапсыру уақыты: <b>'+timeText+'</b></p></div>'+errorHtml+'<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button id="geometryFullRetry" style="border:0;background:#245dff;color:#fff;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer">Қайта тапсыру ↻</button><button id="geometryGoErrors" style="border:1px solid #245dff;background:#fff;color:#245dff;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer">Барлық нәтижелерім →</button></div>';
     quiz.querySelector('#geometryFullRetry').addEventListener('click',()=>{current=0;selected.fill(null);render()});
     quiz.querySelector('#geometryGoErrors')?.addEventListener('click',()=>{page.remove();const nav=document.querySelector('#studentMenu [data-view="errors"]');if(nav)nav.click();else if(typeof renderTestErrors==='function'){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('errorsView')?.classList.add('active');renderTestErrors();}});
