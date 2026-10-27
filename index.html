@@ -654,6 +654,7 @@ footer{background:#f2f7ff;border-color:#dce8fb}
   <div id="studentMenu" class="menu">
     <button class="active" data-view="dashboard">🏠 Басты бет</button>
     <button data-view="lessonsView">📚 Менің сабақтарым</button>
+    <button data-view="testsView">📝 A/B/C деңгейлі тапсырмалар</button>
     <button data-view="progressView">📈 Прогресс</button>
     <button data-view="plan">🎯 Менің жоспарым</button>
     <button data-view="passport">📊 Білім паспорты</button>
@@ -819,6 +820,14 @@ footer{background:#f2f7ff;border-color:#dce8fb}
     <div class="list-item"><div class="left">⚡ <span><b>Физика</b><br><small class="muted">Механика бойынша есептер</small></span></div><button class="btn btn-light" onclick="toast('Тапсырма ашылды')">Орындау</button></div>
     <div class="list-item"><div class="left">📖 <span><b>Үй тапсырмасы</b><br><small class="muted">Бүгінгі оқу жоспары</small></span></div><button class="btn btn-light" onclick="toast('Тапсырма ашылды')">Орындау</button></div>
   </div></div>
+</div>
+
+<div id="testsView" class="view">
+  <div class="dash-head"><div><h1>A/B/C деңгейлі тапсырмалар 📝</h1><p class="muted">Пәнді таңда да, деңгейлер бойынша тапсырмаларды орында. Нәтижелерің «Қателерді түзету» бөлімінде сақталады.</p></div></div>
+  <div class="features" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px">
+    <section class="feature" style="background:linear-gradient(135deg,#eff6ff,#e0e7ff);border:1px solid #c7d2fe"><div class="icon">📐</div><h3>Геометрия</h3><p>Диагностикадағы геометрия тесті. A — жеңіл, B — орташа, C — күрделі тапсырмалар.</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0"><span class="pill">A деңгейі</span><span class="pill">B деңгейі</span><span class="pill">C деңгейі</span></div><button class="btn btn-primary" style="width:100%" onclick="startGeometryTest()">Геометрия тестін бастау →</button></section>
+    <section class="feature" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #bbf7d0"><div class="icon">➗</div><h3>Математика</h3><p>Арифметика, бөлшектер, теңдеулер және пайыз бойынша A/B/C деңгейлі тапсырмалар.</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0"><span class="pill">A деңгейі</span><span class="pill">B деңгейі</span><span class="pill">C деңгейі</span></div><button class="btn btn-primary" style="width:100%" onclick="startMathTest()">Математика тестін бастау →</button></section>
+  </div>
 </div>
 
 <div id="errorsView" class="view">
@@ -1405,7 +1414,8 @@ function showApp(name, role){
   if(first) first.classList.add('active');
   window.scrollTo(0,0);
 }
-function logout(){
+async function logout(){
+  try{if(alphaSupabase) await alphaSupabase.auth.signOut({scope:'local'});}catch(e){console.warn('ALPHA sign out:',e);}
   clearLegacySession();
   $('app').style.display='none';
   $('landing').style.display='block';
@@ -1503,22 +1513,42 @@ function addTeacherTask(){
 }
 
 const GEOMETRY_QUESTIONS = [["A","Үшбұрыштың неше қабырғасы бар?",["2","3","4","5"],1,"Үшбұрыштың 3 қабырғасы бар."],["A","Төрт қабырғасы тең және барлық бұрыштары тік фигура?",["Ромб","Шаршы","Трапеция","Үшбұрыш"],1,"Шаршының төрт қабырғасы тең және бұрыштары 90°."],["A","Шеңбердің центрінен шетіне дейінгі кесінді қалай аталады?",["Диаметр","Хорда","Радиус","Доға"],2,"Бұл кесінді радиус деп аталады."],["A","Тік бұрыш неше градус?",["45°","90°","180°","360°"],1,"Тік бұрыш 90°-қа тең."],["A","Қабырғасы 5 см шаршының периметрі?",["10 см","15 см","20 см","25 см"],2,"P = 4 × 5 = 20 см."],["A","Тік төртбұрыштың неше төбесі бар?",["3","4","5","6"],1,"Тік төртбұрыштың 4 төбесі бар."],["A","Қай фигураның қабырғалары жоқ?",["Шаршы","Үшбұрыш","Шеңбер","Тік төртбұрыш"],2,"Шеңбердің түзу қабырғалары болмайды."],["A","Бір түзудің бойындағы жазыңқы бұрыш қанша?",["90°","120°","180°","360°"],2,"Жазыңқы бұрыш 180°."],["A","Қабырғасы 3 см шаршының ауданы?",["6 см²","9 см²","12 см²","Нұсқаларда жоқ"],1,"S = 3 × 3 = 9 см²."],["A","Бес қабырғасы бар көпбұрыш қалай аталады?",["Алтыбұрыш","Төртбұрыш","Бесбұрыш","Үшбұрыш"],2,"Бес қабырғалы көпбұрыш — бесбұрыш."],["B","Ұзындығы 8 см, ені 3 см тік төртбұрыштың периметрі?",["11 см","22 см","24 см","16 см"],1,"P = 2 × (8 + 3) = 22 см."],["B","Қабырғасы 6 см шаршының ауданы?",["12 см²","24 см²","36 см²","18 см²"],2,"S = 6 × 6 = 36 см²."],["B","Үшбұрыштың екі бұрышы 50° және 60°. Үшіншісі?",["60°","70°","80°","90°"],1,"180° − 50° − 60° = 70°."],["B","Периметрі 28 см шаршының қабырғасы?",["6 см","7 см","8 см","14 см"],1,"28 ÷ 4 = 7 см."],["B","Ауданы 35 см², ұзындығы 7 см тік төртбұрыштың ені?",["4 см","5 см","6 см","7 см"],1,"35 ÷ 7 = 5 см."],["B","Радиусы 4 см шеңбердің диаметрі?",["2 см","4 см","8 см","16 см"],2,"Диаметр радиустан екі есе үлкен: 2 × 4 = 8 см."],["B","Тік төртбұрыштың ұзындығы 9 см, ені 4 см. Ауданы?",["13 см²","26 см²","36 см²","18 см²"],2,"S = 9 × 4 = 36 см²."],["B","Үшбұрыштың бұрыштары 40° және 40°. Үшінші бұрышы?",["80°","90°","100°","120°"],2,"180° − 40° − 40° = 100°."],["B","Қабырғасы 7 см шаршының периметрі?",["14 см","21 см","28 см","49 см"],2,"P = 4 × 7 = 28 см."],["B","Қайсысы доғал бұрыш?",["35°","90°","120°","180°"],2,"Доғал бұрыш 90°-тан үлкен, 180°-тан кіші."],["C","Тік төртбұрыштың периметрі 34 см, ұзындығы 10 см. Ені?",["5 см","7 см","14 см","17 см"],1,"2(10 + ені)=34, сондықтан ені 7 см."],["C","Үшбұрыш қабырғалары 5 см, 6 см және 8 см. Периметрі?",["13 см","19 см","24 см","30 см"],1,"P = 5 + 6 + 8 = 19 см."],["C","Шаршының ауданы 64 см². Периметрі?",["16 см","24 см","32 см","64 см"],2,"Қабырғасы √64 = 8 см; P = 4 × 8 = 32 см."],["C","Тік төртбұрыштың ауданы 72 см², ені 8 см. Периметрі?",["17 см","26 см","34 см","36 см"],2,"Ұзындығы 72 ÷ 8 = 9 см; P = 2(9 + 8) = 34 см."],["C","Үшбұрыштың бұрыштары x, 2x және 3x. Ең үлкен бұрыш қанша?",["30°","60°","90°","120°"],2,"6x = 180°, x = 30°. Ең үлкен бұрыш 3x = 90°."]];
-function startGeometryTest(){
+
+const MATH_QUESTIONS = [
+ ["A","12 + 8 нешеге тең?",["18","20","22","24"],1,"12 + 8 = 20."],
+ ["A","7 × 6 мәнін тап.",["36","40","42","48"],2,"7 × 6 = 42."],
+ ["A","Бөлшектердің қайсысы жартыға тең?",["1/3","2/3","1/2","1/4"],2,"1/2 — бір бүтіннің екі тең бөлігінің бірі."],
+ ["A","100 санының 10%-ы қанша?",["1","5","10","20"],2,"100 × 0,10 = 10."],
+ ["A","x + 9 = 15. x нешеге тең?",["4","5","6","7"],2,"x = 15 − 9 = 6."],
+ ["B","48 : 6 + 5 мәнін тап.",["8","13","16","53"],1,"Алдымен бөлу: 48 : 6 = 8, кейін 8 + 5 = 13."],
+ ["B","3/4 бөлшегін ондық бөлшекке айналдыр.",["0,25","0,5","0,75","1,25"],2,"3 : 4 = 0,75."],
+ ["B","2x − 7 = 11 теңдеуін шеш.",["2","7","9","18"],2,"2x = 18, сондықтан x = 9."],
+ ["B","Бағасы 4000 ₸ затқа 25% жеңілдік жасалды. Жаңа бағасы?",["1000 ₸","2500 ₸","3000 ₸","3500 ₸"],2,"4000-ның 25%-ы 1000 ₸; 4000 − 1000 = 3000 ₸."],
+ ["B","Тізбекті жалғастыр: 4, 7, 10, 13, ...",["14","15","16","17"],2,"Әр жолы 3 қосылады, келесі сан — 16."],
+ ["C","Екі санның қосындысы 36, айырмасы 8. Үлкен санды тап.",["14","18","22","28"],2,"x+y=36, x−y=8. Қосқанда 2x=44, x=22."],
+ ["C","Теңдеуді шеш: 3(x − 2) = 21.",["5","7","9","11"],2,"3(x−2)=21 → x−2=7 → x=9."],
+ ["C","Сыныпта 30 оқушы бар. Оның 40%-ы қыздар. Қыздар саны?",["10","12","14","18"],1,"30 × 0,40 = 12."],
+ ["C","Ұзындығы 12 см, ені 8 см тіктөртбұрыштың периметрі?",["20 см","32 см","40 см","48 см"],2,"P = 2 × (12 + 8) = 40 см."],
+ ["C","Егер a=4 және b=−3 болса, a² + 2b мәні?",["4","6","10","22"],2,"4² + 2(−3) = 16 − 6 = 10."]
+];
+function startGeometryTest(){startSubjectTest('Геометрия',GEOMETRY_QUESTIONS)}
+function startMathTest(){startSubjectTest('Математика',MATH_QUESTIONS)}
+function startSubjectTest(subjectTitle, questions){
   const existing=document.getElementById('geometryFullPage');
   if(existing) existing.remove();
   let current=0;
   const startedAt=Date.now();
-  const selected=Array(GEOMETRY_QUESTIONS.length).fill(null);
+  const selected=Array(questions.length).fill(null);
   const page=document.createElement('div');
   page.id='geometryFullPage';
   page.style.cssText='position:fixed;inset:0;z-index:99999;background:#edf4ff;color:#102448;overflow-y:auto;font-family:inherit';
-  page.innerHTML='<div style="min-height:100vh"><header style="height:62px;background:#0a2142;color:#fff;display:flex;align-items:center;padding:0 clamp(16px,4vw,40px);gap:20px;box-shadow:0 4px 15px #06152d22"><b style="font-size:16px">ALPHA — Диагностика</b><button id="geometryExitBtn" style="margin-left:auto;border:1px solid #31547f;background:#132f56;border-radius:10px;padding:10px 14px;cursor:pointer;color:#fff;font-weight:700">← Кабинетке қайту</button></header><main style="max-width:1000px;margin:28px auto;padding:0 18px 44px"><div style="font-size:13px;color:#416da8;margin-bottom:12px">Диагностика　›　Геометрия</div><div style="background:linear-gradient(110deg,#0b2a60,#3044bd);color:#fff;border-radius:18px;padding:22px 24px;margin-bottom:20px"><h1 style="font-size:25px;margin:0 0 8px">Диагностика 📐</h1><p style="margin:0;color:#dbeafe">25 сұрақ</p></div><section id="geometryFullQuiz" style="background:#fff;border:1px solid #d7e6ff;border-radius:16px;padding:20px 24px;box-shadow:0 8px 28px #173c7810"></section></main></div>';
+  page.innerHTML='<div style="min-height:100vh"><header style="height:62px;background:#0a2142;color:#fff;display:flex;align-items:center;padding:0 clamp(16px,4vw,40px);gap:20px;box-shadow:0 4px 15px #06152d22"><b style="font-size:16px">ALPHA — '+subjectTitle+'</b><button id="geometryExitBtn" style="margin-left:auto;border:1px solid #31547f;background:#132f56;border-radius:10px;padding:10px 14px;cursor:pointer;color:#fff;font-weight:700">← Кабинетке қайту</button></header><main style="max-width:1000px;margin:28px auto;padding:0 18px 44px"><div style="font-size:13px;color:#416da8;margin-bottom:12px">Тесттер　›　'+subjectTitle+'</div><div style="background:linear-gradient(110deg,#0b2a60,#3044bd);color:#fff;border-radius:18px;padding:22px 24px;margin-bottom:20px"><h1 style="font-size:25px;margin:0 0 8px">'+subjectTitle+' 📝</h1><p style="margin:0;color:#dbeafe">25 сұрақ</p></div><section id="geometryFullQuiz" style="background:#fff;border:1px solid #d7e6ff;border-radius:16px;padding:20px 24px;box-shadow:0 8px 28px #173c7810"></section></main></div>';
   document.body.appendChild(page);
   page.querySelector('#geometryExitBtn').addEventListener('click',()=>{page.remove();const home=document.querySelector('#studentMenu [data-view="dashboard"]');if(home)home.click();});
   const quiz=page.querySelector('#geometryFullQuiz');
   function render(){
-    const item=GEOMETRY_QUESTIONS[current];
-    quiz.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:8px;padding-bottom:16px;border-bottom:1px solid #d7e6ff">'+GEOMETRY_QUESTIONS.map((q,i)=>'<button type="button" data-q="'+i+'" style="min-width:42px;height:42px;border:0;border-radius:8px;background:'+(i===current?'#245dff':selected[i]!==null?'#dbeafe':'#e2edff')+';color:'+(i===current?'#fff':selected[i]!==null?'#166534':'#416da8')+';font-weight:700;cursor:pointer">'+(i+1)+'</button>').join('')+'</div><div style="display:flex;justify-content:space-between;gap:12px;margin:26px 0 12px;font-size:13px;color:#5375a5"><span>Сұрақ '+(current+1)+' / '+GEOMETRY_QUESTIONS.length+'</span><b style="color:#245dff">1 балл</b></div><h2 style="font-size:19px;line-height:1.65;color:#102448;margin:0 0 18px">'+(current+1)+'. '+item[1]+'</h2><div style="border-top:1px solid #d7e6ff;padding-top:14px;color:#5375a5;font-size:13px;margin-bottom:10px">Бір дұрыс жауапты таңдаңыз</div>'+item[2].map((a,j)=>'<label style="display:flex;align-items:center;gap:10px;border:1px solid #d7e6ff;border-radius:8px;padding:12px;margin:10px 0;cursor:pointer;color:#102448;background:'+(selected[current]===j?'#edf4ff':'#fff')+'"><input type="radio" name="geometryFullAnswer" value="'+j+'" '+(selected[current]===j?'checked':'')+' style="accent-color:#245dff;width:18px;height:18px"> <span>'+String.fromCharCode(65+j)+') '+a+'</span></label>').join('')+'<div style="display:flex;justify-content:space-between;gap:12px;margin-top:22px"><button type="button" id="geometryFullPrev" style="border:1px solid #d7e6ff;background:#fff;color:#245dff;border-radius:10px;padding:10px 16px;cursor:pointer" '+(current===0?'disabled':'')+'>← Артқа</button>'+(current===GEOMETRY_QUESTIONS.length-1?'<button type="button" id="geometryFullFinish" style="border:0;background:#245dff;color:#fff;border-radius:10px;padding:11px 18px;font-weight:700;cursor:pointer">Тестті аяқтау</button>':'<button type="button" id="geometryFullNext" style="border:0;background:#245dff;color:#fff;border-radius:10px;padding:11px 18px;font-weight:700;cursor:pointer">Келесі →</button>')+'</div>';
+    const item=questions[current];
+    quiz.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:8px;padding-bottom:16px;border-bottom:1px solid #d7e6ff">'+questions.map((q,i)=>'<button type="button" data-q="'+i+'" style="min-width:42px;height:42px;border:0;border-radius:8px;background:'+(i===current?'#245dff':selected[i]!==null?'#dbeafe':'#e2edff')+';color:'+(i===current?'#fff':selected[i]!==null?'#166534':'#416da8')+';font-weight:700;cursor:pointer">'+(i+1)+'</button>').join('')+'</div><div style="display:flex;justify-content:space-between;gap:12px;margin:26px 0 12px;font-size:13px;color:#5375a5"><span>Сұрақ '+(current+1)+' / '+questions.length+'</span><b style="color:#245dff">1 балл</b></div><h2 style="font-size:19px;line-height:1.65;color:#102448;margin:0 0 18px">'+(current+1)+'. '+item[1]+'</h2><div style="border-top:1px solid #d7e6ff;padding-top:14px;color:#5375a5;font-size:13px;margin-bottom:10px">Бір дұрыс жауапты таңдаңыз</div>'+item[2].map((a,j)=>'<label style="display:flex;align-items:center;gap:10px;border:1px solid #d7e6ff;border-radius:8px;padding:12px;margin:10px 0;cursor:pointer;color:#102448;background:'+(selected[current]===j?'#edf4ff':'#fff')+'"><input type="radio" name="geometryFullAnswer" value="'+j+'" '+(selected[current]===j?'checked':'')+' style="accent-color:#245dff;width:18px;height:18px"> <span>'+String.fromCharCode(65+j)+') '+a+'</span></label>').join('')+'<div style="display:flex;justify-content:space-between;gap:12px;margin-top:22px"><button type="button" id="geometryFullPrev" style="border:1px solid #d7e6ff;background:#fff;color:#245dff;border-radius:10px;padding:10px 16px;cursor:pointer" '+(current===0?'disabled':'')+'>← Артқа</button>'+(current===questions.length-1?'<button type="button" id="geometryFullFinish" style="border:0;background:#245dff;color:#fff;border-radius:10px;padding:11px 18px;font-weight:700;cursor:pointer">Тестті аяқтау</button>':'<button type="button" id="geometryFullNext" style="border:0;background:#245dff;color:#fff;border-radius:10px;padding:11px 18px;font-weight:700;cursor:pointer">Келесі →</button>')+'</div>';
     quiz.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>{save();current=Number(b.dataset.q);render()}));
     quiz.querySelectorAll('input[name="geometryFullAnswer"]').forEach(inp=>inp.addEventListener('change',()=>{selected[current]=Number(inp.value);render()}));
     quiz.querySelector('#geometryFullPrev')?.addEventListener('click',()=>{save();current--;render()});
@@ -1529,11 +1559,11 @@ function startGeometryTest(){
   async function finish(){
     save();const missing=selected.findIndex(v=>v===null);if(missing!==-1){current=missing;render();alert((missing+1)+'-сұраққа жауап беріңіз.');return}
     let score=0,a=0,b=0,c=0;
-    GEOMETRY_QUESTIONS.forEach((q,i)=>{if(selected[i]===q[3]){score++;if(q[0]==='A')a++;else if(q[0]==='B')b++;else if(q[0]==='C')c++;}});
-    const errors=GEOMETRY_QUESTIONS.map((q,i)=>({number:i+1,level:q[0],question:q[1],chosen:selected[i],chosenText:q[2][selected[i]],correct:q[3],correctText:q[2][q[3]],explanation:q[4]})).filter(x=>x.chosen!==x.correct);
+    questions.forEach((q,i)=>{if(selected[i]===q[3]){score++;if(q[0]==='A')a++;else if(q[0]==='B')b++;else if(q[0]==='C')c++;}});
+    const errors=questions.map((q,i)=>({number:i+1,level:q[0],question:q[1],chosen:selected[i],chosenText:q[2][selected[i]],correct:q[3],correctText:q[2][q[3]],explanation:q[4]})).filter(x=>x.chosen!==x.correct);
     const elapsed=Math.max(0,Math.floor((Date.now()-startedAt)/1000));const timeText=String(Math.floor(elapsed/60)).padStart(2,'0')+':'+String(elapsed%60).padStart(2,'0');
-    const pct=Math.round(score/GEOMETRY_QUESTIONS.length*100);
-    const result={title:'Диагностика',score,total:GEOMETRY_QUESTIONS.length,pct,time:timeText,date:new Date().toLocaleString('kk-KZ'),dateISO:new Date().toISOString(),errors};
+    const pct=Math.round(score/questions.length*100);
+    const result={title:subjectTitle,score,total:questions.length,pct,time:timeText,date:new Date().toLocaleString('kk-KZ'),dateISO:new Date().toISOString(),errors};
     try{
       const userId=localStorage.getItem('alphaCurrentUserId');
       if(!userId || userId==='guest') throw new Error('Диагностика сақтау үшін аккаунтқа кіріңіз.');
@@ -1548,15 +1578,15 @@ function startGeometryTest(){
       const {error:saveError}=await alphaSupabase.from('alpha_diagnostic_results').insert({
         user_id:authUser.id,title:result.title,score:result.score,total:result.total,pct:result.pct,
         duration:result.time,
-        answers:GEOMETRY_QUESTIONS.map((q,i)=>({number:i+1,question:q[1],chosen:selected[i],chosenText:q[2][selected[i]],correct:q[3],correctText:q[2][q[3]],isCorrect:selected[i]===q[3]})),
+        answers:questions.map((q,i)=>({number:i+1,question:q[1],chosen:selected[i],chosenText:q[2][selected[i]],correct:q[3],correctText:q[2][q[3]],isCorrect:selected[i]===q[3]})),
         errors:result.errors,completed_at:result.dateISO
       });
       if(saveError) throw saveError;
-      toast('Диагностика нәтижесі серверге сақталды ✓');
+      toast(subjectTitle+' нәтижесі серверге сақталды ✓');
       if(typeof renderTestErrors==='function') await renderTestErrors();
       if(typeof renderStudentProgress==='function') await renderStudentProgress();
     }catch(e){console.error('ALPHA diagnostic save error:',e);toast('Нәтиже құрылғыда сақталды, бірақ серверге сақтау сәтсіз болды. Қайта кіріп, Supabase баптауын тексеріңіз.');}
-    const errorHtml=errors.length?'<section style="margin:20px 0;text-align:left"><h2 style="font-size:21px;margin-bottom:12px">Қате жауаптарды талдау ('+errors.length+')</h2>'+errors.map(e=>'<article style="border:1px solid #f1c8ce;border-radius:12px;padding:16px;margin:12px 0;background:#fff"><b style="display:block;margin-bottom:10px">'+e.number+'. '+String(e.question).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</b><p style="color:#c0394b;margin:8px 0"><b>Сенің жауабың:</b> '+String.fromCharCode(65+e.chosen)+') '+String(e.chosenText).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</p><p style="color:#16804a;margin:8px 0"><b>Дұрыс жауап:</b> '+String.fromCharCode(65+e.correct)+') '+String(e.correctText).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</p><div style="background:#f3f7ff;padding:12px;border-radius:9px"><b>Түсіндірме:</b> '+String(e.explanation||'Түсіндірме әзірге қосылмаған.').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div></article>').join('')+'</section>':'<div style="margin:18px 0;padding:16px;border-radius:12px;background:#eafaf1;color:#16804a">Керемет! Қате жауап жоқ 🎉</div>';    quiz.innerHTML='<div style="text-align:center;padding:24px 0 18px"><div style="width:92px;height:92px;border:5px solid #dbeafe;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;font-size:23px;font-weight:800;color:#245dff">'+pct+'%</div><h2 style="font-size:25px;margin:0 0 8px">Тест қорытындысы</h2><div style="font-size:38px;font-weight:900;color:#245dff">'+score+' / '+GEOMETRY_QUESTIONS.length+'</div><p>Жинаған балл: <b>'+score+' / '+GEOMETRY_QUESTIONS.length+'</b></p><p>⏱ Тапсыру уақыты: <b>'+timeText+'</b></p></div>'+errorHtml+'<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button id="geometryFullRetry" style="border:0;background:#245dff;color:#fff;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer">Қайта тапсыру ↻</button><button id="geometryGoErrors" style="border:1px solid #245dff;background:#fff;color:#245dff;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer">Барлық нәтижелерім →</button></div>';
+    const errorHtml=errors.length?'<section style="margin:20px 0;text-align:left"><h2 style="font-size:21px;margin-bottom:12px">Қате жауаптарды талдау ('+errors.length+')</h2>'+errors.map(e=>'<article style="border:1px solid #f1c8ce;border-radius:12px;padding:16px;margin:12px 0;background:#fff"><b style="display:block;margin-bottom:10px">'+e.number+'. '+String(e.question).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</b><p style="color:#c0394b;margin:8px 0"><b>Сенің жауабың:</b> '+String.fromCharCode(65+e.chosen)+') '+String(e.chosenText).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</p><p style="color:#16804a;margin:8px 0"><b>Дұрыс жауап:</b> '+String.fromCharCode(65+e.correct)+') '+String(e.correctText).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</p><div style="background:#f3f7ff;padding:12px;border-radius:9px"><b>Түсіндірме:</b> '+String(e.explanation||'Түсіндірме әзірге қосылмаған.').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div></article>').join('')+'</section>':'<div style="margin:18px 0;padding:16px;border-radius:12px;background:#eafaf1;color:#16804a">Керемет! Қате жауап жоқ 🎉</div>';    quiz.innerHTML='<div style="text-align:center;padding:24px 0 18px"><div style="width:92px;height:92px;border:5px solid #dbeafe;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;font-size:23px;font-weight:800;color:#245dff">'+pct+'%</div><h2 style="font-size:25px;margin:0 0 8px">Тест қорытындысы</h2><div style="font-size:38px;font-weight:900;color:#245dff">'+score+' / '+questions.length+'</div><p>Жинаған балл: <b>'+score+' / '+questions.length+'</b></p><p>⏱ Тапсыру уақыты: <b>'+timeText+'</b></p></div>'+errorHtml+'<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button id="geometryFullRetry" style="border:0;background:#245dff;color:#fff;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer">Қайта тапсыру ↻</button><button id="geometryGoErrors" style="border:1px solid #245dff;background:#fff;color:#245dff;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer">Барлық нәтижелерім →</button></div>';
     quiz.querySelector('#geometryFullRetry').addEventListener('click',()=>{current=0;selected.fill(null);render()});
     quiz.querySelector('#geometryGoErrors')?.addEventListener('click',()=>{page.remove();const nav=document.querySelector('#studentMenu [data-view="errors"]');if(nav)nav.click();else if(typeof renderTestErrors==='function'){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('errorsView')?.classList.add('active');renderTestErrors();}});
     page.scrollTo({top:0,behavior:'smooth'});
@@ -1571,19 +1601,27 @@ function startDiagnosticTest(){
     openLogin('login');
     return;
   }
-  startGeometryTest();
+  startSubjectTest('Диагностика — Геометрия',GEOMETRY_QUESTIONS);
 }
 function startTest(){startDiagnosticTest()}
 function sendMessage(){const m=$('message').value.trim();if(!m){toast('Алдымен сұрағыңды жаз');return}const subject=$('questionSubject')?.value||'Жалпы';const text='ALPHA — мұғалімге сұрақ\\nПән: '+subject+'\\nОқушы: '+(document.getElementById('userName')?.textContent||localStorage.getItem('alphaName')||'Оқушы')+'\\nСұрақ: '+m;const url='https://wa.me/?text='+encodeURIComponent(text);window.open(url,'_blank','noopener,noreferrer');toast('Сұрағыңды WhatsApp арқылы жіберуге дайындадық')}
 function searchContent(v){if(v.trim())toast('Іздеу: '+v)}
 window.addEventListener('keydown',e=>{if(e.key==='Escape')closeLogin()});
 
-const initialUser=getCurrentUser();
-if(initialUser){
-  showApp(initialUser.name,initialUser.role);
-}else if(localStorage.getItem('alphaLogged')==='1'){
-  clearLegacySession();
+async function restoreAuthenticatedSession(){
+  try{
+    if(!alphaSupabase) throw new Error('Supabase unavailable');
+    const {data:{user:authUser},error}=await alphaSupabase.auth.getUser();
+    if(error || !authUser){clearLegacySession();$('app').style.display='none';$('landing').style.display='block';return;}
+    const meta=authUser.user_metadata||{};
+    let profile={};
+    const {data,error:profileError}=await alphaSupabase.from('profiles').select('full_name,role,first_name,patronymic,surname,phone,grade,child_full_name,child_grade').eq('id',authUser.id).maybeSingle();
+    if(!profileError && data) profile=data;
+    const user={id:authUser.id,email:authUser.email,name:profile.full_name||meta.full_name||meta.first_name||authUser.email,firstName:profile.first_name||meta.first_name||'',patronymic:profile.patronymic||meta.patronymic||'',surname:profile.surname||meta.surname||'',phone:profile.phone||meta.phone||'',role:profile.role||meta.role||'student',grade:profile.grade||meta.grade||'',child:profile.child_full_name?{fullName:profile.child_full_name,grade:profile.child_grade||''}:null};
+    const users=getUsers().filter(u=>u.id!==user.id);users.push(user);saveUsers(users);syncCurrentUser(user);showApp(user.name,user.role);
+  }catch(e){clearLegacySession();$('app').style.display='none';$('landing').style.display='block';console.warn('ALPHA session restore:',e);}
 }
+restoreAuthenticatedSession();
 function openWhatsApp(message){
   const text=encodeURIComponent(message + '\nALPHA білім платформасы туралы ақпарат алғым келеді.');
   window.open('https://wa.me/77053402792?text='+text,'_blank','noopener,noreferrer');
