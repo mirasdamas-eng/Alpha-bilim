@@ -1564,10 +1564,10 @@ function startSubjectTest(subjectTitle, questions){
   }
   function save(){const v=quiz.querySelector('input[name="geometryFullAnswer"]:checked');if(v)selected[current]=Number(v.value)}
   async function finish(){
-    save();const missing=selected.findIndex(v=>v===null);if(missing!==-1){current=missing;render();alert((missing+1)+'-сұраққа жауап беріңіз.');return}
+    save();
     let score=0,a=0,b=0,c=0;
     questions.forEach((q,i)=>{if(selected[i]===q[3]){score++;if(q[0]==='A')a++;else if(q[0]==='B')b++;else if(q[0]==='C')c++;}});
-    const errors=questions.map((q,i)=>({number:i+1,level:q[0],question:q[1],chosen:selected[i],chosenText:q[2][selected[i]],correct:q[3],correctText:q[2][q[3]],explanation:q[4]})).filter(x=>x.chosen!==x.correct);
+    const errors=questions.map((q,i)=>({number:i+1,level:q[0],question:q[1],chosen:selected[i],chosenText:selected[i]===null?'Жауап берілмеген':q[2][selected[i]],correct:q[3],correctText:q[2][q[3]],explanation:q[4]})).filter(x=>x.chosen!==x.correct);
     const elapsed=Math.max(0,Math.floor((Date.now()-startedAt)/1000));const timeText=String(Math.floor(elapsed/60)).padStart(2,'0')+':'+String(elapsed%60).padStart(2,'0');
     const pct=Math.round(score/questions.length*100);
     const result={title:subjectTitle,score,total:questions.length,pct,time:timeText,date:new Date().toLocaleString('kk-KZ'),dateISO:new Date().toISOString(),errors};
@@ -1585,7 +1585,7 @@ function startSubjectTest(subjectTitle, questions){
       const {error:saveError}=await alphaSupabase.from('alpha_diagnostic_results').insert({
         user_id:authUser.id,title:result.title,score:result.score,total:result.total,pct:result.pct,
         duration:result.time,
-        answers:questions.map((q,i)=>({number:i+1,question:q[1],chosen:selected[i],chosenText:q[2][selected[i]],correct:q[3],correctText:q[2][q[3]],isCorrect:selected[i]===q[3]})),
+        answers:questions.map((q,i)=>({number:i+1,question:q[1],chosen:selected[i],chosenText:selected[i]===null?'Жауап берілмеген':q[2][selected[i]],correct:q[3],correctText:q[2][q[3]],isCorrect:selected[i]===q[3]})),
         errors:result.errors,completed_at:result.dateISO
       });
       if(saveError) throw saveError;
@@ -1641,7 +1641,8 @@ const DIAGNOSTIC_QUESTIONS = [
  ["C","Алгебра: Тауар бағасы 20% арзандап, 9600 ₸ болды. Бастапқы бағасы?",["11 000 ₸","11 500 ₸","12 000 ₸","12 500 ₸"],2,"9600 — бастапқы бағаның 80%-ы; 9600÷0,8=12000."],
  ["C","Геометрия: Шаршының диагоналі 10√2 см. Ауданын тап.",["50 см²","100 см²","150 см²","200 см²"],1,"d=a√2, сондықтан a=10 см; S=100 см²."],
  ["C","Алгебра: 1/(x−1)=1/3 теңдеуін шеш (x≠1).",["2","3","4","5"],2,"x−1=3, сондықтан x=4."],
- ["C","Геометрия: Радиусы 6 см жарты шеңбердің периметрін тап (π=3,14).",["18,84 см","25,84 см","30,84 см","37,68 см"],2,"Жарты шеңбер доғасы πr=18,84; диаметрі 12; қосындысы 30,84 см."]
+ ["C","Геометрия: Радиусы 6 см жарты шеңбердің периметрін тап (π=3,14).",["18,84 см","25,84 см","30,84 см","37,68 см"],2,"Жарты шеңбер доғасы πr=18,84; диаметрі 12; қосындысы 30,84 см."],
+ ["C","Квадрат теңдеудің дискриминанты 0-ге тең болса, неше нақты түбірі болады?",["Түбірі жоқ","Бір түбірі бар","Екі әртүрлі түбірі бар","Үш түбірі бар"],1,"D=0 болғанда квадрат теңдеудің бір нақты (қос түбірлі) шешімі болады."]
 ];
 const INFORMATICS_DIAGNOSTIC_QUESTIONS = [
  ["A","3,5 МБ файл неше КБ? (1 МБ=1024 КБ)",["3584 КБ","3500 КБ","3072 КБ","4096 КБ"],0,"3,5×1024=3584 КБ."],
@@ -1683,7 +1684,8 @@ const INFORMATICS_DIAGNOSTIC_QUESTIONS = [
  ["C","SQL-де кестеден барлық бағанды таңдайтын сұраныс?",["GET ALL FROM users;","SELECT * FROM users;","OPEN users;","SHOW ROW users;"],1,"SELECT * кестенің барлық бағандарын таңдайды."],
  ["C","Алгоритм күрделілігі O(n) болса, кіріс көлемі екі есе артқанда жұмыс мөлшері шамамен қалай өзгереді?",["Өзгермейді","Екі есе артады","Төрт есе артады","Жартысына азаяды"],1,"Сызықтық күрделілік кіріс өлшеміне пропорционал өседі."],
  ["C","HTML-де сілтеме жасауға арналған тег?",["<p>","<a>","<img>","<table>"],1,"<a href='...'> сілтеме жасайды."],
- ["C","Екі факторлы аутентификацияның артықшылығы?",["Құпиясөзден бөлек екінші тексеру қадамын қосады","Құпиясөзді міндетті түрде қысқартады","Аккаунтты ашық етеді","Барлық вирусты жояды"],0,"Екінші фактор пароль ұрланса да қосымша кедергі береді."]
+ ["C","Екі факторлы аутентификацияның артықшылығы?",["Құпиясөзден бөлек екінші тексеру қадамын қосады","Құпиясөзді міндетті түрде қысқартады","Аккаунтты ашық етеді","Барлық вирусты жояды"],0,"Екінші фактор пароль ұрланса да қосымша кедергі береді."],
+ ["C","Python-да сөздіктің мәнін кілт арқылы алу үшін қандай жазылу қолданылады?",["dict.value","dict[key]","dict->key","get.key()"],1,"Сөздік мәніне dict[key] немесе dict.get(key) арқылы қол жеткізіледі."]
 ];
 function startDiagnosticTest(){
   const userId=localStorage.getItem('alphaCurrentUserId');
