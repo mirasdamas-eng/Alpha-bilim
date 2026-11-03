@@ -19,9 +19,9 @@ footer{text-align:center;color:var(--muted);padding:20px;font-size:13px}@media(m
 (function(){
  const $=id=>document.getElementById(id);
  const esc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
- const user=localStorage.getItem('alphaCurrentUserId')||localStorage.getItem('alphaName')||'guest';
+ const user=localStorage.getItem('alphaCurrentUserId');
  const idx=Number(new URLSearchParams(location.search).get('result')||0);
- let results=[];try{results=JSON.parse(localStorage.getItem('alphaTestResults_'+user)||'[]')}catch(e){}
+ let results=[];try{if(user)results=JSON.parse(localStorage.getItem('alphaTestResults_'+user)||'[]')}catch(e){}
  // Қауіпсіздік: тек ағымдағы аккаунттың нәтижесін оқимыз. Басқа аккаунттардың кілттерін іздемейміз.
  const r=results[idx];
  if(!r){$('testTitle').textContent='Тест нәтижесі табылмады';$('summary').innerHTML='<div class="empty">Бұл тест нәтижесі осы браузерде табылмады. ALPHA сайтына кіріп, «Қателерім» бөлімінен қайта таңда.</div>';return}
