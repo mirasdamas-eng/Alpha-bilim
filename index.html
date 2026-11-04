@@ -1652,11 +1652,8 @@ function startSubjectTest(subjectTitle, questions){
   page.style.cssText='position:fixed;inset:0;z-index:99999;background:#edf4ff;color:#102448;overflow-y:auto;font-family:inherit';
   page.innerHTML='<div style="min-height:100vh"><header style="height:62px;background:#0a2142;color:#fff;display:flex;align-items:center;padding:0 clamp(16px,4vw,40px);gap:20px;box-shadow:0 4px 15px #06152d22"><b style="font-size:16px">ALPHA — '+subjectTitle+'</b><button id="geometryExitBtn" style="margin-left:auto;border:1px solid #31547f;background:#132f56;border-radius:10px;padding:10px 14px;cursor:pointer;color:#fff;font-weight:700">← Кабинетке қайту</button></header><main style="max-width:1000px;margin:28px auto;padding:0 18px 44px"><div style="font-size:13px;color:#416da8;margin-bottom:12px">Тесттер　›　'+subjectTitle+'</div><div style="background:linear-gradient(110deg,#0b2a60,#3044bd);color:#fff;border-radius:18px;padding:22px 24px;margin-bottom:20px"><h1 style="font-size:25px;margin:0 0 8px">'+subjectTitle+' 📝</h1><p style="margin:0;color:#dbeafe">'+questions.length+' сұрақ</p></div><section id="geometryFullQuiz" style="background:#fff;border:1px solid #d7e6ff;border-radius:16px;padding:20px 24px;box-shadow:0 8px 28px #173c7810"></section></main></div>';
   document.body.appendChild(page);
-  // Finish батырмасын overlay деңгейінде де ұстаймыз: диагностикада да click жоғалмайды.
-  page.addEventListener('click',function(event){
-    const finishButton=event.target.closest('#geometryFullFinish');
-    if(finishButton){event.preventDefault();event.stopPropagation();finish();}
-  },true);
+  // Аяқтау әрекетін тек батырманың өзіне байланыстырамыз.
+  // Capture деңгейіндегі қосымша тыңдағыш click оқиғасының таралуын бөгемеуі керек.
   page.querySelector('#geometryExitBtn').textContent='← '+returnSectionName+' бөліміне қайту';
   page.querySelector('#geometryExitBtn').addEventListener('click',returnToOriginSection);
   const quiz=page.querySelector('#geometryFullQuiz');
@@ -1667,7 +1664,20 @@ function startSubjectTest(subjectTitle, questions){
     quiz.querySelectorAll('input[name="geometryFullAnswer"]').forEach(inp=>inp.addEventListener('change',()=>{selected[current]=Number(inp.value);const label=inp.closest('label');if(label){label.style.background='#edf4ff';label.style.borderColor='#245dff';}}));
     quiz.querySelector('#geometryFullPrev')?.addEventListener('click',()=>{save();current--;render()});
     quiz.querySelector('#geometryFullNext')?.addEventListener('click',()=>{save();if(selected[current]===null){alert('Алдымен жауапты таңдаңыз.');return}current++;render()});
-    quiz.querySelector('#geometryFullFinish')?.addEventListener('click',finish);
+    const finishButton=quiz.querySelector('#geometryFullFinish');
+    if(finishButton) finishButton.onclick=function(event){
+      event.preventDefault();
+      if(finished)return;
+      finishButton.disabled=true;
+      finishButton.textContent='Нәтиже есептелуде...';
+      Promise.resolve(finish()).catch(error=>{
+        console.error('ALPHA diagnostic finish error:',error);
+        finished=false;
+        finishButton.disabled=false;
+        finishButton.textContent='Тестті аяқтау';
+        toast('Диагностиканы аяқтау кезінде қате шықты. Қайта басып көр.');
+      });
+    };
   }
   function save(){const v=quiz.querySelector('input[name="geometryFullAnswer"]:checked');if(v)selected[current]=Number(v.value)}
   async function finish(){
