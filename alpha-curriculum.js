@@ -28,6 +28,10 @@ const extraTopics=[["§17–18. Виртуалды және кеңейтілге
 topics.push(...extraTopics);
 topics.push(...[["§51. Startup түсінігі. Startup-ты іске қалай қосады?",[["Оқу мақсаты","Startup — жаңа мәселені шешуге бағытталған, өсуге қабілетті бизнес-жоба."],["Негізгі ұғым","Бастапқы қадам: мәселені анықтау, аудиторияны зерттеу, шешім идеясын ұсыну."],["Түсіндіру","MVP — идеяны тексеруге арналған өнімнің ең қарапайым жұмыс нұсқасы."],["Қолдану","Сұхбат пен тестілеу арқылы пайдаланушылардың кері байланысын жина."],["Практикалық тапсырма","Тапсырма: мектептегі бір мәселені шешетін startup идеясын сипатта."]]],["§52. Crowdfunding платформаларының жұмыс істеу қағидалары",[["Оқу мақсаты","Crowdfunding — жобаны көп адамның шағын үлесі арқылы қаржыландыру тәсілі."],["Негізгі ұғым","Платформада жоба мақсаты, қажетті қаражат, мерзім және қолдау шарттары көрсетіледі."],["Түсіндіру","Модельдер: сыйақыға негізделген, қайырымдылық және инвестициялық қолдау."],["Қолдану","Қаржыландыруға дейін платформаның ережелері мен тәуекелдерін тексеру маңызды."],["Практикалық тапсырма","Тапсырма: оқу жобасына арналған crowdfunding таныстырылымын жоспарла."]]],["§53–54. Жобаны алға жылжыту",[["Оқу мақсаты","Жобаны алға жылжыту — мақсатты аудиторияға өнімнің құндылығын түсіндіру."],["Негізгі ұғым","Негізгі құралдар: әлеуметтік желі, демонстрация, сайт, кері байланыс."],["Түсіндіру","Мақсатты аудиторияның қажеттілігі мен хабарламаның түсініктілігін ескер."],["Қолдану","Нәтижені қаралым, қызығушылық және тіркелу сияқты көрсеткіштермен бағала."],["Практикалық тапсырма","Тапсырма: IT жобаға арналған үш арналы жарнама жоспарын жаса."]]],["§55. IT Startup және жарнама",[["Оқу мақсаты","Startup жарнамасы өнімнің қандай мәселені шешетінін нақты көрсетуі керек."],["Негізгі ұғым","Қысқа хабарлама: мәселе → шешім → артықшылық → әрекетке шақыру."],["Түсіндіру","Мысал: оқуға көмектесетін қосымша үшін 20 секундтық бейнеролик идеясы."],["Қолдану","Жарнамада жалған уәде берме және авторлық құқықты сақта."],["Практикалық тапсырма","Тапсырма: startup үшін ұран мен жарнама мәтінін жаз."]]],["§56. Маркетингтік жарнама жасау (инфографика). Практикум",[["Оқу мақсаты","Инфографика ақпаратты мәтін, белгіше, диаграмма арқылы көрнекі ұсынады."],["Негізгі ұғым","Құрылымы: тақырып, мәселе, шешім, үш артықшылық және әрекетке шақыру."],["Түсіндіру","Түс, қаріп және бос кеңістік оқылымдылыққа әсер етеді."],["Қолдану","Сандық деректерді пайдалансаң, олардың дереккөзін көрсет."],["Практикалық тапсырма","Практикум: startup жарнамасына арналған бір беттік инфографика жаса."]]],["§57–58. Қазақстандағы цифрландыру",[["Оқу мақсаты","Цифрландыру — қызметтер мен үдерістерді цифрлық технологиялар арқылы жетілдіру."],["Негізгі ұғым","Қазақстанда цифрлық қызметтер мемлекеттік басқаруда, білімде және бизнесте қолданылады."],["Түсіндіру","Мысал: электрондық өтініш беру және онлайн анықтама алу."],["Қолдану","Цифрлық қолжетімділік пен жеке деректерді қорғау маңызды."],["Практикалық тапсырма","Тапсырма: цифрландырудың үш пайдасы мен екі тәуекелін жаз."]]],["§59–60. Blockchain технологиясы",[["Оқу мақсаты","Blockchain — жазбалар блоктарға топтастырылып, өзара байланысқан таратылған тізбек."],["Негізгі ұғым","Әр блок алдыңғы блокпен криптографиялық байланысады."],["Түсіндіру","Таратылған көшірмелер өзгерістерді тексеруге көмектеседі."],["Қолдану","Қолданылуы: жазбаларды тексеру, жеткізу тізбегін бақылау және басқа жүйелер."],["Практикалық тапсырма","Тапсырма: блоктар тізбегінің қарапайым схемасын сыз."]]],["§61–62. Ақпараттарды құқықтық қорғау",[["Оқу мақсаты","Ақпаратты құқықтық қорғау авторлық құқықты, дербес деректерді және лицензияларды қамтиды."],["Негізгі ұғым","Өзгенің суретін, мәтінін немесе бағдарламасын пайдаланарда рұқсат шарттарын тексер."],["Түсіндіру","Ашық лицензиялар қолдану және атрибуция талаптарын анықтайды."],["Қолдану","Жеке ақпаратты келісімсіз жарияламау керек."],["Практикалық тапсырма","Тапсырма: үш түрлі цифрлық материалға қолдану шарттарын салыстыр."]]],["§63–64. Электронды цифрлық қолтаңба және сертификат",[["Оқу мақсаты","ЭЦҚ электрондық құжаттың қол қоюшысын және тұтастығын растауға көмектеседі."],["Негізгі ұғым","Жабық кілт қол қоюға, ашық кілт қолтаңбаны тексеруге қолданылады."],["Түсіндіру","Сертификат ашық кілтті иесімен байланыстырады."],["Қолдану","Жабық кілт пен құпиясөзді ешкімге беруге болмайды."],["Практикалық тапсырма","Тапсырма: ЭЦҚ тексеру кезеңдерін блок-схема түрінде көрсет."]]],["§65–66. Электронды цифрлық қолтаңба және сертификатты қолдану. Практикум",[["Оқу мақсаты","Мақсат: ЭЦҚ қолдану логикасын және қауіпсіздік ережелерін түсіну."],["Негізгі ұғым","Құжат → қол қою → сертификатты тексеру → нәтижені растау."],["Түсіндіру","Оқу барысында нақты жеке кілттерді жарияламай, үлгілік деректерді пайдалан."],["Қолдану","Қате сертификат немесе өзгертілген құжат тексеруден өтпеуі мүмкін."],["Практикалық тапсырма","Практикум: қолтаңбаны тексерудің қадамдық нұсқаулығын жаса."]]],["§67–68. Электронды үкімет",[["Оқу мақсаты","Электронды үкімет азаматтарға мемлекеттік қызметтерді онлайн алуға мүмкіндік береді."],["Негізгі ұғым","Қызметті таңдау, сәйкестендіру, өтінім беру және нәтижені алу кезеңдері бар."],["Түсіндіру","Ресми портал мен қолданбаны пайдаланғанда сайт мекенжайын тексер."],["Қолдану","Құпия деректер мен растау кодтарын бөтен адамға берме."],["Практикалық тапсырма","Тапсырма: электрондық қызмет алудың жалпы алгоритмін құрастыр."]]]]);
 const curriculumSections=[{"title":"1-бөлім. Жасанды интеллект","start":0,"end":8},{"title":"2-бөлім. 3D жобалау","start":8,"end":13},{"title":"3-бөлім. Аппараттық жасақтама","start":13,"end":16},{"title":"4-бөлім. Заттар интернеті","start":16,"end":26},{"title":"5-бөлім. IT Startup","start":26,"end":31},{"title":"6-бөлім. Цифрлық сауаттылық","start":31,"end":37}];
+const mathTopics=[["Алғашқы функция және интеграл",[["Негізгі ұғым","Алғашқы функция: F'(x)=f(x)"],["Түсіндіру","Анықталмаған интеграл: ∫f(x)dx=F(x)+C"],["Формула және қасиеттер","Ньютон–Лейбниц: ∫ₐᵇf(x)dx=F(b)−F(a)"],["Қолдану","Қисықсызықты трапеция ауданы анықталған интегралмен табылады"],["Мысал немесе тапсырма","∫₀²2x dx=4"]]],["Математикалық статистика элементтері",[["Негізгі ұғым","Бас жиынтық және таңдама"],["Түсіндіру","Дискретті және интервалдық вариациялық қатарлар"],["Формула және қасиеттер","Орташа мән, медиана, мода"],["Қолдану","Өзгеріс ауқымы: ең үлкен мән − ең кіші мән"],["Мысал немесе тапсырма","2, 3, 3, 8 қатарының модасы — 3"]]],["Дәрежелер мен түбірлер",[["Негізгі ұғым","n-ші дәрежелі түбір және қасиеттері"],["Түсіндіру","Рационал көрсеткішті дәреже: a^(m/n)"],["Формула және қасиеттер","Иррационал өрнектерді түрлендіру"],["Қолдану","Дәрежелік функция және туындысы"],["Мысал немесе тапсырма","16^(3/4)=8"]]],["Иррационал теңдеулер мен теңсіздіктер",[["Негізгі ұғым","Анықталу облысын анықтау"],["Түсіндіру","Түбірді оқшаулау және дәрежелеу"],["Формула және қасиеттер","Бөгде түбірлерді бастапқы теңдеумен тексеру"],["Қолдану","Иррационал теңсіздіктер мен жүйелер"],["Мысал немесе тапсырма","√(x+5)=x−1 теңдеуін шеш"]]],["Комплекс сандар (ЖМБ)",[["Негізгі ұғым","Жорамал бірлік: i²=−1"],["Түсіндіру","Комплекс сан: z=a+bi"],["Формула және қасиеттер","Комплекс сандарды қосу және көбейту"],["Қолдану","Алгебраның негізгі теоремасы"],["Мысал немесе тапсырма","(2+i)+(3−2i)=5−i"]]],["Көрсеткіштік және логарифмдік функциялар",[["Негізгі ұғым","Көрсеткіштік функция: y=aˣ"],["Түсіндіру","Логарифм: logₐb=c ⇔ aᶜ=b"],["Формула және қасиеттер","Функциялардың қасиеттері мен графиктері"],["Қолдану","Дифференциалдау және теңдеулер мен теңсіздіктер"],["Мысал немесе тапсырма","log₂(x−1)=3 теңдеуін шеш"]]],["Дифференциалдық теңдеулер",[["Негізгі ұғым","Дифференциалдық теңдеу ұғымы"],["Түсіндіру","Бірінші ретті: y'=2x → y=x²+C"],["Формула және қасиеттер","Екінші ретті: y''=6x → y=x³+C₁x+C₂"],["Қолдану","Бастапқы шарттар және тұрақтылар"],["Мысал немесе тапсырма","y'=3x², y(0)=2 есебін шеш"]]],["Көпжақтар",[["Негізгі ұғым","Призма және параллелепипед"],["Түсіндіру","Пирамида және қиық пирамида"],["Формула және қасиеттер","Дұрыс көпжақтар"],["Қолдану","Көпжақтардың қималары"],["Мысал немесе тапсырма","Тікбұрышты параллелепипед көлемі: V=abc"]]],["Айналу денелері",[["Негізгі ұғым","Цилиндр: V=πr²h"],["Түсіндіру","Конус: V=πr²h/3"],["Формула және қасиеттер","Қиық конус: V=πh(R²+Rr+r²)/3"],["Қолдану","Сфера, шар және олардың қималары"],["Мысал немесе тапсырма","r=3, h=5 цилиндрдің көлемін есепте"]]],["Денелердің көлемдері",[["Негізгі ұғым","Призма: V=Sₜh"],["Түсіндіру","Пирамида: V=Sₜh/3"],["Формула және қасиеттер","Шар: V=4πr³/3"],["Қолдану","Бет аудандары: сфера S=4πr²"],["Мысал немесе тапсырма","Радиусы 3 шардың көлемін есепте"]]],["Кеңістіктегі векторлар мен координаттар",[["Негізгі ұғым","Векторлар: a=(a₁,a₂,a₃)"],["Түсіндіру","Екі нүктенің арақашықтығы"],["Формула және қасиеттер","Сфера: (x−a)²+(y−b)²+(z−c)²=R²"],["Қолдану","Жазықтық: Ax+By+Cz+D=0"],["Мысал немесе тапсырма","Кеңістіктегі бұрыштар мен қашықтықтар"]]]];
+const mathSections=[{title:'Алгебра және анализ бастамалары',start:0,end:7},{title:'Геометрия (Стереометрия)',start:7,end:11}];
+const activeTopics=()=>subject==='math'?mathTopics:topics;
+const activeSections=()=>subject==='math'?mathSections:curriculumSections;
 let sectionIndex=0;
 let subject=null,section=false,lesson=-1,slide=0;
 const root=()=>document.getElementById('alphaCurriculum');
@@ -36,7 +40,7 @@ const el=(tag,cls,txt)=>{const x=document.createElement(tag);if(cls)x.className=
 const btn=(txt,cb,disabled=false)=>{const b=el('button','btn btn-primary',txt);b.type='button';b.disabled=disabled;if(cb)b.onclick=cb;return b};
 const card=(title,description)=>{const x=el('article','alpha-edu-card');x.append(el('h3','',title));if(description)x.append(el('p','alpha-edu-muted',description));return x};
 function show(){
-if(typeof refreshAlphaEntitlement==='function'&&typeof getStudentTariff==='function'){refreshAlphaEntitlement().then(()=>{document.querySelectorAll('#alphaCurriculum .alpha-edu-card').forEach(card=>{const buttons=card.querySelectorAll('button');buttons.forEach(button=>{const text=button.textContent.replace(/^🔒\s*/, '');if(text==='Интерактивті тапсырма'||text==='Видеосабақ'){const firstVideo=text==='Видеосабақ'&&[topics[0][0],topics[1][0],topics[2][0],topics[10][0]].includes(card.querySelector('h3')?.textContent);button.textContent=(getStudentTariff()==='free'&&!firstVideo?'🔒 ':'')+text}})})}).catch(console.error)}
+if(typeof refreshAlphaEntitlement==='function'&&typeof getStudentTariff==='function'){refreshAlphaEntitlement().then(()=>{document.querySelectorAll('#alphaCurriculum .alpha-edu-card').forEach(card=>{const buttons=card.querySelectorAll('button');buttons.forEach(button=>{const text=button.textContent.replace(/^🔒\s*/, '');if(text==='Интерактивті тапсырма'||text==='Видеосабақ'){const firstVideo=subject==='informatics'&&text==='Видеосабақ'&&[activeTopics()[0][0],activeTopics()[1][0],activeTopics()[2][0],activeTopics()[10][0]].includes(card.querySelector('h3')?.textContent);button.textContent=(getStudentTariff()==='free'&&!firstVideo?'🔒 ':'')+text}})})}).catch(console.error)}
 const r=root();if(!r)return;r.replaceChildren();const g=grade();r.append(el('h2','',g?g+'-сынып · Менің сабақтарым':'Менің сабақтарым'));
 if(!g){r.append(el('p','alpha-edu-muted','Сынып анықталмады. Профильдегі сыныпты тексеріңіз.'));return}
 if(subject)r.append(btn('← Пәндер',()=>{subject=null;section=false;lesson=-1;show()}));
@@ -63,13 +67,13 @@ grid.classList.add('alpha-subject-grid');
  grid.append(c);
 });
 }else if(!section){
-if(subject==='informatics'&&g===11){curriculumSections.forEach((group,idx)=>{const c=card(group.title,(group.end-group.start)+' сабақ');c.classList.add('alpha-section-card');c.style.setProperty('--alpha-card-index',idx);const open=btn('Бөлімді ашу →',()=>{sectionIndex=idx;section=true;lesson=-1;show()});open.classList.add('alpha-lesson-action','alpha-lesson-primary');c.append(open);grid.append(c)})}
+if(g===11){activeSections().forEach((group,idx)=>{const c=card(group.title,(group.end-group.start)+' сабақ');c.classList.add('alpha-section-card');c.style.setProperty('--alpha-card-index',idx);const open=btn('Бөлімді ашу →',()=>{sectionIndex=idx;section=true;lesson=-1;show()});open.classList.add('alpha-lesson-action','alpha-lesson-primary');c.append(open);grid.append(c)})}
 else{grid.append(card('Материалдар дайындалуда',g+'-сынып · '+(subject==='math'?'Математика':'Информатика')))}
 }else if(lesson<0){
-topics.forEach(([t],i)=>{if(i<curriculumSections[sectionIndex].start||i>=curriculumSections[sectionIndex].end)return;const c=card(t,'');c.classList.add('alpha-topic-card');const presentation=btn('Презентацияны қарау →',()=>{lesson=i;slide=0;show()});presentation.classList.add('alpha-lesson-action','alpha-lesson-primary');c.append(presentation);const taskButton=btn('Интерактивті тапсырма',async()=>{if(!await requirePaidLesson())return;lesson=i;slide=0;quiz()});const videoButton=btn('Видеосабақ',async()=>{if(i===0||i===1||i===2||i===10){lesson=i;slide=0;show();setTimeout(()=>document.querySelector('#alphaCurriculum .alpha-lesson-video-card')?.scrollIntoView({behavior:'smooth',block:'center'}),80);return}if(!await requirePaidLesson())return;alert('Бұл тақырыпқа видеосабақ әлі жүктелмеген.')});const updateLocks=()=>{const paid=typeof getStudentTariff==='function'&&getStudentTariff()!=='free';taskButton.textContent=(paid?'':'🔒 ')+'Интерактивті тапсырма';videoButton.textContent=(paid||i===0||i===1||i===2||i===10?'':'🔒 ')+'Видеосабақ'};updateLocks();taskButton.classList.add('alpha-lesson-action','alpha-lesson-task');videoButton.classList.add('alpha-lesson-action','alpha-lesson-video');c.append(taskButton,videoButton);const game=btn('🎮 Геймификация',()=>{lesson=i;slide=0;openGamification()});game.classList.add('alpha-lesson-action','alpha-lesson-game');c.append(game);if(i===10){const tourButton=btn('🌐 3D турды ашу',()=>{lesson=i;slide=0;show();setTimeout(()=>document.querySelector('#alphaCurriculum .alpha-3d-tour')?.scrollIntoView({behavior:'smooth',block:'center'}),80)});tourButton.classList.add('alpha-lesson-action','alpha-lesson-tour');c.append(tourButton)}grid.append(c)});
+activeTopics().forEach(([t],i)=>{if(i<activeSections()[sectionIndex].start||i>=activeSections()[sectionIndex].end)return;const c=card(t,'');c.classList.add('alpha-topic-card');const presentation=btn('Презентацияны қарау →',()=>{lesson=i;slide=0;show()});presentation.classList.add('alpha-lesson-action','alpha-lesson-primary');c.append(presentation);const taskButton=btn('Интерактивті тапсырма',async()=>{if(!await requirePaidLesson())return;lesson=i;slide=0;quiz()});const videoButton=btn('Видеосабақ',async()=>{if(subject==='informatics'&&(i===0||i===1||i===2||i===10)){lesson=i;slide=0;show();setTimeout(()=>document.querySelector('#alphaCurriculum .alpha-lesson-video-card')?.scrollIntoView({behavior:'smooth',block:'center'}),80);return}if(!await requirePaidLesson())return;alert('Бұл тақырыпқа видеосабақ әлі жүктелмеген.')});const updateLocks=()=>{const paid=typeof getStudentTariff==='function'&&getStudentTariff()!=='free';taskButton.textContent=(paid?'':'🔒 ')+'Интерактивті тапсырма';videoButton.textContent=(paid||(subject==='informatics'&&(i===0||i===1||i===2||i===10))?'':'🔒 ')+'Видеосабақ'};updateLocks();taskButton.classList.add('alpha-lesson-action','alpha-lesson-task');videoButton.classList.add('alpha-lesson-action','alpha-lesson-video');c.append(taskButton,videoButton);const game=btn('🎮 Геймификация',()=>{lesson=i;slide=0;openGamification()});game.classList.add('alpha-lesson-action','alpha-lesson-game');c.append(game);if(i===10){const tourButton=btn('🌐 3D турды ашу',()=>{lesson=i;slide=0;show();setTimeout(()=>document.querySelector('#alphaCurriculum .alpha-3d-tour')?.scrollIntoView({behavior:'smooth',block:'center'}),80)});tourButton.classList.add('alpha-lesson-action','alpha-lesson-tour');c.append(tourButton)}grid.append(c)});
 }else{
-const [name,slides]=topics[lesson];const c=card(name,'Презентация · '+(lesson===0?'10':slides.length+1)+' слайд');
-if(lesson===0){
+const [name,slides]=activeTopics()[lesson];const c=card(name,'Презентация · '+(lesson===0?'10':slides.length+1)+' слайд');
+if(subject==='informatics'&&lesson===0){
   const pptxUrl=new URL('ALPHA_ZHASANDY_INTELLEKT_ZHEKE_SURETTER.pptx',document.baseURI).href;
   const viewer='https://view.officeapps.live.com/op/embed.aspx?src='+encodeURIComponent(pptxUrl);
   const frame=document.createElement('iframe');
@@ -126,7 +130,7 @@ if(lesson===0){
   r.append(grid);
   return;
 }
-if(lesson===1){
+if(subject==='informatics'&&lesson===1){
  const videoCard=el('section','alpha-lesson-video-card');
  videoCard.append(el('h3','','🎬 Видеосабақ · Қарапайым нейрон моделін құру'));
  const videoFrame=document.createElement('iframe');
@@ -140,7 +144,7 @@ if(lesson===1){
  const link=document.createElement('a');link.href='https://youtu.be/4uRsz1D5wis';link.target='_blank';link.rel='noopener noreferrer';link.className='alpha-tour-external';link.textContent='↗ YouTube-та ашу';videoCard.append(link);
  c.append(videoCard);
 }
-if(lesson===2){
+if(subject==='informatics'&&lesson===2){
  const videoCard=el('section','alpha-lesson-video-card');
  videoCard.append(el('h3','','🎬 Видеосабақ · Жасанды интеллектіні қолдану саласы'));
  const videoFrame=document.createElement('iframe');
@@ -154,7 +158,7 @@ if(lesson===2){
  const link=document.createElement('a');link.href='https://youtu.be/Ix6c4on1cOo';link.target='_blank';link.rel='noopener noreferrer';link.className='alpha-tour-external';link.textContent='↗ YouTube-та ашу';videoCard.append(link);
  c.append(videoCard);
 }
-if(lesson===10){
+if(subject==='informatics'&&lesson===10){
  const videoCard=el('section','alpha-lesson-video-card');
  videoCard.append(el('h3','','🎬 Видеосабақ · 3D панорама және виртуалды тур'));
  const videoFrame=document.createElement('iframe');
@@ -168,7 +172,7 @@ if(lesson===10){
  const link=document.createElement('a');link.href='https://youtu.be/Kq9x33quhdw';link.target='_blank';link.rel='noopener noreferrer';link.className='alpha-tour-external';link.textContent='↗ YouTube-та ашу';videoCard.append(link);
  c.append(videoCard);
 }
-if(lesson===10){
+if(subject==='informatics'&&lesson===10){
  const tour=el('section','alpha-3d-tour');
  tour.append(el('h3','','🌐 Интерактивті 3D виртуалды тур'));
  tour.append(el('p','alpha-edu-muted','Дайын 3D турды осы бетте зерттеп көріңіз: көріністі бұрып, белгіленген нүктелерді басыңыз.'));
@@ -183,7 +187,7 @@ if(lesson===10){
  const fallback=document.createElement('a');fallback.href=alpha3dTourUrl;fallback.target='_blank';fallback.rel='noopener noreferrer';fallback.className='alpha-tour-external';fallback.textContent='↗ 3D турды ThingLink сайтында ашу';
  tour.append(fallback);c.append(tour);
 }
-const panel=el('div','alpha-slide');const title=slide===0?name:slides[slide-1][0];const body=slide===0?'ИНФОРМАТИКА ЖӘНЕ ЖАСАНДЫ ИНТЕЛЛЕКТ · 11-СЫНЫП':slides[slide-1][1];panel.append(el('div','alpha-slide-count',(slide+1)+' / '+(slides.length+1)),el('h2','',title),el('p','',body));c.append(panel);
+const panel=el('div','alpha-slide');const title=slide===0?name:slides[slide-1][0];const body=slide===0?(subject==='math'?'МАТЕМАТИКА · 11-СЫНЫП':'ИНФОРМАТИКА ЖӘНЕ ЖАСАНДЫ ИНТЕЛЛЕКТ · 11-СЫНЫП'):slides[slide-1][1];panel.append(el('div','alpha-slide-count',(slide+1)+' / '+(slides.length+1)),el('h2','',title),el('p','',body));c.append(panel);
 c.append(btn('← Алдыңғы',()=>{slide=Math.max(0,slide-1);show()},slide===0));
 c.append(btn('Келесі →',()=>{slide=Math.min(slides.length,slide+1);show()},slide===slides.length));
 c.append(btn('Толық экран',()=>{if(panel.requestFullscreen)panel.requestFullscreen()}));
@@ -198,13 +202,13 @@ function openGamification(){
 const r=root();if(!r)return;
 r.replaceChildren();
 r.append(btn('← Сабаққа қайту',()=>show()));
-r.append(el('h2','','🎮 Геймификация · '+(topics[lesson]?.[0]||'AI QUEST')));
+r.append(el('h2','','🎮 Геймификация · '+(activeTopics()[lesson]?.[0]||'AI QUEST')));
 const frame=document.createElement('iframe');
 frame.src='ai-pixel-quest.html?v=23';
 frame.addEventListener('load',()=>{
- frame.contentWindow?.postMessage({type:'alpha-game-topic',title:topics[lesson][0],slides:topics[lesson][1]},window.location.origin);
+ frame.contentWindow?.postMessage({type:'alpha-game-topic',title:activeTopics()[lesson][0],slides:activeTopics()[lesson][1]},window.location.origin);
 });
-frame.title='AI QUEST — '+topics[lesson][0];
+frame.title='AI QUEST — '+activeTopics()[lesson][0];
 frame.setAttribute('allowfullscreen','');
 frame.style.cssText='display:block;width:100%;height:min(78vh,850px);min-height:540px;border:0;border-radius:16px;background:#101a2c;';
 r.append(frame);
@@ -214,11 +218,11 @@ link.textContent='Ойынды бөлек терезеде ашу ↗';
 r.append(link);
 }
 function quiz(){
-const r=root();r.replaceChildren();r.append(btn('← Сабаққа қайту',()=>show()),el('h2','','Интерактивті тапсырма · '+topics[lesson][0]));
-if(lesson>=8){
- const content=topics[lesson][1];
+const r=root();r.replaceChildren();r.append(btn('← Сабаққа қайту',()=>show()),el('h2','','Интерактивті тапсырма · '+activeTopics()[lesson][0]));
+if(subject==='math'||lesson>=8){
+ const content=activeTopics()[lesson][1];
  const questions=[
-  {q:'Бұл сабақтың негізгі тақырыбы қандай?',choices:[topics[lesson][0],topics[0][0],topics[1][0]],correct:0},
+  {q:'Бұл сабақтың негізгі тақырыбы қандай?',choices:[activeTopics()[lesson][0],activeTopics()[0][0],activeTopics()[1][0]],correct:0},
   {q:'Осы тақырып бойынша дұрыс тұжырымды таңдаңыз.',choices:[content[1][1], 'Бұл тақырып тек компьютерді өшіруге арналған.', 'Тақырыпты тәжірибеде қолдануға болмайды.'],correct:0},
   {q:'Практикалық жұмыста не істеу керек?',choices:[content[4][1], 'Ештеңе тексермеу.', 'Барлық деректерді жою.'],correct:0}
  ];
@@ -229,7 +233,7 @@ if(lesson>=8){
  return;
 }
 
-if(lesson===0){
+if(subject==='informatics'&&lesson===0){
   const panel=card('Wordwall · Жасанды интеллект','Интерактивті ойынды төменде орындаңыз.');
   const frame=document.createElement('iframe');
   frame.src='https://wordwall.net/kk/embed/c3cf79c78d414ffaba1df25942284649?themeId=50&templateId=30&fontStackId=0';
