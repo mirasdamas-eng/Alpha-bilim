@@ -43,7 +43,24 @@ if(section)r.append(btn('← Бөлім',()=>{section=false;lesson=-1;show()}));
 if(lesson>=0)r.append(btn('← Параграфтар',()=>{lesson=-1;slide=0;show()}));
 const grid=el('div','alpha-edu-grid');
 if(!subject){
-[['informatics','💻 Информатика'],['math','➗ Математика']].forEach(([k,t])=>{const c=card(t,g+'-сынып');c.append(btn('Пәнге кіру →',()=>{subject=k;show()}));grid.append(c)});
+grid.classList.add('alpha-subject-grid');
+[['informatics','Информатика'],['math','Математика']].forEach(([k,t])=>{
+ const c=card(t,'');
+ c.classList.add('alpha-subject-card',k==='informatics'?'alpha-subject-info':'alpha-subject-math');
+ const decor=el('div','alpha-subject-decor');
+ decor.setAttribute('aria-hidden','true');
+ const emblem=el('div','alpha-subject-emblem',k==='informatics'?'⌘':'∑');
+ decor.append(emblem);
+ c.prepend(decor);
+ const eyebrow=el('div','alpha-subject-eyebrow',k==='informatics'?'НЕГІЗГІ БАҒЫТ':'ҚОСЫМША БАҒЫТ');
+ c.insertBefore(eyebrow,c.querySelector('h3'));
+ c.append(el('p','alpha-subject-desc',k==='informatics'?'Алгоритмдер, Python, жасанды интеллект және цифрлық технологиялар.':'Алгебра, геометрия және есептерді шешу дағдылары.'));
+ c.append(el('div','alpha-subject-grade',g+'-сынып · Сабақтар'));
+ const open=btn('Сабақтарға өту  →',()=>{subject=k;show()});
+ open.classList.add('alpha-subject-open');
+ c.append(open);
+ grid.append(c);
+});
 }else if(!section){
 if(subject==='informatics'&&g===11){curriculumSections.forEach((group,idx)=>{const c=card(group.title,(group.end-group.start)+' сабақ');c.append(btn('Бөлімді ашу →',()=>{sectionIndex=idx;section=true;lesson=-1;show()}));grid.append(c)})}
 else{grid.append(card('Материалдар дайындалуда',g+'-сынып · '+(subject==='math'?'Математика':'Информатика')))}
