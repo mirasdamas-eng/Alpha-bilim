@@ -202,18 +202,33 @@ if(subject==='informatics'&&lesson===10){
  tour.append(fallback);c.append(tour);
 }
 if(subject==='informatics'&&name.includes('Blockchain технологиясы')){
- const viewerCard=el('section','alpha-lesson-video-card alpha-blockchain-presentation');
- viewerCard.append(el('h3','','📊 Blockchain технологиясы · 6 слайд'));
- const frame=document.createElement('iframe');
- frame.src=new URL('blockchain-presentation.html?v=2',document.baseURI).href;
- frame.title='§59–60. Blockchain технологиясы · Презентация';
- frame.loading='lazy';frame.allowFullscreen=true;
- frame.style.cssText='display:block;width:100%;height:clamp(460px,75vh,850px);border:0;border-radius:16px;background:#090e26';
- viewerCard.append(frame);
- const fullscreen=btn('⛶ Презентацияны үлкейту',()=>{if(frame.requestFullscreen)frame.requestFullscreen()});
- viewerCard.append(fullscreen);
- const openLink=document.createElement('a');openLink.href=new URL('blockchain-presentation.html?v=2',document.baseURI).href;openLink.target='_blank';openLink.rel='noopener noreferrer';openLink.className='alpha-tour-external';openLink.textContent='↗ Презентацияны бөлек ашу';viewerCard.append(openLink);
- c.append(viewerCard);
+ const deck=el('section','alpha-blockchain-presentation');
+ deck.style.cssText='background:radial-gradient(circle at 90% 0%,#33236c,#0b1331 55%);border:1px solid #5143a6;border-radius:20px;padding:clamp(18px,4vw,38px);color:#f5f9ff;margin:16px 0;min-height:390px;box-shadow:0 16px 45px #0005';
+ const slidesData=[
+  ['BLOCKCHAIN ТЕХНОЛОГИЯСЫ','Ақпаратты орталықсыздандырылған сақтау және қорғау технологиялары',[['Деректер','Үлестірілген тізілім'],['Сенім','Криптографиялық тексеру'],['Қауіпсіздік','Блоктар тізбегі']]],
+  ['Блокчейннің 3 негізгі тірегі','Блокчейн — орталықсыздандырылған деректер тізілімі.',[['Орталықсыздандыру','Ақпарат бір ғана серверде емес, желідегі компьютерлерде сақталады.'],['Өзгермейтіндік','Блоктар хэштермен байланысады, бұрынғы жазбаны өзгерту өте қиын.'],['Ашықтық пен сенім','Қатысушылар операциялар тарихын тексере алады.']]],
+  ['Транзакциядан блокқа дейін','Блокчейн жүйесіндегі негізгі кезеңдер.',[['1. Транзакция','Пайдаланушы операцияны бастайды, ақпарат желіге жіберіледі.'],['2. Тексеру','Нодалар операцияны тексереді, жаңа блок құралады.'],['3. Тізбек','Жаңа блок алдыңғы блоктың хэшін қамтып, тізбекке қосылады.']]],
+  ['Неге блокчейн маңызды?','Технологияның негізгі мүмкіндіктері.',[['Қауіпсіздік','Криптография жазбаларды қорғауға көмектеседі.'],['P2P транзакциялар','Делдалдарға тәуелділікті азайта алады.'],['Қадағалау','Операциялар тарихын тексеруге болады.'],['Смарт-контракт','Шарт орындалғанда код автоматты түрде іске қосылады.']]],
+  ['Блокчейн қайда қолданылады?','Қаржыдан мемлекеттік реестрлерге дейін.',[['Қаржы','Криптовалюталар мен цифрлық аударымдар.'],['Смарт-контракт','Автоматты келісімдер.'],['Логистика','Жеткізу тізбегін қадағалау.'],['Реестрлер','Цифрлық жазбаларды тіркеу.']]],
+  ['Біліміңді тексер!','Қорытынды және бекіту.',[['Негізгі түйіндер','Үлестірілген тізілім, хэштеу, P2P, смарт-контракттар.'],['Сұрақ 1','Орталықтандырылған базадан айырмасы неде?'],['Сұрақ 2','Хэш қандай рөл атқарады?'],['Сұрақ 3','Смарт-контракт қайда қолданылады?']]]
+ ];
+ let current=0;
+ const heading=el('div','');heading.style.cssText='font-size:13px;font-weight:800;letter-spacing:2px;color:#27e5ee;margin-bottom:12px';heading.textContent='§59–60 · ИНФОРМАТИКА · 11-СЫНЫП';deck.append(heading);
+ const slideTitle=el('h2','');slideTitle.style.cssText='font-size:clamp(25px,4vw,42px);line-height:1.16;color:#fff;margin:0 0 14px';deck.append(slideTitle);
+ const slideSubtitle=el('p','');slideSubtitle.style.cssText='font-size:17px;color:#b7c9e8;margin:0 0 25px';deck.append(slideSubtitle);
+ const cards=el('div','');cards.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:13px;min-height:165px';deck.append(cards);
+ const toolbar=el('div','');toolbar.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid #6a55a5;margin-top:25px;padding-top:17px';deck.append(toolbar);
+ const previous=btn('← Алдыңғы',()=>{current=Math.max(0,current-1);renderDeck()});
+ const counter=el('strong','');counter.style.cssText='color:#23ddeb;font-size:17px';
+ const next=btn('Келесі →',()=>{current=Math.min(slidesData.length-1,current+1);renderDeck()});
+ const expand=btn('⛶ Үлкейту',()=>{if(deck.requestFullscreen)deck.requestFullscreen()});
+ toolbar.append(previous,counter,next,expand);
+ function renderDeck(){
+  const [title,subtitle,items]=slidesData[current];slideTitle.textContent=title;slideSubtitle.textContent=subtitle;cards.replaceChildren();
+  items.forEach(([title,body],i)=>{const item=el('article','');item.style.cssText='background:#1a2852;border-radius:13px;border-top:4px solid '+['#21deed','#a57bff','#ff5ba6','#ffd66b'][i%4]+';padding:18px';const h=el('h3','',title);h.style.cssText='color:#fff;font-size:19px;margin:0 0 10px';const p=el('p','',body);p.style.cssText='color:#c8d8ee;font-size:15px;line-height:1.5;margin:0';item.append(h,p);cards.append(item)});
+  counter.textContent=(current+1)+' / '+slidesData.length;previous.disabled=current===0;next.disabled=current===slidesData.length-1;
+ }
+ renderDeck();c.append(deck);
 }
 const panel=el('div','alpha-slide');const title=slide===0?name:slides[slide-1][0];const body=slide===0?(subject==='math'?'МАТЕМАТИКА · 11-СЫНЫП':'ИНФОРМАТИКА ЖӘНЕ ЖАСАНДЫ ИНТЕЛЛЕКТ · 11-СЫНЫП'):slides[slide-1][1];panel.append(el('div','alpha-slide-count',(slide+1)+' / '+(slides.length+1)),el('h2','',title),el('p','',body));c.append(panel);
 c.append(btn('← Алдыңғы',()=>{slide=Math.max(0,slide-1);show()},slide===0));
