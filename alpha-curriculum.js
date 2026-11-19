@@ -55,7 +55,37 @@ if(lesson===0){
   frame.loading='lazy';
   frame.allowFullscreen=true;
   frame.style.cssText='display:block;width:100%;aspect-ratio:16/9;min-height:360px;border:0;border-radius:16px;background:#101a2c;margin:16px 0';
-  c.append(frame);
+  const holder=el('div','alpha-presentation-holder');
+  holder.style.cssText='width:100%;position:relative';
+  frame.style.margin='12px 0';
+  holder.append(frame);
+  c.append(holder);
+  const enlarge=btn('⛶ Сайт ішінде үлкейту',()=>{
+    const overlay=el('div','alpha-presentation-overlay');
+    overlay.style.cssText='position:fixed;inset:0;z-index:2147483646;background:#07152e;display:flex;flex-direction:column;padding:12px;gap:10px';
+    const toolbar=el('div','');
+    toolbar.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:12px;color:#fff;font:700 16px Sylfaen,serif';
+    toolbar.append(el('span','','§1–2. Жасанды интеллект · Презентация'));
+    const close=btn('✕ Жабу',()=>finish());
+    toolbar.append(close);
+    overlay.append(toolbar);
+    const previous=frame.style.cssText;
+    frame.style.cssText='display:block;width:100%;height:calc(100% - 52px);flex:1;min-height:0;border:0;border-radius:12px;background:#101a2c';
+    overlay.append(frame);
+    document.body.append(overlay);
+    const priorOverflow=document.body.style.overflow;
+    document.body.style.overflow='hidden';
+    function onKey(e){if(e.key==='Escape')finish()}
+    function finish(){
+      document.removeEventListener('keydown',onKey);
+      holder.append(frame);
+      frame.style.cssText=previous;
+      overlay.remove();
+      document.body.style.overflow=priorOverflow;
+    }
+    document.addEventListener('keydown',onKey);
+  });
+  c.append(enlarge);
   grid.append(c);
   r.append(grid);
   return;
