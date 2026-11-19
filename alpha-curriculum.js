@@ -86,6 +86,7 @@ if(lesson===0){
     document.addEventListener('keydown',onKey);
   });
   c.append(enlarge);
+  c.append(btn('🎮 Геймификациялық ойын',()=>openGamification()));
   grid.append(c);
   r.append(grid);
   return;
@@ -94,6 +95,7 @@ const panel=el('div','alpha-slide');const title=slide===0?name:slides[slide-1][0
 c.append(btn('← Алдыңғы',()=>{slide=Math.max(0,slide-1);show()},slide===0));
 c.append(btn('Келесі →',()=>{slide=Math.min(slides.length,slide+1);show()},slide===slides.length));
 c.append(btn('Толық экран',()=>{if(panel.requestFullscreen)panel.requestFullscreen()}));
+c.append(btn('🎮 Геймификациялық ойын',()=>openGamification()));
 c.append(el('p','alpha-edu-muted','PowerPoint файлын жүктеу кейін қосылады. Қазір слайд мазмұнын сайттан қарауға болады.'));
 c.append(btn('🎮 Геймификациялық ойын',()=>openGamification()));
 
