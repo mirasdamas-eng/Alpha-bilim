@@ -1,5 +1,18 @@
 
 (()=>{
+// Paid lesson access is checked against the verified Supabase entitlement.
+// This module must not depend on the separate administrator page.
+async function requirePaidLesson(){
+  if(typeof refreshAlphaEntitlement!=='function'||typeof getStudentTariff!=='function'){
+    alert('Тарифті тексеру мүмкін емес. Бетті жаңартыңыз.');return false;
+  }
+  await refreshAlphaEntitlement();
+  if(getStudentTariff()==='free'){
+    alert('🔒 Интерактивті тапсырмалар тек ақылы тарифте ашылады. Тарифті әкімші арқылы қосыңыз.');
+    return false;
+  }
+  return true;
+}
 const topics=[
 ["§1–2. Жасанды интеллект",[["Жасанды интеллект деген не?","ЖИ — деректерден үйреніп, белгілі міндеттерді орындайтын технология."],["ЖИ қалай жұмыс істейді?","Деректер → модельді оқыту → болжау → тексеру."],["ЖИ түрлері","Ережеге негізделген жүйелер. Машиналық оқыту және терең оқыту."],["Күнделікті өмірдегі ЖИ","Іздеу жүйесі, аударма, навигация және білім беру."],["ЖИ мүмкіндіктері","Ақпаратты жылдам өңдейді және қайталанатын жұмысты жеңілдетеді."],["ЖИ шектеулері","Қате жауап беруі мүмкін. Жеке деректерді қорғау маңызды."],["Тапсырма","Калькулятор, сөйлеуді тану, таймер: қайсысы ЖИ? Неліктен?"],["Қорытынды","ЖИ — көмекші құрал, адам тексеруі қажет."]]],
 ["§3–4. Қарапайым нейрон моделін құру. Практикум",[["Жасанды нейрон","Нейрон кіріс мәндерін қабылдап, нәтижені есептейді."],["Нейронның құрамдастары","x — кіріс; w — салмақ; b — ығысу; y — нәтиже."],["Негізгі формула","z = x₁w₁ + x₂w₂ + b"],["Қарапайым есеп","x₁=2, x₂=3, w₁=1, w₂=2, b=0. Нәтиже: 8."],["Python: нейрон есебі","x1, x2 = 2, 3\nw1, w2, b = 1, 2, 0\nprint(x1*w1 + x2*w2 + b)"],["Практикум","Кірістерді 4 және 5 деп өзгертіңдер. Нәтижені салыстырыңдар."],["Өзіндік жұмыс","x₁=1, x₂=4, w₁=3, w₂=2, b=1. z мәнін есепте."],["Жауап","z = 12. Нейрон — нейрондық желінің негізгі бөлігі."]]],
@@ -29,7 +42,7 @@ if(!subject){
 if(subject==='informatics'&&g===11){const c=card('1-бөлім. Жасанды интеллект','§1–16 · 8 сабақ');c.append(btn('Бөлімді ашу →',()=>{section=true;show()}));grid.append(c)}
 else{grid.append(card('Материалдар дайындалуда',g+'-сынып · '+(subject==='math'?'Математика':'Информатика')))}
 }else if(lesson<0){
-topics.forEach(([t],i)=>{const c=card(t,'9 слайд · қысқаша түсіндіру');c.append(btn('Презентацияны қарау →',()=>{lesson=i;slide=0;show()}));c.append(btn('🔒 Интерактивті тапсырма',()=>{if(!window.alphaPaidAccess?.()){window.alphaPaidLocked?.();return}lesson=i;slide=0;quiz()}));c.append(btn('🔒 Видеосабақ',()=>{if(!window.alphaPaidAccess?.()){window.alphaPaidLocked?.();return}alert('Бұл тақырыпқа видеосабақ әлі жүктелмеген.')}));grid.append(c)});
+topics.forEach(([t],i)=>{const c=card(t,'9 слайд · қысқаша түсіндіру');c.append(btn('Презентацияны қарау →',()=>{lesson=i;slide=0;show()}));c.append(btn('🔒 Интерактивті тапсырма',async()=>{if(!await requirePaidLesson())return;lesson=i;slide=0;quiz()}));c.append(btn('🔒 Видеосабақ',async()=>{if(!await requirePaidLesson())return;alert('Бұл тақырыпқа видеосабақ әлі жүктелмеген.')}));grid.append(c)});
 }else{
 const [name,slides]=topics[lesson];const c=card(name,'Презентация · '+(slides.length+1)+' слайд');
 const panel=el('div','alpha-slide');const title=slide===0?name:slides[slide-1][0];const body=slide===0?'ИНФОРМАТИКА ЖӘНЕ ЖАСАНДЫ ИНТЕЛЛЕКТ · 11-СЫНЫП':slides[slide-1][1];panel.append(el('div','alpha-slide-count',(slide+1)+' / '+(slides.length+1)),el('h2','',title),el('p','',body));c.append(panel);
