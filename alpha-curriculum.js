@@ -201,6 +201,19 @@ if(subject==='informatics'&&lesson===10){
  const fallback=document.createElement('a');fallback.href=alpha3dTourUrl;fallback.target='_blank';fallback.rel='noopener noreferrer';fallback.className='alpha-tour-external';fallback.textContent='↗ 3D турды ThingLink сайтында ашу';
  tour.append(fallback);c.append(tour);
 }
+if(subject==='informatics'&&name.includes('Blockchain технологиясы')){
+ const viewerCard=el('section','alpha-lesson-video-card');
+ viewerCard.append(el('h3','','📊 Blockchain технологиясы · 6 слайд'));
+ const frame=document.createElement('iframe');
+ frame.src='blockchain-presentation.html?v=1';
+ frame.title='§59–60. Blockchain технологиясы · Презентация';
+ frame.loading='lazy';frame.allowFullscreen=true;
+ frame.style.cssText='display:block;width:100%;height:clamp(460px,75vh,850px);border:0;border-radius:16px;background:#090e26';
+ viewerCard.append(frame);
+ const fullscreen=btn('⛶ Презентацияны үлкейту',()=>{if(frame.requestFullscreen)frame.requestFullscreen()});
+ viewerCard.append(fullscreen);
+ c.append(viewerCard);
+}
 const panel=el('div','alpha-slide');const title=slide===0?name:slides[slide-1][0];const body=slide===0?(subject==='math'?'МАТЕМАТИКА · 11-СЫНЫП':'ИНФОРМАТИКА ЖӘНЕ ЖАСАНДЫ ИНТЕЛЛЕКТ · 11-СЫНЫП'):slides[slide-1][1];panel.append(el('div','alpha-slide-count',(slide+1)+' / '+(slides.length+1)),el('h2','',title),el('p','',body));c.append(panel);
 c.append(btn('← Алдыңғы',()=>{slide=Math.max(0,slide-1);show()},slide===0));
 c.append(btn('Келесі →',()=>{slide=Math.min(slides.length,slide+1);show()},slide===slides.length));
