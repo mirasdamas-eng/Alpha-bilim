@@ -108,6 +108,18 @@ if(lesson===0){
     document.addEventListener('keydown',onKey);
   });
   c.append(enlarge);
+  const videoCard=el('div','alpha-lesson-video-card');
+  videoCard.append(el('h3','','🎬 Видеосабақ · Жасанды интеллект'));
+  const videoFrame=document.createElement('iframe');
+  videoFrame.src='https://www.youtube-nocookie.com/embed/XnrFgaf_os0';
+  videoFrame.title='Жасанды интеллект · 1-сабақ · Видеосабақ';
+  videoFrame.loading='lazy';
+  videoFrame.allowFullscreen=true;
+  videoFrame.referrerPolicy='strict-origin-when-cross-origin';
+  videoFrame.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+  videoFrame.style.cssText='display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:16px;background:#0b1935';
+  videoCard.append(videoFrame);
+  c.append(videoCard);
   c.append(btn('🎮 Геймификация',()=>openGamification()));
   grid.append(c);
   r.append(grid);
