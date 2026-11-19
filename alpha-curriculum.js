@@ -30,6 +30,7 @@ const el=(tag,cls,txt)=>{const x=document.createElement(tag);if(cls)x.className=
 const btn=(txt,cb,disabled=false)=>{const b=el('button','btn btn-primary',txt);b.type='button';b.disabled=disabled;if(cb)b.onclick=cb;return b};
 const card=(title,description)=>{const x=el('article','alpha-edu-card');x.append(el('h3','',title));if(description)x.append(el('p','alpha-edu-muted',description));return x};
 function show(){
+if(typeof refreshAlphaEntitlement==='function'&&typeof getStudentTariff==='function'){refreshAlphaEntitlement().then(()=>{document.querySelectorAll('#alphaCurriculum .alpha-edu-card').forEach(card=>{const buttons=card.querySelectorAll('button');buttons.forEach(button=>{const text=button.textContent.replace(/^🔒\s*/, '');if(text==='Интерактивті тапсырма'||text==='Видеосабақ')button.textContent=(getStudentTariff()==='free'?'🔒 ':'')+text})})}).catch(console.error)}
 const r=root();if(!r)return;r.replaceChildren();const g=grade();r.append(el('h2','',g?g+'-сынып · Менің сабақтарым':'Менің сабақтарым'));
 if(!g){r.append(el('p','alpha-edu-muted','Сынып анықталмады. Профильдегі сыныпты тексеріңіз.'));return}
 if(subject)r.append(btn('← Пәндер',()=>{subject=null;section=false;lesson=-1;show()}));
@@ -42,7 +43,7 @@ if(!subject){
 if(subject==='informatics'&&g===11){const c=card('1-бөлім. Жасанды интеллект','§1–16 · 8 сабақ');c.append(btn('Бөлімді ашу →',()=>{section=true;show()}));grid.append(c)}
 else{grid.append(card('Материалдар дайындалуда',g+'-сынып · '+(subject==='math'?'Математика':'Информатика')))}
 }else if(lesson<0){
-topics.forEach(([t],i)=>{const c=card(t,'');c.append(btn('Презентацияны қарау →',()=>{lesson=i;slide=0;show()}));c.append(btn('🔒 Интерактивті тапсырма',async()=>{if(!await requirePaidLesson())return;lesson=i;slide=0;quiz()}));c.append(btn('🔒 Видеосабақ',async()=>{if(!await requirePaidLesson())return;alert('Бұл тақырыпқа видеосабақ әлі жүктелмеген.')}));grid.append(c)});
+topics.forEach(([t],i)=>{const c=card(t,'');c.append(btn('Презентацияны қарау →',()=>{lesson=i;slide=0;show()}));const taskButton=btn('Интерактивті тапсырма',async()=>{if(!await requirePaidLesson())return;lesson=i;slide=0;quiz()});const videoButton=btn('Видеосабақ',async()=>{if(!await requirePaidLesson())return;alert('Бұл тақырыпқа видеосабақ әлі жүктелмеген.')});const updateLocks=()=>{const paid=typeof getStudentTariff==='function'&&getStudentTariff()!=='free';taskButton.textContent=(paid?'':'🔒 ')+'Интерактивті тапсырма';videoButton.textContent=(paid?'':'🔒 ')+'Видеосабақ'};updateLocks();c.append(taskButton,videoButton);grid.append(c)});
 }else{
 const [name,slides]=topics[lesson];const c=card(name,'Презентация · '+(slides.length+1)+' слайд');
 const panel=el('div','alpha-slide');const title=slide===0?name:slides[slide-1][0];const body=slide===0?'ИНФОРМАТИКА ЖӘНЕ ЖАСАНДЫ ИНТЕЛЛЕКТ · 11-СЫНЫП':slides[slide-1][1];panel.append(el('div','alpha-slide-count',(slide+1)+' / '+(slides.length+1)),el('h2','',title),el('p','',body));c.append(panel);
