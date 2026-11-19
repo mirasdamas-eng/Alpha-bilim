@@ -54,7 +54,7 @@ grid.classList.add('alpha-subject-grid');
  c.prepend(decor);
  const eyebrow=el('div','alpha-subject-eyebrow',k==='informatics'?'НЕГІЗГІ БАҒЫТ':'ҚОСЫМША БАҒЫТ');
  c.insertBefore(eyebrow,c.querySelector('h3'));
- c.append(el('p','alpha-subject-desc',k==='informatics'?'Алгоритмдер, Python, жасанды интеллект және цифрлық технологиялар.':'Алгебра, геометрия және есептерді шешу дағдылары.'));
+ c.append(el('p','alpha-subject-desc',k==='informatics'?'Жасанды интеллект, 3D жобалау, аппараттық жасақтама, заттар интернеті, IT Startup және цифрлық сауаттылық.':'Алгебра, геометрия және есептерді шешу дағдылары.'));
  c.append(el('div','alpha-subject-grade',g+'-сынып · Сабақтар'));
  const open=btn('Сабақтарға өту  →',()=>{subject=k;show()});
  open.classList.add('alpha-subject-open');
