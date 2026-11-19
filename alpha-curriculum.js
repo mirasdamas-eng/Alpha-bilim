@@ -114,7 +114,10 @@ r.append(btn('← Сабаққа қайту',()=>show()));
 r.append(el('h2','','🎮 Геймификация · '+(topics[lesson]?.[0]||'AI QUEST')));
 const frame=document.createElement('iframe');
 frame.src='ai-pixel-quest.html';
-frame.title='AI QUEST — Жасанды интеллект әлемі';
+frame.addEventListener('load',()=>{
+ if(lesson>0)frame.contentWindow?.postMessage({type:'alpha-game-topic',title:topics[lesson][0],slides:topics[lesson][1]},window.location.origin);
+});
+frame.title='AI QUEST — '+topics[lesson][0];
 frame.setAttribute('allowfullscreen','');
 frame.style.cssText='display:block;width:100%;height:min(78vh,850px);min-height:540px;border:0;border-radius:16px;background:#101a2c;';
 r.append(frame);
