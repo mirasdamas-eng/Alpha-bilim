@@ -130,16 +130,16 @@ r.replaceChildren();
 r.append(btn('← Сабаққа қайту',()=>show()));
 r.append(el('h2','','🎮 Геймификация · '+(topics[lesson]?.[0]||'AI QUEST')));
 const frame=document.createElement('iframe');
-frame.src='ai-pixel-quest.html';
+frame.src='ai-pixel-quest.html?v=18';
 frame.addEventListener('load',()=>{
- if(lesson>0)frame.contentWindow?.postMessage({type:'alpha-game-topic',title:topics[lesson][0],slides:topics[lesson][1]},window.location.origin);
+ frame.contentWindow?.postMessage({type:'alpha-game-topic',title:topics[lesson][0],slides:topics[lesson][1]},window.location.origin);
 });
 frame.title='AI QUEST — '+topics[lesson][0];
 frame.setAttribute('allowfullscreen','');
 frame.style.cssText='display:block;width:100%;height:min(78vh,850px);min-height:540px;border:0;border-radius:16px;background:#101a2c;';
 r.append(frame);
 const link=document.createElement('a');
-link.href='ai-pixel-quest.html';link.target='_blank';link.rel='noopener noreferrer';
+link.href='ai-pixel-quest.html?v=18';link.target='_blank';link.rel='noopener noreferrer';
 link.textContent='Ойынды бөлек терезеде ашу ↗';
 r.append(link);
 }
