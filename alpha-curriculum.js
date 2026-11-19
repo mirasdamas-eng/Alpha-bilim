@@ -36,7 +36,7 @@ const el=(tag,cls,txt)=>{const x=document.createElement(tag);if(cls)x.className=
 const btn=(txt,cb,disabled=false)=>{const b=el('button','btn btn-primary',txt);b.type='button';b.disabled=disabled;if(cb)b.onclick=cb;return b};
 const card=(title,description)=>{const x=el('article','alpha-edu-card');x.append(el('h3','',title));if(description)x.append(el('p','alpha-edu-muted',description));return x};
 function show(){
-if(typeof refreshAlphaEntitlement==='function'&&typeof getStudentTariff==='function'){refreshAlphaEntitlement().then(()=>{document.querySelectorAll('#alphaCurriculum .alpha-edu-card').forEach(card=>{const buttons=card.querySelectorAll('button');buttons.forEach(button=>{const text=button.textContent.replace(/^🔒\s*/, '');if(text==='Интерактивті тапсырма'||text==='Видеосабақ'){const firstVideo=text==='Видеосабақ'&&card.querySelector('h3')?.textContent===topics[0][0];button.textContent=(getStudentTariff()==='free'&&!firstVideo?'🔒 ':'')+text}})})}).catch(console.error)}
+if(typeof refreshAlphaEntitlement==='function'&&typeof getStudentTariff==='function'){refreshAlphaEntitlement().then(()=>{document.querySelectorAll('#alphaCurriculum .alpha-edu-card').forEach(card=>{const buttons=card.querySelectorAll('button');buttons.forEach(button=>{const text=button.textContent.replace(/^🔒\s*/, '');if(text==='Интерактивті тапсырма'||text==='Видеосабақ'){const firstVideo=text==='Видеосабақ'&&[topics[0][0],topics[1][0]].includes(card.querySelector('h3')?.textContent);button.textContent=(getStudentTariff()==='free'&&!firstVideo?'🔒 ':'')+text}})})}).catch(console.error)}
 const r=root();if(!r)return;r.replaceChildren();const g=grade();r.append(el('h2','',g?g+'-сынып · Менің сабақтарым':'Менің сабақтарым'));
 if(!g){r.append(el('p','alpha-edu-muted','Сынып анықталмады. Профильдегі сыныпты тексеріңіз.'));return}
 if(subject)r.append(btn('← Пәндер',()=>{subject=null;section=false;lesson=-1;show()}));
@@ -66,7 +66,7 @@ grid.classList.add('alpha-subject-grid');
 if(subject==='informatics'&&g===11){curriculumSections.forEach((group,idx)=>{const c=card(group.title,(group.end-group.start)+' сабақ');c.classList.add('alpha-section-card');c.style.setProperty('--alpha-card-index',idx);const open=btn('Бөлімді ашу →',()=>{sectionIndex=idx;section=true;lesson=-1;show()});open.classList.add('alpha-lesson-action','alpha-lesson-primary');c.append(open);grid.append(c)})}
 else{grid.append(card('Материалдар дайындалуда',g+'-сынып · '+(subject==='math'?'Математика':'Информатика')))}
 }else if(lesson<0){
-topics.forEach(([t],i)=>{if(i<curriculumSections[sectionIndex].start||i>=curriculumSections[sectionIndex].end)return;const c=card(t,'');c.classList.add('alpha-topic-card');const presentation=btn('Презентацияны қарау →',()=>{lesson=i;slide=0;show()});presentation.classList.add('alpha-lesson-action','alpha-lesson-primary');c.append(presentation);const taskButton=btn('Интерактивті тапсырма',async()=>{if(!await requirePaidLesson())return;lesson=i;slide=0;quiz()});const videoButton=btn('Видеосабақ',async()=>{if(i===0){lesson=i;slide=0;show();setTimeout(()=>document.querySelector('#alphaCurriculum .alpha-lesson-video-card')?.scrollIntoView({behavior:'smooth',block:'center'}),80);return}if(!await requirePaidLesson())return;alert('Бұл тақырыпқа видеосабақ әлі жүктелмеген.')});const updateLocks=()=>{const paid=typeof getStudentTariff==='function'&&getStudentTariff()!=='free';taskButton.textContent=(paid?'':'🔒 ')+'Интерактивті тапсырма';videoButton.textContent=(paid||i===0?'':'🔒 ')+'Видеосабақ'};updateLocks();taskButton.classList.add('alpha-lesson-action','alpha-lesson-task');videoButton.classList.add('alpha-lesson-action','alpha-lesson-video');c.append(taskButton,videoButton);const game=btn('🎮 Геймификация',()=>{lesson=i;slide=0;openGamification()});game.classList.add('alpha-lesson-action','alpha-lesson-game');c.append(game);if(i===10){const tourButton=btn('🌐 3D турды ашу',()=>{lesson=i;slide=0;show();setTimeout(()=>document.querySelector('#alphaCurriculum .alpha-3d-tour')?.scrollIntoView({behavior:'smooth',block:'center'}),80)});tourButton.classList.add('alpha-lesson-action','alpha-lesson-tour');c.append(tourButton)}grid.append(c)});
+topics.forEach(([t],i)=>{if(i<curriculumSections[sectionIndex].start||i>=curriculumSections[sectionIndex].end)return;const c=card(t,'');c.classList.add('alpha-topic-card');const presentation=btn('Презентацияны қарау →',()=>{lesson=i;slide=0;show()});presentation.classList.add('alpha-lesson-action','alpha-lesson-primary');c.append(presentation);const taskButton=btn('Интерактивті тапсырма',async()=>{if(!await requirePaidLesson())return;lesson=i;slide=0;quiz()});const videoButton=btn('Видеосабақ',async()=>{if(i===0||i===1){lesson=i;slide=0;show();setTimeout(()=>document.querySelector('#alphaCurriculum .alpha-lesson-video-card')?.scrollIntoView({behavior:'smooth',block:'center'}),80);return}if(!await requirePaidLesson())return;alert('Бұл тақырыпқа видеосабақ әлі жүктелмеген.')});const updateLocks=()=>{const paid=typeof getStudentTariff==='function'&&getStudentTariff()!=='free';taskButton.textContent=(paid?'':'🔒 ')+'Интерактивті тапсырма';videoButton.textContent=(paid||i===0||i===1?'':'🔒 ')+'Видеосабақ'};updateLocks();taskButton.classList.add('alpha-lesson-action','alpha-lesson-task');videoButton.classList.add('alpha-lesson-action','alpha-lesson-video');c.append(taskButton,videoButton);const game=btn('🎮 Геймификация',()=>{lesson=i;slide=0;openGamification()});game.classList.add('alpha-lesson-action','alpha-lesson-game');c.append(game);if(i===10){const tourButton=btn('🌐 3D турды ашу',()=>{lesson=i;slide=0;show();setTimeout(()=>document.querySelector('#alphaCurriculum .alpha-3d-tour')?.scrollIntoView({behavior:'smooth',block:'center'}),80)});tourButton.classList.add('alpha-lesson-action','alpha-lesson-tour');c.append(tourButton)}grid.append(c)});
 }else{
 const [name,slides]=topics[lesson];const c=card(name,'Презентация · '+(lesson===0?'10':slides.length+1)+' слайд');
 if(lesson===0){
@@ -125,6 +125,20 @@ if(lesson===0){
   grid.append(c);
   r.append(grid);
   return;
+}
+if(lesson===1){
+ const videoCard=el('section','alpha-lesson-video-card');
+ videoCard.append(el('h3','','🎬 Видеосабақ · Қарапайым нейрон моделін құру'));
+ const videoFrame=document.createElement('iframe');
+ videoFrame.src='https://www.youtube-nocookie.com/embed/4uRsz1D5wis';
+ videoFrame.title='§3–4. Қарапайым нейрон моделін құру · Видеосабақ';
+ videoFrame.loading='lazy';videoFrame.allowFullscreen=true;
+ videoFrame.referrerPolicy='strict-origin-when-cross-origin';
+ videoFrame.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+ videoFrame.style.cssText='display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:16px;background:#0b1935';
+ videoCard.append(videoFrame);
+ const link=document.createElement('a');link.href='https://youtu.be/4uRsz1D5wis';link.target='_blank';link.rel='noopener noreferrer';link.className='alpha-tour-external';link.textContent='↗ YouTube-та ашу';videoCard.append(link);
+ c.append(videoCard);
 }
 if(lesson===10){
  const tour=el('section','alpha-3d-tour');
