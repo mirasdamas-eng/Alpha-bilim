@@ -56,14 +56,6 @@ if(lesson===0){
   frame.allowFullscreen=true;
   frame.style.cssText='display:block;width:100%;aspect-ratio:16/9;min-height:360px;border:0;border-radius:16px;background:#101a2c;margin:16px 0';
   c.append(frame);
-  const note=el('p','alpha-edu-muted','Презентацияны сайт ішінде қараңыз. Егер онлайн қарау ашылмаса, PowerPoint файлын жүктеп алыңыз.');
-  c.append(note);
-  const link=document.createElement('a');
-  link.href=pptxUrl;link.download='ALPHA_ZHASANDY_INTELLEKT_ZHEKE_SURETTER.pptx';
-  link.className='btn btn-primary';link.textContent='⬇ PowerPoint презентациясын жүктеу';
-  link.style.cssText='display:inline-block;margin:8px 8px 8px 0';
-  c.append(link);
-  c.append(btn('🎮 Геймификациялық ойын',()=>openGamification()));
   grid.append(c);
   r.append(grid);
   return;
