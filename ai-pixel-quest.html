@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI QUEST — Жасанды интеллект әлемі</title>
+<style>
+:root{--navy:#101a2c;--panel:#17263d;--line:#385273;--gold:#ffd66b;--mint:#67e0bb}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% 0,#233b58,#0b1424 70%);color:#f4f7ff;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif}
+.wrap{max-width:1180px;margin:auto;padding:18px}header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+h1{margin:0;color:#ffe18a;font-size:clamp(23px,4vw,35px);letter-spacing:.3px}.sub{color:#afc3dc;font-size:14px;margin-top:5px}
+.stats{display:flex;gap:8px;flex-wrap:wrap}.pill{background:#1b2d47;border:1px solid #456080;padding:9px 13px;border-radius:12px;font-weight:750}
+.stage{position:relative;background:#111d30;border:1px solid #49617f;border-radius:20px;overflow:hidden;box-shadow:0 24px 70px #0008}
+canvas#game{display:block;width:100%;height:auto;image-rendering:pixelated}
+.hud{position:absolute;right:15px;top:15px;width:190px;background:#101b2cdd;border:1px solid #8ba5c566;border-radius:14px;padding:9px;backdrop-filter:blur(8px);box-shadow:0 8px 25px #0005}
+.hud strong{display:block;font-size:12px;letter-spacing:.08em;color:#d9e8fa;margin:0 0 6px}.mini{width:100%;display:block;border-radius:8px;border:1px solid #7188a4}
+.mapnote{font-size:11px;color:#a9bdd5;margin-top:5px}
+.toast{position:absolute;left:50%;top:15px;transform:translateX(-50%);background:#101b2ceF;border:1px solid #7188a4;padding:10px 15px;border-radius:11px;font-weight:800;opacity:0;pointer-events:none;transition:.2s;white-space:nowrap}.toast.on{opacity:1}
+.below{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:13px}.hint{color:#c0d0e4;font-size:13px;line-height:1.5}
+button{border:0;border-radius:11px;padding:11px 15px;font-weight:800;cursor:pointer}.restart{background:linear-gradient(135deg,#ffe18a,#f5b94c);color:#26354b}
+.dpad{display:grid;grid-template-columns:repeat(3,42px);grid-template-rows:repeat(2,37px);gap:4px}.dpad button{padding:3px;background:#243a58;color:#fff;border:1px solid #5a7698;font-size:17px}.up{grid-column:2}.left{grid-column:1;grid-row:2}.down{grid-column:2;grid-row:2}.right{grid-column:3;grid-row:2}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;color:#aebfd4;font-size:12px}.legend span{display:flex;align-items:center;gap:6px}.dot{width:10px;height:10px;border-radius:3px;display:inline-block}
+.modal{position:fixed;inset:0;background:#07101ddd;display:none;align-items:center;justify-content:center;padding:15px;z-index:5}.modal.show{display:flex}
+.dialog{width:min(650px,100%);max-height:92vh;overflow:auto;background:#f7f9ff;color:#17243a;border:1px solid #b8c8dc;border-radius:20px;padding:23px;box-shadow:0 20px 70px #000a}
+.dialog h2{margin:0 0 6px;font-size:24px}.qcount{font-size:12px;color:#61728a;font-weight:850;letter-spacing:.07em;text-transform:uppercase}.progress{height:8px;background:#dfe6f0;border-radius:10px;overflow:hidden;margin:13px 0 18px}.progress span{display:block;height:100%;background:linear-gradient(90deg,#45c6a0,#64a9ff);width:0;transition:.2s}
+.question{font-size:18px;font-weight:800;line-height:1.45;margin:12px 0 15px}.answers{display:grid;gap:9px}.answer{background:#edf2f9;color:#24334b;text-align:left;border:2px solid #d8e1ec;padding:12px;border-radius:11px;font-size:14px}.answer:hover{border-color:#7898c2;background:#e5eef9}.answer:disabled{cursor:default}
+.feedback{min-height:24px;margin:12px 0 4px;font-weight:800}.good{color:#138453}.bad{color:#b63e3e}.next{display:none;background:#213b5c;color:#fff;width:100%;margin-top:8px}.note{font-size:12px;color:#718098;margin-top:12px}
+@media(max-width:650px){.wrap{padding:9px}.hud{width:126px;right:8px;top:8px;padding:6px}.hud strong{font-size:10px}.mapnote{font-size:9px}.dialog{padding:17px}.question{font-size:16px}}
+</style></head>
+<body><div class="wrap">
+<header><div><h1>✦ AI QUEST: Жасанды интеллект әлемі</h1><div class="sub">11-сыныпқа арналған пиксельдік шытырман квест · 5 аймақ · 25 сұрақ</div></div>
+<div class="stats"><div class="pill">🏁 Орындалды: <span id="done">0</span>/5</div><div class="pill">⭐ Ұпай: <span id="score">0</span></div><div class="pill">💎 Кристалл: <span id="gems">0</span></div></div></header>
+<div class="stage"><canvas id="game" width="960" height="600"></canvas>
+<div class="hud"><strong>🗺️ ӘЛЕМ КАРТАСЫ</strong><canvas id="mini" class="mini" width="240" height="150"></canvas><div class="mapnote">Ақ нүкте — сенің орның · Жарқыраған нүктелер — тапсырмалар</div></div>
+<div class="toast" id="toast">Тапсырмаға жақында!</div></div>
+<div class="below"><div class="hint">Қозғалу: <b>W A S D</b> немесе <b>← ↑ → ↓</b><br>Тапсырмаға жақындап, <b>ПРОБЕЛ</b> не <b>Enter</b> бас.</div>
+<div class="dpad"><button class="up" data-move="up">▲</button><button class="left" data-move="left">◀</button><button class="down" data-move="down">▼</button><button class="right" data-move="right">▶</button></div>
+<button class="restart" id="restart">↻ Қайта бастау</button></div>
+<div class="legend"><span><i class="dot" style="background:#f7ca59"></i> Белсенді тапсырма</span><span><i class="dot" style="background:#57d8c0"></i> Орындалған</span><span>🧱 Кедергілерден айналып өт</span><span>🔎 Камера кейіпкерге жақындатылған</span></div>
+</div>
+<div class="modal" id="modal"><div class="dialog"><div class="qcount" id="qcount"></div><h2 id="taskTitle"></h2><div class="progress"><span id="bar"></span></div><div class="question" id="question"></div><div class="answers" id="answers"></div><div class="feedback" id="feedback"></div><button class="next" id="next"></button><div class="note">Қате жауап берсең, қайта таңдай аласың. Esc — терезені жабу.</div></div></div>
+<script>
+(()=>{
+const canvas=document.querySelector('#game'),ctx=canvas.getContext('2d'),mini=document.querySelector('#mini'),mctx=mini.getContext('2d');
+const W=40,H=40,C=42,R=30,VIEW_W=24,VIEW_H=15;
+const doneEl=document.querySelector('#done'),scoreEl=document.querySelector('#score'),modal=document.querySelector('#modal');
+const titleEl=document.querySelector('#taskTitle'),qcount=document.querySelector('#qcount'),qEl=document.querySelector('#question'),answersEl=document.querySelector('#answers'),feedback=document.querySelector('#feedback'),bar=document.querySelector('#bar'),next=document.querySelector('#next'),toast=document.querySelector('#toast');
+const tasks=[
+{name:'1-аймақ · AI зертханасы',emoji:'🤖',x:6,y:5,qs:[
+['Жасанды интеллект (ЖИ) ұғымын ең дәл сипаттайтын анықтама қайсы?',['Тек интернетке қосылатын құрылғы','Адамның кейбір зияткерлік әрекеттерін модельдейтін жүйелер мен әдістер','Компьютердің сыртқы бөлігі','Ақпаратты тек сақтайтын бағдарлама'],1],
+['Машиналық оқыту дегеніміз не?',['Жүйенің деректерден заңдылықтарды үйрену тәсілі','Компьютерді қолмен жөндеу','Файлдарды архивтеу','Монитор сапасын арттыру'],0],
+['ЖИ моделін оқытудағы негізгі мақсат қандай?',['Компьютер жадын толтыру','Мысалдар негізінде параметрлерді бейімдеп, болжам сапасын арттыру','Интернет жылдамдығын өлшеу','Файл атауын өзгерту'],1],
+['ЖИ жүйесінің нәтижесі неге тәуелді болуы мүмкін?',['Тек экран өлшеміне','Тек компьютер түсіне','Деректер сапасына, модельге және оқыту әдісіне','Пернетақта тілінің түсіне'],2],
+['Тар маманданған ЖИ-ге қайсысы мысал болады?',['Кез келген адам сияқты барлық саланы түсінетін әмбебап сана','Бір нақты міндетті орындайтын кескін тану жүйесі','Қарапайым электр сымы','Қағаз күнтізбе'],1]]},
+{name:'2-аймақ · Деректер орманы',emoji:'🌿',x:34,y:5,qs:[
+['Оқыту деректер жиыны (training set) не үшін қолданылады?',['Модель параметрлерін үйрету үшін','Тек нәтижені көрсету үшін','Компьютерді өшіру үшін','Құжатты басып шығару үшін'],0],
+['Тестілік деректер жиынының міндеті қандай?',['Модельді күнделікті қайта жазу','Оқыту кезінде қолданылған деректерді көбейту','Модельдің бұрын көрмеген деректердегі сапасын бағалау','Желі кабелін тексеру'],2],
+['Деректердегі біржақтылық (bias) қандай салдарға әкелуі мүмкін?',['Нәтиженің барлық адамға бірдей әділ болуына','Кейбір топтарға қатысты жүйелі қате шешімдерге','Модельдің міндетті түрде жылдамдауына','Деректердің автоматты түрде шифрлануына'],1],
+['Артық үйрену (overfitting) дегеніміз не?',['Модель оқыту деректерін жақсы меңгеріп, жаңа деректерде нашар жұмыс істеуі','Модельдің мүлде оқымауы','Деректердің жоғалуы','Компьютердің қызып кетуі'],0],
+['Деректерді алдын ала өңдеудің мақсаты қандай?',['Деректерді әдейі бұрмалау','Тек файл көлемін үлкейту','Қателерді түзету, форматтау және модельге дайындау','Интернетті ажырату'],2]]},
+{name:'3-аймақ · Робототехника шеберханасы',emoji:'🦾',x:7,y:24,qs:[
+['Компьютерлік көру (Computer Vision) нені зерттейді?',['Мәтінді дыбыстауды ғана','Компьютердің кескіндер мен бейнелерден ақпарат алуын','Желі протоколдарын ғана','Процессор температурасын'],1],
+['Табиғи тілді өңдеу (NLP) технологиясы неге бағытталған?',['Адам тіліндегі мәтін мен сөйлеуді талдауға','Тек график салуға','Компьютерді құрастыруға','Электр қуатын үнемдеуге'],0],
+['Роботтағы сенсордың қызметі қандай?',['Бағдарлама кодын басып шығару','Құрылғыны безендіру','Қоршаған ортадан өлшемдер мен сигналдар алу','Файлдарды сығу'],2],
+['Күшейту арқылы оқытуда (Reinforcement Learning) агент қалай үйренеді?',['Тек дайын жауаптарды көшіру арқылы','Ортамен әрекеттесіп, марапат/айып сигналдары арқылы','Кездейсоқ файлдарды ашу арқылы','Тек мұғалімнің мәтінін оқу арқылы'],1],
+['Роботтың автономды әрекет етуіне не қажет?',['Тек сыртқы қабық','Сенсорлар, басқару алгоритмі және атқарушы механизмдер','Тек экран','Тек интернет браузері'],1]]},
+{name:'4-аймақ · Нейрондық желі мұнарасы',emoji:'🧠',x:34,y:24,qs:[
+['Жасанды нейрондық желінің негізгі құрылымы неден тұрады?',['Қабаттарға біріктірілген өзара байланысқан нейрондардан','Тек қатты дискілерден','Монитор пиксельдерінен','Интернет парақтарынан'],0],
+['Кері тарату (backpropagation) алгоритмі не үшін қолданылады?',['Суретті үлкейту үшін','Қате градиентін есептеп, желі салмақтарын жаңартуға','Файлдарды жоюға','Деректерді басып шығаруға'],1],
+['Генеративті ЖИ-дің ерекшелігі қандай?',['Тек деректерді сұрыптайды','Тек компьютерді қорғайды','Үлгілерді үйреніп, жаңа мәтін, сурет не дыбыс жасай алады','Тек кесте ашады'],2],
+['Үлкен тілдік модель (LLM) негізінен немен жұмыс істейді?',['Табиғи тілдегі үлкен мәтіндік деректермен','Тек температура датчигімен','Тек бейнекамерамен','Электр қозғалтқышымен'],0],
+['Генеративті модельдің «галлюцинациясы» дегеніміз не?',['Модельдің экранды өшіруі','Модельдің сенімді естілетін, бірақ қате ақпарат құрастыруы','Модельдің файлды сығуы','Модельдің интернетке қосылуы'],1]]},
+{name:'5-аймақ · Киберқауіпсіздік қақпасы',emoji:'🛡️',x:21,y:15,qs:[
+['ЖИ жүйесінде дербес деректерді қорғаудың дұрыс жолы қайсы?',['Барлық деректі ашық жариялау','Қажетсіз жеке ақпаратты жинамау және деректерді қорғау','Құпиясөзді бәріне жіберу','Қорғанысты өшіру'],1],
+['Deepfake технологиясы қандай қауіп тудыруы мүмкін?',['Жалған аудио немесе бейне арқылы адамдарды жаңылыстыруы','Компьютер жадын физикалық үлкейтуі','Интернетті міндетті түрде жылдамдатуы','Экран жарықтығын реттеуі'],0],
+['ЖИ шешімдерінің түсіндірмелілігі (explainability) не үшін маңызды?',['Модель атауын әдемі ету үшін','Файл өлшемін азайту үшін','Шешімнің қалай және неге шыққанын түсінуге көмектесу үшін','Құрылғыны қайта іске қосу үшін'],2],
+['Авторлық құқықты сақтай отырып ЖИ қолданудың дұрыс тәсілі қайсы?',['Жасалған материалды міндетті түрде өзімдікі деу','Қолдану шарттарын тексеріп, қажет жерде дереккөз бен ЖИ көмегін көрсету','Кез келген туындыны рұқсатсыз көшіру','Автор атын өшіру'],1],
+['ЖИ қолданған кезде адам бақылауы неге қажет?',['ЖИ әрдайым мінсіз болғандықтан','Жауаптар ешқашан өзгермейтіндіктен','Қателерді, әділетсіздікті және тәуекелдерді анықтау үшін','Компьютерді жылдам өшіру үшін'],2]]}
+];
+// Map: 0 grass,1 paved path,2 water,3 trees,4 rock,5 flower patch
+let map=Array.from({length:R},(_,y)=>Array.from({length:C},(_,x)=>{
+ if(x===0||y===0||x===C-1||y===R-1)return 3;
+ if((x===18&&y>2&&y<26)||(x===19&&y>2&&y<26))return 2;
+ if((x*17+y*13)%37===0)return 4;
+ if((x*7+y*11)%31===0)return 3;
+ if((x*5+y*3)%23===0)return 5;
+ return 0;
+}));
+// Curving main paths and branches
+function path(x1,y1,x2,y2){let x=x1,y=y1;while(x!==x2){map[y][x]=1;x+=Math.sign(x2-x);}while(y!==y2){map[y][x]=1;y+=Math.sign(y2-y);}map[y2][x2]=1;}
+path(20,15,7,5);path(20,15,34,5);path(20,15,7,24);path(20,15,34,24);
+for(let x=7;x<=34;x++)map[15][x]=1;
+for(let y=5;y<=24;y++)if(y!==15)map[y][20]=1;
+// Decorative ponds and rocks, then ensure routes remain walkable
+for(let y=8;y<12;y++)for(let x=10;x<14;x++)if(!(y===8||x===10))map[y][x]=2;
+for(let y=18;y<22;y++)for(let x=25;x<29;x++)if(!(y===21||x===28))map[y][x]=4;
+const clearPath=[[20,15],[7,5],[34,5],[7,24],[34,24],[21,15]];
+for(const [x,y] of clearPath)map[y][x]=1;
+let player={x:20,y:15},completed=new Set(),score=0,active=-1,qIndex=0,cam={x:0,y:0};
+let gems=0,animTick=0,walkTick=0;
+const crystals=[[12,15],[16,15],[24,15],[29,15],[20,9],[20,21],[10,5],[30,24],[7,16],[34,16],[13,24],[27,5]];
+const collected=new Set();
+const chests=[[13,15],[27,15],[20,8],[20,22]];
+const openedChests=new Set();
+const tileColors={0:'#4f9b70',1:'#b9a77f',2:'#348db4',3:'#285c4c',4:'#77869a',5:'#76b96e'};
+function solid(x,y){return x<1||y<1||x>=C-1||y>=R-1||[2,3,4].includes(map[y][x]);}
+function nearTask(){return tasks.findIndex((t,i)=>!completed.has(i)&&Math.abs(t.x-player.x)+Math.abs(t.y-player.y)<=1);}
+function updateStats(){doneEl.textContent=completed.size;scoreEl.textContent=score;document.querySelector('#gems').textContent=gems;}
+function notify(s){toast.textContent=s;toast.classList.add('on');setTimeout(()=>toast.classList.remove('on'),1300);}
+function drawTile(g,x,y,t){
+ const px=x,py=y;g.fillStyle=tileColors[t];g.fillRect(px,py,W,H);
+ if(t===0||t===5){g.fillStyle=t===5?'#a6d77d':'#68b781';g.fillRect(px+5,py+8,5,3);g.fillRect(px+27,py+29,4,3);if(t===5){g.fillStyle='#f5df87';g.fillRect(px+17,py+15,5,5);}}
+ if(t===1){g.fillStyle='#d5c298';g.fillRect(px+3,py+8,12,3);g.fillRect(px+23,py+27,10,3);g.strokeStyle='#a38d68';g.strokeRect(px,py,W,H);}
+ if(t===2){g.fillStyle='#5cb8d2';g.fillRect(px+((animTick%12)+4),py+10,15,3);g.fillRect(px+((animTick*2%18)+14),py+28,11,3);g.fillStyle='#a0e8ed';g.fillRect(px+((animTick*3%25)+5),py+19,5,2);}
+ if(t===3){g.fillStyle='#1c473e';g.fillRect(px+5,py+9,30,25);g.fillStyle='#32775a';g.fillRect(px+9,py+3,22,25);g.fillStyle='#76523b';g.fillRect(px+17,py+28,7,12);}
+ if(t===4){g.fillStyle='#a5b1be';g.fillRect(px+7,py+12,26,23);g.fillStyle='#c7d0d9';g.fillRect(px+12,py+7,15,9);}
+ g.strokeStyle='#102d2b18';g.strokeRect(px,py,W,H);
+}
+function drawPlayer(g,x,y,s=1){
+ const bob=Math.sin(walkTick/2)*1.8*s; const px=x,py=y+bob;
+ g.fillStyle='#10233166';g.fillRect(px+9*s,py+33*s,23*s,5*s);
+ g.fillStyle='#233d66';g.fillRect(px+10*s,py+18*s,20*s,16*s);
+ g.fillStyle='#f2c493';g.fillRect(px+12*s,py+5*s,16*s,15*s);
+ g.fillStyle='#392e35';g.fillRect(px+10*s,py+3*s,20*s,7*s);
+ g.fillStyle='#fff';g.fillRect(px+15*s,py+11*s,3*s,3*s);g.fillRect(px+23*s,py+11*s,3*s,3*s);
+ g.fillStyle='#d9e5ef';g.fillRect(px+(12+Math.sin(walkTick)*1.5)*s,py+33*s,7*s,5*s);g.fillRect(px+(22-Math.sin(walkTick)*1.5)*s,py+33*s,7*s,5*s);
+}
+function drawMini(){
+ mctx.clearRect(0,0,240,150);const tw=240/C,th=150/R;
+ for(let y=0;y<R;y++)for(let x=0;x<C;x++){mctx.fillStyle=tileColors[map[y][x]];mctx.fillRect(x*tw,y*th,tw+.3,th+.3);}
+ tasks.forEach((t,i)=>{mctx.fillStyle=completed.has(i)?'#5de5d1':'#ffda69';mctx.beginPath();mctx.arc((t.x+.5)*tw,(t.y+.5)*th,3.2,0,Math.PI*2);mctx.fill();});
+ crystals.forEach((p,i)=>{if(!collected.has(i)){mctx.fillStyle='#8ffff1';mctx.fillRect(p[0]*tw+1,p[1]*th+1,2.5,2.5);}});
+ mctx.fillStyle='#fff';mctx.strokeStyle='#fff';mctx.beginPath();mctx.arc((player.x+.5)*tw,(player.y+.5)*th,3.5,0,Math.PI*2);mctx.fill();
+ // camera viewport rectangle
+ mctx.strokeStyle='#ffffffbb';mctx.lineWidth=1.2;mctx.strokeRect(cam.x/C*240,cam.y/R*150,VIEW_W/C*240,VIEW_H/R*150);
+}
+function draw(){
+ const sx=canvas.width/VIEW_W,sy=canvas.height/VIEW_H;
+ cam.x=Math.max(0,Math.min(C-VIEW_W,player.x-VIEW_W/2));cam.y=Math.max(0,Math.min(R-VIEW_H,player.y-VIEW_H/2));
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ for(let vy=0;vy<VIEW_H;vy++)for(let vx=0;vx<VIEW_W;vx++){let mx=Math.floor(cam.x)+vx,my=Math.floor(cam.y)+vy;if(mx<C&&my<R)drawTile(ctx,vx*sx,vy*sy,map[my][mx]);}
+ // Орталық финал порталы
+ if(completed.size===5){const gx=(20-cam.x)*sx,gy=(15-cam.y)*sy;ctx.save();ctx.strokeStyle='#a78bfa';ctx.lineWidth=4;ctx.shadowColor='#a78bfa';ctx.shadowBlur=22;ctx.beginPath();ctx.ellipse(gx+20,gy+20,18+Math.sin(animTick/3)*2,23,0,0,Math.PI*2);ctx.stroke();ctx.restore();}
+ tasks.forEach((t,i)=>{
+  const x=(t.x-cam.x)*sx,y=(t.y-cam.y)*sy;if(x<-50||y<-50||x>canvas.width||y>canvas.height)return;
+  const done=completed.has(i);ctx.save();ctx.shadowColor=done?'#5de5d1':'#ffdc70';ctx.shadowBlur=done?8:20;
+  ctx.fillStyle=done?'#39bcae':'#e9bd58';ctx.beginPath();ctx.roundRect(x+7,y+5,26,29,7);ctx.fill();ctx.shadowBlur=0;
+  ctx.fillStyle='#142c3a';ctx.font='22px sans-serif';ctx.textAlign='center';ctx.fillText(done?'✓':t.emoji,x+20,y+27);
+  ctx.fillStyle='#13283a';ctx.fillRect(x-15,y-13,70,13);ctx.fillStyle='#fff';ctx.font='bold 9px Arial';ctx.fillText(done?'ОРЫНДАЛДЫ':`ТАПСЫРМА ${i+1}`,x+20,y-4);ctx.restore();
+ });
+ // Қазына сандықтары мен жиналатын кристалдар
+ chests.forEach((p,i)=>{if(openedChests.has(i))return;const x=(p[0]-cam.x)*sx,y=(p[1]-cam.y)*sy;if(x<-35||y<-35||x>canvas.width||y>canvas.height)return;
+  ctx.fillStyle='#754526';ctx.fillRect(x+8,y+17,24,17);ctx.fillStyle='#c98b42';ctx.fillRect(x+7,y+13,26,9);ctx.fillStyle='#ffe08a';ctx.fillRect(x+18,y+15,4,8);ctx.fillStyle='#4b3529';ctx.fillRect(x+8,y+28,24,3);
+ });
+ crystals.forEach((p,i)=>{if(collected.has(i))return;const x=(p[0]-cam.x)*sx,y=(p[1]-cam.y)*sy;if(x<-20||y<-20||x>canvas.width||y>canvas.height)return;
+  const bob=Math.sin(animTick/3+i)*3;ctx.save();ctx.translate(x+20,y+20+bob);ctx.rotate(Math.PI/4);ctx.fillStyle='#7df5ef';ctx.shadowColor='#69fff0';ctx.shadowBlur=14;ctx.fillRect(-6,-6,12,12);ctx.fillStyle='#e2ffff';ctx.fillRect(-3,-5,4,4);ctx.restore();
+ });
+ drawPlayer(ctx,(player.x-cam.x)*sx,(player.y-cam.y)*sy,sx/40);
+ const near=nearTask();if(near>=0){ctx.fillStyle='#102238dd';ctx.fillRect(245,canvas.height-48,470,32);ctx.fillStyle='#fff';ctx.font='bold 15px Arial';ctx.textAlign='center';ctx.fillText('SPACE немесе ENTER — тапсырманы бастау',480,canvas.height-27);}
+ if(completed.size===5){ctx.fillStyle='#0a1729dd';ctx.fillRect(0,0,960,600);ctx.fillStyle='#ffe18a';ctx.font='bold 43px Arial';ctx.textAlign='center';ctx.fillText('ҚҰТТЫҚТАЙМЫЗ!',480,260);ctx.fillStyle='#fff';ctx.font='bold 24px Arial';ctx.fillText('Сен барлық 5 тапсырманы орындадың!',480,310);ctx.font='18px Arial';ctx.fillText('ЖИ әлеміндегі біліміңді дәлелдедің!',480,350);}
+ drawMini();
+}
+function move(dx,dy){if(modal.classList.contains('show')||completed.size===5)return;let x=player.x+dx,y=player.y+dy;if(!solid(x,y)){player.x=x;player.y=y;walkTick++; 
+ crystals.forEach((p,i)=>{if(!collected.has(i)&&p[0]===x&&p[1]===y){collected.add(i);gems++;score+=5;notify('💎 Кристалл жиналды! +5 ұпай');updateStats();}});
+ chests.forEach((p,i)=>{if(!openedChests.has(i)&&p[0]===x&&p[1]===y){openedChests.add(i);score+=20;notify('🎁 Қазына табылды! +20 ұпай');updateStats();}});
+ draw();}}
+function interact(){if(modal.classList.contains('show'))return;
+ if(completed.size===5){if(Math.abs(player.x-20)+Math.abs(player.y-15)<=2){winScreen();return;}notify('Барлық аймақ орындалды! Орталық порталға қайт.');return;}
+ let i=nearTask();if(i<0){notify('Алдымен тапсырма белгісіне жақында!');return;}active=i;qIndex=0;renderQ();}
+function winScreen(){modal.classList.add('show');titleEl.textContent='🏆 AI QUEST — ЖЕҢІС!';qcount.textContent='КВЕСТ АЯҚТАЛДЫ';bar.style.width='100%';qEl.textContent=`Керемет! Сен 5 аймақтың барлық 25 сұрағына жауап бердің. Жиналған кристалл: ${gems}. Жалпы ұпай: ${score}.`;answersEl.innerHTML='';feedback.textContent='Жасанды интеллект әлемінің шебері атандың!';feedback.className='feedback good';next.textContent='Қайта ойнау';next.style.display='block';next.onclick=()=>document.querySelector('#restart').click();}
+function renderQ(){
+ const t=tasks[active],q=t.qs[qIndex];modal.classList.add('show');titleEl.textContent=t.emoji+' '+t.name;qcount.textContent=`${active+1}-тапсырма · ${qIndex+1}/5 сұрақ`;bar.style.width=(qIndex/5*100)+'%';qEl.textContent=q[0];answersEl.innerHTML='';feedback.textContent='';feedback.className='feedback';next.style.display='none';
+ q[1].forEach((a,i)=>{let b=document.createElement('button');b.className='answer';b.textContent=String.fromCharCode(65+i)+') '+a;b.onclick=()=>choose(i);answersEl.appendChild(b);});
+}
+function choose(n){
+ const q=tasks[active].qs[qIndex],bs=[...answersEl.children];bs.forEach(b=>b.disabled=true);
+ if(n===q[2]){score+=10;feedback.textContent='✓ Дұрыс жауап! Жарайсың!';feedback.className='feedback good';bs[n].style.background='#dcf7e9';bs[n].style.borderColor='#43b77b';next.textContent=qIndex===4?'Аймақты аяқтау ✓':'Келесі сұрақ →';next.style.display='block';next.onclick=()=>{if(qIndex<4){qIndex++;renderQ();}else{completed.add(active);modal.classList.remove('show');updateStats();notify(completed.size===5?'Барлық аймақ ашылды! Орталық порталға орал.':'Аймақ сәтті аяқталды! Келесі тапсырманы ізде.');draw();}};}
+ else{feedback.textContent='✗ Дұрыс емес. Тағы бір рет байқап көр!';feedback.className='feedback bad';bs[n].style.background='#fde5e3';bs[n].style.borderColor='#dc7770';next.textContent='Қайта таңдау';next.style.display='block';next.onclick=()=>{bs.forEach(b=>{b.disabled=false;b.style.background='';b.style.borderColor='';});feedback.textContent='';next.style.display='none';};}
+ updateStats();
+}
+document.addEventListener('keydown',e=>{let k=e.key.toLowerCase();if(k==='escape'){modal.classList.remove('show');return;}if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k))e.preventDefault();if(k==='w'||k==='arrowup')move(0,-1);if(k==='s'||k==='arrowdown')move(0,1);if(k==='a'||k==='arrowleft')move(-1,0);if(k==='d'||k==='arrowright')move(1,0);if(k===' '||k==='enter')interact();});
+document.querySelectorAll('[data-move]').forEach(b=>{const d={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};b.onclick=()=>move(...d[b.dataset.move]);});
+document.querySelector('#restart').onclick=()=>{player={x:20,y:15};completed.clear();collected.clear();openedChests.clear();gems=0;score=0;active=-1;qIndex=0;modal.classList.remove('show');updateStats();draw();};
+function animate(){animTick++;if(animTick%3===0)draw();requestAnimationFrame(animate);}
+draw();updateStats();requestAnimationFrame(animate);
+})();
+</script></body></html>
