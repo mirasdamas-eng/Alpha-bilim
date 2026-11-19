@@ -48,4 +48,5 @@ async function init(){
 }
 window.alphaPaidAccess=paid;window.alphaPaidLocked=locked;
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+if(typeof alphaSupabase!=='undefined'&&alphaSupabase)alphaSupabase.auth.onAuthStateChange(()=>{setTimeout(()=>{init();if(typeof refreshAlphaEntitlement==='function')refreshAlphaEntitlement()},100)});
 })();
