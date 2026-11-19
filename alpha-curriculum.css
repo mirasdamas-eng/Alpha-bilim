@@ -17,3 +17,8 @@
 #alphaCurriculum .alpha-subject-card .alpha-subject-open:focus-visible{outline:3px solid #ffe27d;outline-offset:3px}
 @media(max-width:760px){#alphaCurriculum .alpha-subject-grid{grid-template-columns:1fr;gap:18px}#alphaCurriculum .alpha-subject-card{min-height:300px;padding:22px}#alphaCurriculum .alpha-subject-decor{width:38%;right:-12px;top:55px}#alphaCurriculum .alpha-subject-card h3,#alphaCurriculum .alpha-subject-desc{max-width:72%}}
 @media(prefers-reduced-motion:reduce){#alphaCurriculum .alpha-subject-card,#alphaCurriculum .alpha-subject-card .alpha-subject-open{transition:none}#alphaCurriculum .alpha-subject-card:hover{transform:none}}
+
+/* Keep subject action buttons aligned and fully inside 3D cards */
+#alphaCurriculum .alpha-subject-card{display:flex;flex-direction:column;align-items:flex-start}
+#alphaCurriculum .alpha-subject-card .alpha-subject-open{margin:auto 0 0!important;max-width:100%;min-height:48px;box-sizing:border-box;white-space:normal;text-align:center;flex-shrink:0}
+#alphaCurriculum .alpha-subject-grade{margin-bottom:16px}
