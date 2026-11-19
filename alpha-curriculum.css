@@ -22,3 +22,27 @@
 #alphaCurriculum .alpha-subject-card{display:flex;flex-direction:column;align-items:flex-start}
 #alphaCurriculum .alpha-subject-card .alpha-subject-open{margin:auto 0 0!important;max-width:100%;min-height:48px;box-sizing:border-box;white-space:normal;text-align:center;flex-shrink:0}
 #alphaCurriculum .alpha-subject-grade{margin-bottom:16px}
+
+/* Curriculum sections and lesson actions: visual refresh without changing behavior */
+#alphaCurriculum .alpha-edu-grid:not(.alpha-subject-grid){gap:20px}
+#alphaCurriculum .alpha-section-card,#alphaCurriculum .alpha-topic-card{position:relative;overflow:hidden;border-radius:22px;border:1px solid #dce7fb;background:linear-gradient(155deg,#fff 0%,#f4f8ff 100%);box-shadow:0 10px 28px rgba(27,57,118,.08);transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+#alphaCurriculum .alpha-section-card:hover,#alphaCurriculum .alpha-topic-card:hover{transform:translateY(-4px);box-shadow:0 18px 36px rgba(27,57,118,.15);border-color:#9dbcf6}
+#alphaCurriculum .alpha-section-card:before{content:"";position:absolute;inset:0 auto 0 0;width:5px;background:linear-gradient(#4b7bff,#18b5d6)}
+#alphaCurriculum .alpha-section-card:nth-child(3n+2):before{background:linear-gradient(#7e5bef,#c26fff)}
+#alphaCurriculum .alpha-section-card:nth-child(3n):before{background:linear-gradient(#12a99d,#5fddbc)}
+#alphaCurriculum .alpha-section-card h3,#alphaCurriculum .alpha-topic-card h3{color:#142b5a!important;font-size:clamp(17px,1.8vw,21px);line-height:1.4;margin-bottom:12px}
+#alphaCurriculum .alpha-lesson-action{font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid #d4e2f8;background:#fff;color:#1e4785!important;border-radius:12px;padding:11px 14px;margin:5px 7px 5px 0;font-weight:750;font-size:13px;line-height:1.35;min-height:43px;max-width:100%;white-space:normal;text-align:center;cursor:pointer;box-shadow:0 4px 10px rgba(28,65,126,.06);transition:background .2s,transform .2s,box-shadow .2s}
+#alphaCurriculum .alpha-lesson-action:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(28,65,126,.15)}
+#alphaCurriculum .alpha-lesson-action:focus-visible{outline:3px solid #f6b74e;outline-offset:2px}
+#alphaCurriculum .alpha-lesson-primary{background:linear-gradient(120deg,#2454d9,#167adf);color:#fff!important;border-color:#2454d9;box-shadow:0 7px 16px rgba(35,88,209,.22)}
+#alphaCurriculum .alpha-lesson-primary:hover{background:linear-gradient(120deg,#1b44ba,#126bc8)}
+#alphaCurriculum .alpha-lesson-task{background:#eaf8f6;color:#0b7269!important;border-color:#b8e9df}
+#alphaCurriculum .alpha-lesson-video{background:#f1efff;color:#5840ac!important;border-color:#dcd5ff}
+#alphaCurriculum .alpha-lesson-game{background:#fff3df;color:#92510b!important;border-color:#f6d6a3}
+#alphaCurriculum .alpha-topic-card{display:flex;flex-wrap:wrap;align-content:flex-start;align-items:flex-start;gap:3px}
+#alphaCurriculum .alpha-topic-card h3{flex:0 0 100%}
+#alphaCurriculum .alpha-topic-card .alpha-edu-muted{flex:0 0 100%}
+#alphaCurriculum .alpha-topic-card .alpha-lesson-primary{flex:0 0 100%;margin-right:0}
+#alphaCurriculum .alpha-section-card .alpha-lesson-primary{margin-top:14px}
+@media(max-width:600px){#alphaCurriculum .alpha-edu-grid:not(.alpha-subject-grid){grid-template-columns:1fr}#alphaCurriculum .alpha-section-card,#alphaCurriculum .alpha-topic-card{padding:20px}#alphaCurriculum .alpha-topic-card .alpha-lesson-action{flex:1 1 100%;margin:4px 0}}
+@media(prefers-reduced-motion:reduce){#alphaCurriculum .alpha-section-card,#alphaCurriculum .alpha-topic-card,#alphaCurriculum .alpha-lesson-action{transition:none}#alphaCurriculum .alpha-section-card:hover,#alphaCurriculum .alpha-topic-card:hover,#alphaCurriculum .alpha-lesson-action:hover{transform:none}}
