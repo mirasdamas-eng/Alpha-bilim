@@ -124,6 +124,20 @@ r.append(link);
 }
 function quiz(){
 const r=root();r.replaceChildren();r.append(btn('← Сабаққа қайту',()=>show()),el('h2','','Интерактивті тапсырма · '+topics[lesson][0]));
+if(lesson>=8){
+ const content=topics[lesson][1];
+ const questions=[
+  {q:'Бұл сабақтың негізгі тақырыбы қандай?',choices:[topics[lesson][0],topics[0][0],topics[1][0]],correct:0},
+  {q:'Осы тақырып бойынша дұрыс тұжырымды таңдаңыз.',choices:[content[1][1], 'Бұл тақырып тек компьютерді өшіруге арналған.', 'Тақырыпты тәжірибеде қолдануға болмайды.'],correct:0},
+  {q:'Практикалық жұмыста не істеу керек?',choices:[content[4][1], 'Ештеңе тексермеу.', 'Барлық деректерді жою.'],correct:0}
+ ];
+ const grid=el('div','alpha-edu-grid');
+ questions.forEach((item,i)=>{const cardEl=card((i+1)+'. '+item.q);const select=el('select');const placeholder=el('option','','Жауапты таңдаңыз');placeholder.value='';select.append(placeholder);item.choices.forEach((answer,j)=>{const opt=el('option','',answer);opt.value=String(j);select.append(opt)});select.value='';select.dataset.correct=String(item.correct);cardEl.append(select);grid.append(cardEl)});
+ r.append(grid);
+ const result=el('p','alpha-edu-muted','');r.append(btn('Жауаптарды тексеру',()=>{let score=0;grid.querySelectorAll('select').forEach(sel=>{if(sel.value!==''&&sel.value===sel.dataset.correct)score++});result.textContent='Нәтиже: '+score+' / '+questions.length;}));r.append(result);
+ return;
+}
+
 if(lesson===0){
   const panel=card('Wordwall · Жасанды интеллект','Интерактивті ойынды төменде орындаңыз.');
   const frame=document.createElement('iframe');
