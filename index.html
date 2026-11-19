@@ -83,6 +83,20 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
 @media(max-width:900px){.alpha-progress-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.alpha-progress-columns{grid-template-columns:1fr}}
 @media(max-width:520px){.alpha-progress-hero{padding:22px 18px;border-radius:18px}.alpha-progress-ring{width:88px;height:88px}.alpha-progress-score{font-size:34px}.alpha-progress-metrics{gap:9px}.alpha-metric{padding:14px}.alpha-metric b{font-size:24px}.alpha-week-chart{gap:5px}.alpha-day-bars{gap:3px}.alpha-progress-tip{padding:16px}}
 
+
+/* Digital Bilim Passport — readable goal labels and refined subject tiles */
+#passport .passport{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:18px}
+#passport .passport .p{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:12px;min-width:0;min-height:175px;padding:22px 20px;border-radius:21px;background:linear-gradient(150deg,#ffffff,#f0f5ff);border:1px solid #dce6f7;box-shadow:0 10px 24px rgba(30,65,125,.08);overflow:hidden}
+#passport .passport .p:before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#4e78eb,#73b6fa)}
+#passport .passport .p small{display:block;margin:0;color:#526582;font-size:14px;line-height:1.5;font-weight:700;overflow-wrap:anywhere}
+#passport .passport .p b{display:block;font-size:clamp(28px,3vw,36px);line-height:1.2;color:#173c85}
+#passport .passport .p b.warn{color:#c67a1e}
+#passport .passport .p b.good{color:#158569}
+#passport .passport .p span{display:inline-flex;align-items:center;justify-content:flex-start;max-width:100%;margin-top:auto;padding:8px 12px;border-radius:11px;background:#e6efff;color:#244b91!important;font-size:13px;line-height:1.5;font-weight:700;white-space:normal;overflow-wrap:anywhere}
+#passport .passport .p span.good{background:#e3f7ee;color:#167e5c!important}
+@media(max-width:1100px){#passport .passport{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){#passport .passport{grid-template-columns:1fr;gap:12px}#passport .passport .p{min-height:155px;padding:20px}}
+
 </style>
 
 <style>
