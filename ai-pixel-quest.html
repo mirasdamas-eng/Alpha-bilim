@@ -76,6 +76,43 @@ const tasks=[
 ['Авторлық құқықты сақтай отырып ЖИ қолданудың дұрыс тәсілі қайсы?',['Жасалған материалды міндетті түрде өзімдікі деу','Қолдану шарттарын тексеріп, қажет жерде дереккөз бен ЖИ көмегін көрсету','Кез келген туындыны рұқсатсыз көшіру','Автор атын өшіру'],1],
 ['ЖИ қолданған кезде адам бақылауы неге қажет?',['ЖИ әрдайым мінсіз болғандықтан','Жауаптар ешқашан өзгермейтіндіктен','Қателерді, әділетсіздікті және тәуекелдерді анықтау үшін','Компьютерді жылдам өшіру үшін'],2]]}
 ];
+// When embedded by ALPHA, use the current lesson's own content instead of AI questions.
+window.addEventListener('message',event=>{
+ if(event.origin!==window.location.origin||event.data?.type!=='alpha-game-topic')return;
+ const title=String(event.data.title||'').slice(0,180);
+ const slides=Array.isArray(event.data.slides)?event.data.slides.filter(p=>Array.isArray(p)&&p.length>=2).slice(0,8):[];
+ if(!title||slides.length<3)return;
+ const correctFacts=slides.map(p=>String(p[1]).slice(0,320));
+ const wrongAnswers=[
+  'Бұл әрекет тек экранның түсін өзгертуге арналған.',
+  'Бұл әдіс барлық ақпаратты тексермей жариялауды талап етеді.',
+  'Бұл технология тек компьютерді өшіру үшін қолданылады.',
+  'Бұл үдерісте жоспарлау мен тексеру мүлдем қажет емес.',
+  'Бұл тәсіл кез келген деректі рұқсатсыз таратуға мүмкіндік береді.'
+ ];
+ const prompts=[
+  'Сабақ материалындағы дұрыс тұжырымды таңда.',
+  'Осы тақырып туралы қай ақпарат дұрыс?',
+  'Теория бойынша дұрыс жауапты тап.',
+  'Тақырыпты қайталау: дұрыс сипаттаманы көрсет.',
+  'Сабақта қарастырылған тұжырымды анықта.'
+ ];
+ tasks.forEach((task,zone)=>{
+  task.name=(zone+1)+'-аймақ · '+title.replace(/^§[^.]+\.\s*/, '').slice(0,48);
+  task.qs=Array.from({length:5},(_,i)=>{
+   const factIndex=(zone*5+i)%correctFacts.length;
+   const correct=correctFacts[factIndex];
+   const position=(zone+i)%4;
+   const alternatives=[wrongAnswers[(zone+i)%5],wrongAnswers[(zone+i+1)%5],wrongAnswers[(zone+i+2)%5]];
+   const answers=alternatives.slice();answers.splice(position,0,correct);
+   return [prompts[i]+' ('+(factIndex+1)+'-бөлік)',answers,position];
+  });
+ });
+ document.querySelector('h1').textContent='✦ ALPHA QUEST: '+title;
+ document.querySelector('.sub').textContent='Тақырыптық квест · 5 аймақ · 25 сұрақ';
+ player={x:20,y:15};completed.clear();collected.clear();openedChests.clear();score=0;gems=0;active=-1;qIndex=0;modal.classList.remove('show');updateStats();draw();
+});
+
 // Map: 0 grass,1 paved path,2 water,3 trees,4 rock,5 flower patch
 let map=Array.from({length:R},(_,y)=>Array.from({length:C},(_,x)=>{
  if(x===0||y===0||x===C-1||y===R-1)return 3;
