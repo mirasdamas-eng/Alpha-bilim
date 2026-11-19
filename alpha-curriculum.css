@@ -106,3 +106,11 @@
 #alphaCurriculum .alpha-lesson-video-card{width:100%;margin:22px 0 12px;padding:18px;border:1px solid rgba(124,181,255,.32);border-radius:22px;background:linear-gradient(145deg,#12284e,#0b1a35);box-shadow:0 16px 30px rgba(7,20,49,.18)}
 #alphaCurriculum .alpha-lesson-video-card h3{margin:0 0 14px;color:#f0f7ff!important;font-size:19px}
 @media(max-width:600px){#alphaCurriculum .alpha-lesson-video-card{padding:12px}#alphaCurriculum .alpha-lesson-video-card h3{font-size:16px}}
+
+/* §21–22 interactive ThingLink virtual tour */
+#alphaCurriculum .alpha-topic-card button.alpha-lesson-tour{flex:1 1 100%;background:linear-gradient(125deg,#126e8d,#18519c)!important;border-color:#64c7e9!important;color:#f4fcff!important}
+#alphaCurriculum .alpha-3d-tour{width:100%;margin:20px 0 8px;padding:20px;border-radius:20px;background:linear-gradient(140deg,#102748,#0b1b35);border:1px solid rgba(116,184,237,.45);box-shadow:0 15px 30px rgba(5,16,43,.2)}
+#alphaCurriculum .alpha-3d-tour h3{color:#f3f9ff!important;font-size:20px;margin:0 0 9px}
+#alphaCurriculum .alpha-3d-tour .alpha-edu-muted{color:#bdd7f3!important;line-height:1.6;margin-bottom:15px}
+#alphaCurriculum .alpha-tour-external{display:inline-block;margin-top:15px;padding:11px 15px;border-radius:11px;background:#1c5da0;color:#fff!important;font-weight:700;text-decoration:none}
+@media(max-width:600px){#alphaCurriculum .alpha-3d-tour{padding:12px}#alphaCurriculum .alpha-3d-tour iframe{height:420px!important}}
