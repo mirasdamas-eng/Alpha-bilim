@@ -51,6 +51,21 @@ c.append(btn('← Алдыңғы',()=>{slide=Math.max(0,slide-1);show()},slide==
 c.append(btn('Келесі →',()=>{slide=Math.min(slides.length,slide+1);show()},slide===slides.length));
 c.append(btn('Толық экран',()=>{if(panel.requestFullscreen)panel.requestFullscreen()}));
 c.append(el('p','alpha-edu-muted','PowerPoint файлын жүктеу кейін қосылады. Қазір слайд мазмұнын сайттан қарауға болады.'));
+if(lesson===0){
+  const gameCard=card('🎮 AI QUEST — Геймификациялық ойын','5 аймақ · 25 сұрақ · Жасанды интеллект әлемі');
+  const gameFrame=document.createElement('iframe');
+  gameFrame.src='ai-pixel-quest.html';
+  gameFrame.title='AI QUEST — 1-сабақ геймификациялық ойыны';
+  gameFrame.loading='lazy';
+  gameFrame.allowFullscreen=true;
+  gameFrame.style.cssText='display:block;width:100%;height:740px;max-width:100%;border:0;border-radius:16px;background:#101a2c;';
+  gameCard.append(gameFrame);
+  const gameLink=document.createElement('a');
+  gameLink.href='ai-pixel-quest.html';gameLink.target='_blank';gameLink.rel='noopener noreferrer';
+  gameLink.textContent='Ойынды толық экранда ашу ↗';
+  gameCard.append(gameLink);
+  grid.append(gameCard);
+}
 grid.append(c);
 }r.append(grid);
 }
