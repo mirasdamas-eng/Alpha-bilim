@@ -108,7 +108,8 @@ window.addEventListener('message',event=>{
    return [prompts[i]+' ('+(factIndex+1)+'-бөлік)',answers,position];
   });
  });
- document.querySelector('h1').textContent='✦ ALPHA QUEST: '+title;\n document.title='Геймификация — '+title;
+ document.querySelector('h1').textContent='✦ ALPHA QUEST: '+title;
+ document.title='Геймификация — '+title;
  document.querySelector('.sub').textContent='Тақырыптық квест · 5 аймақ · 25 сұрақ';
  player={x:20,y:15};completed.clear();collected.clear();openedChests.clear();score=0;gems=0;active=-1;qIndex=0;modal.classList.remove('show');updateStats();draw();
 });
