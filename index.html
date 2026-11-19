@@ -2393,51 +2393,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
 
-<style>
-#alphaCurriculum{margin:16px 0 26px}.alpha-edu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}.alpha-edu-card{background:#fff;border:1px solid #e7eaf1;border-radius:18px;padding:20px}.alpha-edu-card h3{margin:4px 0 12px}.alpha-edu-card button{margin:5px 6px 5px 0}.alpha-edu-muted{color:#667085;font-size:14px}.alpha-edu-breadcrumb{margin:0 0 18px;color:#667085}.alpha-edu-card .btn[disabled]{opacity:.55;cursor:not-allowed}
-</style>
-<script>
-(function(){
- const chapters11=[
- ['§1–2. Жасанды интеллект','01'],
- ['§3–4. Қарапайым нейрон моделін құру. Практикум','02'],
- ['§5–6. Жасанды интеллектіні қолдану саласы','03'],
- ['§7–8. Жасанды интеллектіні жобалау. Практикум','04'],
- ['§9–10. Жасанды интеллектіні жобалау','05'],
- ['§11–12. Жасанды интеллектіні жобалау. Жобалық жұмыс','06'],
- ['§13–14. Мұғаліммен оқыту әдісі','07'],
- ['§15–16. Мұғаліммен оқыту. Практикум','08']
- ];
- const state={subject:null,section:null};
- const root=()=>document.getElementById('alphaCurriculum');
- const grade=()=>{let v='';try{v=localStorage.getItem('alphaGrade')||''}catch(e){};return /^([7-9]|10|11)(?:-сынып)?$/.test(v)?parseInt(v,10):null};
- const btn=(label,fn)=>{const b=document.createElement('button');b.className='btn btn-primary';b.type='button';b.textContent=label;b.addEventListener('click',fn);return b};
- const card=(title,description)=>{const d=document.createElement('article');d.className='alpha-edu-card';const h=document.createElement('h3');h.textContent=title;d.append(h);if(description){const p=document.createElement('p');p.className='alpha-edu-muted';p.textContent=description;d.append(p)}return d};
- function render(){
-  const el=root();if(!el)return;el.replaceChildren();
-  const g=grade();const h=document.createElement('h2');h.textContent=g?g+'-сынып · Менің сабақтарым':'Менің сабақтарым';el.append(h);
-  if(!g){const p=document.createElement('p');p.className='alpha-edu-muted';p.textContent='Сынып анықталмады. Профильдегі сынып дерегін тексеріңіз.';el.append(p);return}
-  if(state.subject){el.append(btn('← Артқа',()=>{state.subject=null;state.section=null;render()}))}
-  if(state.section){el.append(btn('← Бөлімдер',()=>{state.section=null;render()}))}
-  const grid=document.createElement('div');grid.className='alpha-edu-grid';
-  if(!state.subject){
-   [['informatics','💻 Информатика'],['math','➗ Математика']].forEach(([key,name])=>{const c=card(name,g+'-сынып бағдарламасы');c.append(btn('Пәнге кіру →',()=>{state.subject=key;render()}));grid.append(c)})
-  }else if(!state.section){
-   if(state.subject==='informatics'&&g===11){const c=card('1-бөлім. Жасанды интеллект','§1–16 · 8 сабақ');c.append(btn('Бөлімді ашу →',()=>{state.section='ai';render()}));grid.append(c)}
-   else{const c=card('Оқу материалдары дайындалуда',g+'-сынып · '+(state.subject==='math'?'Математика':'Информатика'));c.append(btn('Тегін видеосабақтарды көру',()=>{el.style.display='none';document.getElementById('freeSubjects').style.display='';if(typeof openFreeSubject==='function')openFreeSubject(state.subject)}));grid.append(c)}
-  }else{
-   chapters11.forEach(([name,id])=>{const c=card(name,'Презентация · интерактивті тапсырма · видеосабақ');const p=document.createElement('p');p.className='alpha-edu-muted';p.textContent='Материалдар сайтқа жүктелгеннен кейін ашылады.';c.append(p);['Презентацияны қарау','PowerPoint жүктеу','Интерактивті тапсырма','Видеосабақ'].forEach(label=>{const b=btn(label,()=>{});b.disabled=true;b.title='Материал әлі жүктелмеген';c.append(b)});grid.append(c)})
-  }
-  el.append(grid);
- }
- document.addEventListener('DOMContentLoaded',()=>{
-  const view=document.getElementById('lessonsView');if(!view)return;
-  const holder=document.createElement('div');holder.id='alphaCurriculum';view.insertBefore(holder,view.firstChild);
-  const legacy=[...view.children].filter(x=>x!==holder&&x.tagName!=='STYLE');legacy.forEach(x=>x.style.display='none');
-  const menu=document.querySelectorAll('[data-view="lessonsView"]');menu.forEach(b=>b.addEventListener('click',()=>{holder.style.display='';legacy.forEach(x=>x.style.display='none');state.subject=null;state.section=null;render()}));
-  render();
- });
-})();
-</script>
+<link rel="stylesheet" href="alpha-curriculum.css?v=2">
+<script defer src="alpha-curriculum.js?v=2"></script>
 </body>
 </html>
