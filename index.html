@@ -679,7 +679,7 @@ html,body,body *,button,input,select,textarea,option,svg text{font-family:"Sylfa
   <div id="studentMenu" class="menu">
     <button class="active" data-view="dashboard">🏠 Басты бет</button>
     <button data-view="lessonsView">📚 Менің сабақтарым</button>
-    <button data-view="testsView">📝 Тапсырмалар</button>
+    <button data-view="testsView">🧠 Білім тренажері</button>
     <button data-view="progressView">📈 Прогресс</button>
     <button data-view="plan">🎯 Менің жоспарым</button>
     <button data-view="passport">📊 Білім паспорты</button>
@@ -699,7 +699,7 @@ html,body,body *,button,input,select,textarea,option,svg text{font-family:"Sylfa
   </div>
   <div id="studentTasksMenu" class="menu" style="display:none;margin-top:10px">
     <button data-view="lessonsView">📚 Сабақтар</button>
-    <button data-view="tasksView">📝 Тапсырмалар</button>
+    <button data-view="tasksView">🧠 Білім тренажері</button>
     <button data-view="errorsView">❌ Қателер</button>
   </div>
   <div class="side-bottom"><button class="btn btn-light" style="width:100%" data-view="profileView">👤 Профиль</button></div>
@@ -839,7 +839,7 @@ html,body,body *,button,input,select,textarea,option,svg text{font-family:"Sylfa
 </div>
 
 <div id="tasksView" class="view">
-  <div class="dash-head"><div><h1>Тапсырмалар 📝</h1><p class="muted">Пәнді таңда, есептерді орында және нәтижеңді бірден көр.</p></div></div>
+  <div class="dash-head"><div><h1>Білім тренажері 🧠</h1><p class="muted">Пәнді таңда, есептерді орында және нәтижеңді бірден көр.</p></div></div>
   <div class="features" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px">
     <section class="feature"><div class="icon">💻</div><h3>Информатика</h3><p>5 нақты тапсырма · Алгоритмдер және Python негіздері.</p><button class="btn btn-primary" style="width:100%" onclick="startAlphaTask('informatics')">Орындау →</button></section>
     <section class="feature"><div class="icon">➗</div><h3>Алгебра: теңдеулер</h3><p>5 нақты тапсырма · Сызықтық теңдеу және өрнектер.</p><button class="btn btn-primary" style="width:100%" onclick="startAlphaTask('algebra')">Орындау →</button></section>
@@ -848,7 +848,7 @@ html,body,body *,button,input,select,textarea,option,svg text{font-family:"Sylfa
 </div>
 
 <div id="testsView" class="view">
-  <div class="dash-head"><div><h1>Тапсырмалар 📝</h1><p class="muted">Негізгі бағыт — информатика. Python мен алгоритмдерден баста немесе математика тапсырмаларын таңда. Нәтижелерің «Қателерді түзету» бөлімінде сақталады.</p></div></div>
+  <div class="dash-head"><div><h1>Білім тренажері 🧠</h1><p class="muted">Негізгі бағыт — информатика. Python мен алгоритмдерден баста немесе математика тапсырмаларын таңда. Нәтижелерің «Қателерді түзету» бөлімінде сақталады.</p></div></div>
   <div class="features" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px">
     <section class="feature" style="background:linear-gradient(135deg,#eef6ff,#e0f2fe);border:1px solid #bae6fd"><div class="icon">💻</div><h3>Информатика</h3><p>Алгоритмдер, Python және информатика негіздері бойынша тапсырмалар.</p><button class="btn btn-primary" style="width:100%" onclick="startAlphaTask('informatics')">Информатика тапсырмаларын бастау →</button></section>
     <section class="feature" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #bbf7d0"><div class="icon">➗</div><h3>Математика</h3><p>Алгебра мен геометрия біріктірілген бір математика тесті.</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0"><span class="pill">A деңгейі</span><span class="pill">B деңгейі</span><span class="pill">C деңгейі</span></div><button class="btn btn-primary" style="width:100%" onclick="startMathTest()">Математика тестін бастау →</button></section>
@@ -1658,7 +1658,7 @@ function startSubjectTest(subjectTitle, questions){
   // Тест басталған бөлімді есте сақтаймыз: аяқтаған соң сол бөлімге қайтады.
   const returnViewId=document.querySelector('.view.active')?.id || (String(subjectTitle).startsWith('Тапсырма')?'tasksView':'testsView');
   const returnMenuButton=document.querySelector('.menu button.active');
-  const returnSectionName=(returnMenuButton?.textContent||'').trim() || (returnViewId==='dashboard'?'Басты бет':returnViewId==='tasksView'||returnViewId==='testsView'?'Тапсырмалар':'бөлім');
+  const returnSectionName=(returnMenuButton?.textContent||'').trim() || (returnViewId==='dashboard'?'Басты бет':returnViewId==='tasksView'||returnViewId==='testsView'?'Білім тренажері':'бөлім');
   function returnToOriginSection(){
     page.remove();
     document.querySelectorAll('.view').forEach(view=>view.classList.remove('active'));
