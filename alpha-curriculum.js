@@ -13,6 +13,7 @@ async function requirePaidLesson(){
   }
   return true;
 }
+const alpha3dTourUrl='https://www.thinglink.com/scene/2170526099316933094';
 const topics=[
 ["§1–2. Жасанды интеллект",[["Жасанды интеллект деген не?","ЖИ — деректерден үйреніп, белгілі міндеттерді орындайтын технология."],["ЖИ қалай жұмыс істейді?","Деректер → модельді оқыту → болжау → тексеру."],["ЖИ түрлері","Ережеге негізделген жүйелер. Машиналық оқыту және терең оқыту."],["Күнделікті өмірдегі ЖИ","Іздеу жүйесі, аударма, навигация және білім беру."],["ЖИ мүмкіндіктері","Ақпаратты жылдам өңдейді және қайталанатын жұмысты жеңілдетеді."],["ЖИ шектеулері","Қате жауап беруі мүмкін. Жеке деректерді қорғау маңызды."],["Тапсырма","Калькулятор, сөйлеуді тану, таймер: қайсысы ЖИ? Неліктен?"],["Қорытынды","ЖИ — көмекші құрал, адам тексеруі қажет."]]],
 ["§3–4. Қарапайым нейрон моделін құру. Практикум",[["Жасанды нейрон","Нейрон кіріс мәндерін қабылдап, нәтижені есептейді."],["Нейронның құрамдастары","x — кіріс; w — салмақ; b — ығысу; y — нәтиже."],["Негізгі формула","z = x₁w₁ + x₂w₂ + b"],["Қарапайым есеп","x₁=2, x₂=3, w₁=1, w₂=2, b=0. Нәтиже: 8."],["Python: нейрон есебі","x1, x2 = 2, 3\nw1, w2, b = 1, 2, 0\nprint(x1*w1 + x2*w2 + b)"],["Практикум","Кірістерді 4 және 5 деп өзгертіңдер. Нәтижені салыстырыңдар."],["Өзіндік жұмыс","x₁=1, x₂=4, w₁=3, w₂=2, b=1. z мәнін есепте."],["Жауап","z = 12. Нейрон — нейрондық желінің негізгі бөлігі."]]],
@@ -65,7 +66,7 @@ grid.classList.add('alpha-subject-grid');
 if(subject==='informatics'&&g===11){curriculumSections.forEach((group,idx)=>{const c=card(group.title,(group.end-group.start)+' сабақ');c.classList.add('alpha-section-card');c.style.setProperty('--alpha-card-index',idx);const open=btn('Бөлімді ашу →',()=>{sectionIndex=idx;section=true;lesson=-1;show()});open.classList.add('alpha-lesson-action','alpha-lesson-primary');c.append(open);grid.append(c)})}
 else{grid.append(card('Материалдар дайындалуда',g+'-сынып · '+(subject==='math'?'Математика':'Информатика')))}
 }else if(lesson<0){
-topics.forEach(([t],i)=>{if(i<curriculumSections[sectionIndex].start||i>=curriculumSections[sectionIndex].end)return;const c=card(t,'');c.classList.add('alpha-topic-card');const presentation=btn('Презентацияны қарау →',()=>{lesson=i;slide=0;show()});presentation.classList.add('alpha-lesson-action','alpha-lesson-primary');c.append(presentation);const taskButton=btn('Интерактивті тапсырма',async()=>{if(!await requirePaidLesson())return;lesson=i;slide=0;quiz()});const videoButton=btn('Видеосабақ',async()=>{if(i===0){lesson=i;slide=0;show();setTimeout(()=>document.querySelector('#alphaCurriculum .alpha-lesson-video-card')?.scrollIntoView({behavior:'smooth',block:'center'}),80);return}if(!await requirePaidLesson())return;alert('Бұл тақырыпқа видеосабақ әлі жүктелмеген.')});const updateLocks=()=>{const paid=typeof getStudentTariff==='function'&&getStudentTariff()!=='free';taskButton.textContent=(paid?'':'🔒 ')+'Интерактивті тапсырма';videoButton.textContent=(paid||i===0?'':'🔒 ')+'Видеосабақ'};updateLocks();taskButton.classList.add('alpha-lesson-action','alpha-lesson-task');videoButton.classList.add('alpha-lesson-action','alpha-lesson-video');c.append(taskButton,videoButton);const game=btn('🎮 Геймификация',()=>{lesson=i;slide=0;openGamification()});game.classList.add('alpha-lesson-action','alpha-lesson-game');c.append(game);grid.append(c)});
+topics.forEach(([t],i)=>{if(i<curriculumSections[sectionIndex].start||i>=curriculumSections[sectionIndex].end)return;const c=card(t,'');c.classList.add('alpha-topic-card');const presentation=btn('Презентацияны қарау →',()=>{lesson=i;slide=0;show()});presentation.classList.add('alpha-lesson-action','alpha-lesson-primary');c.append(presentation);const taskButton=btn('Интерактивті тапсырма',async()=>{if(!await requirePaidLesson())return;lesson=i;slide=0;quiz()});const videoButton=btn('Видеосабақ',async()=>{if(i===0){lesson=i;slide=0;show();setTimeout(()=>document.querySelector('#alphaCurriculum .alpha-lesson-video-card')?.scrollIntoView({behavior:'smooth',block:'center'}),80);return}if(!await requirePaidLesson())return;alert('Бұл тақырыпқа видеосабақ әлі жүктелмеген.')});const updateLocks=()=>{const paid=typeof getStudentTariff==='function'&&getStudentTariff()!=='free';taskButton.textContent=(paid?'':'🔒 ')+'Интерактивті тапсырма';videoButton.textContent=(paid||i===0?'':'🔒 ')+'Видеосабақ'};updateLocks();taskButton.classList.add('alpha-lesson-action','alpha-lesson-task');videoButton.classList.add('alpha-lesson-action','alpha-lesson-video');c.append(taskButton,videoButton);const game=btn('🎮 Геймификация',()=>{lesson=i;slide=0;openGamification()});game.classList.add('alpha-lesson-action','alpha-lesson-game');c.append(game);if(i===10){const tourButton=btn('🌐 3D турды ашу',()=>{lesson=i;slide=0;show();setTimeout(()=>document.querySelector('#alphaCurriculum .alpha-3d-tour')?.scrollIntoView({behavior:'smooth',block:'center'}),80)});tourButton.classList.add('alpha-lesson-action','alpha-lesson-tour');c.append(tourButton)}grid.append(c)});
 }else{
 const [name,slides]=topics[lesson];const c=card(name,'Презентация · '+(lesson===0?'10':slides.length+1)+' слайд');
 if(lesson===0){
@@ -124,6 +125,21 @@ if(lesson===0){
   grid.append(c);
   r.append(grid);
   return;
+}
+if(lesson===10){
+ const tour=el('section','alpha-3d-tour');
+ tour.append(el('h3','','🌐 Интерактивті 3D виртуалды тур'));
+ tour.append(el('p','alpha-edu-muted','Дайын 3D турды осы бетте зерттеп көріңіз: көріністі бұрып, белгіленген нүктелерді басыңыз.'));
+ const frame=document.createElement('iframe');
+ frame.src=alpha3dTourUrl;
+ frame.title='§21–22. 3D панорама және виртуалды тур — ThingLink';
+ frame.loading='lazy';frame.allowFullscreen=true;
+ frame.setAttribute('allow','fullscreen; accelerometer; gyroscope; xr-spatial-tracking');
+ frame.referrerPolicy='strict-origin-when-cross-origin';
+ frame.style.cssText='display:block;width:100%;height:clamp(340px,65vh,700px);border:0;border-radius:15px;background:#08182f';
+ tour.append(frame);
+ const fallback=document.createElement('a');fallback.href=alpha3dTourUrl;fallback.target='_blank';fallback.rel='noopener noreferrer';fallback.className='alpha-tour-external';fallback.textContent='↗ 3D турды ThingLink сайтында ашу';
+ tour.append(fallback);c.append(tour);
 }
 const panel=el('div','alpha-slide');const title=slide===0?name:slides[slide-1][0];const body=slide===0?'ИНФОРМАТИКА ЖӘНЕ ЖАСАНДЫ ИНТЕЛЛЕКТ · 11-СЫНЫП':slides[slide-1][1];panel.append(el('div','alpha-slide-count',(slide+1)+' / '+(slides.length+1)),el('h2','',title),el('p','',body));c.append(panel);
 c.append(btn('← Алдыңғы',()=>{slide=Math.max(0,slide-1);show()},slide===0));
