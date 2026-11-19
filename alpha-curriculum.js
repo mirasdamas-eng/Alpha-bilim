@@ -55,6 +55,22 @@ grid.append(c);
 }
 function quiz(){
 const r=root();r.replaceChildren();r.append(btn('← Сабаққа қайту',()=>show()),el('h2','','Интерактивті тапсырма · '+topics[lesson][0]));
+if(lesson===0){
+  const panel=card('Wordwall · Жасанды интеллект','Интерактивті ойынды төменде орындаңыз.');
+  const frame=document.createElement('iframe');
+  frame.src='https://wordwall.net/kk/embed/c3cf79c78d414ffaba1df25942284649?themeId=50&templateId=30&fontStackId=0';
+  frame.title='Wordwall — 1-сабақ интерактивті ойыны';
+  frame.width='500';frame.height='380';
+  frame.style.cssText='display:block;width:100%;max-width:900px;min-height:380px;border:0;border-radius:12px;background:#fff;';
+  frame.setAttribute('allowfullscreen','');
+  frame.setAttribute('loading','lazy');
+  panel.append(frame);
+  const fallback=el('p','alpha-edu-muted','Ойын ашылмаса, ');
+  const link=document.createElement('a');link.href='https://wordwall.net/ru/resource/106422584?wwmethod=link';link.target='_blank';link.rel='noopener noreferrer';link.textContent='Wordwall сайтында ашу';
+  fallback.append(link);panel.append(fallback);r.append(panel);
+  return;
+}
+
 const questions=[['Жасанды интеллект қандай міндет атқара алады?',['Деректерден үйрену','Тек уақыт көрсету','Тек экран жарығын өзгерту'],0],['Модель нәтижесін не үшін тексереді?',['Қателерді анықтау','Файлды жою','Компьютерді өшіру'],0],['Деректермен жұмыс кезінде не маңызды?',['Жеке деректерді қорғау','Барлық құпиясөзді жариялау','Деректерді тексермеу'],0]];
 let score=0;const grid=el('div','alpha-edu-grid');
 questions.forEach(([q,options,correct],i)=>{const c=card((i+1)+'. '+q);const select=el('select');options.forEach((t,j)=>{const o=el('option','',t);o.value=j;select.append(o)});select.value='';const placeholder=el('option','','Жауапты таңдаңыз');placeholder.value='';placeholder.selected=true;select.prepend(placeholder);select.dataset.answer=correct;c.append(select);grid.append(c)});r.append(grid);
