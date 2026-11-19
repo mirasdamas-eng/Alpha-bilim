@@ -102,3 +102,7 @@
  #alphaCurriculum .alpha-edu-card.alpha-topic-card:hover,
  #alphaCurriculum .alpha-edu-card button.alpha-lesson-action:hover{transform:none!important}
 }
+
+#alphaCurriculum .alpha-lesson-video-card{width:100%;margin:22px 0 12px;padding:18px;border:1px solid rgba(124,181,255,.32);border-radius:22px;background:linear-gradient(145deg,#12284e,#0b1a35);box-shadow:0 16px 30px rgba(7,20,49,.18)}
+#alphaCurriculum .alpha-lesson-video-card h3{margin:0 0 14px;color:#f0f7ff!important;font-size:19px}
+@media(max-width:600px){#alphaCurriculum .alpha-lesson-video-card{padding:12px}#alphaCurriculum .alpha-lesson-video-card h3{font-size:16px}}
