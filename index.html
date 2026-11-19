@@ -836,8 +836,7 @@ html,body,body *,button,input,select,textarea,option,svg text{font-family:"Sylfa
 <div id="testsView" class="view">
   <div class="dash-head"><div><h1>Тапсырмалар 📝</h1><p class="muted">Пәнді таңда да, деңгейлер бойынша тапсырмаларды орында. Нәтижелерің «Қателерді түзету» бөлімінде сақталады.</p></div></div>
   <div class="features" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px">
-    <section class="feature" style="background:linear-gradient(135deg,#eff6ff,#e0e7ff);border:1px solid #c7d2fe"><div class="icon">📐</div><h3>Геометрия</h3><p>Диагностикадағы геометрия тесті. A — жеңіл, B — орташа, C — күрделі тапсырмалар.</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0"><span class="pill">A деңгейі</span><span class="pill">B деңгейі</span><span class="pill">C деңгейі</span></div><button class="btn btn-primary" style="width:100%" onclick="startGeometryTest()">Геометрия тестін бастау →</button></section>
-    <section class="feature" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #bbf7d0"><div class="icon">➗</div><h3>Математика</h3><p>Арифметика, бөлшектер, теңдеулер және пайыз бойынша Тапсырмалар.</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0"><span class="pill">A деңгейі</span><span class="pill">B деңгейі</span><span class="pill">C деңгейі</span></div><button class="btn btn-primary" style="width:100%" onclick="startMathTest()">Математика тестін бастау →</button></section>
+    <section class="feature" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #bbf7d0"><div class="icon">➗</div><h3>Математика</h3><p>Алгебра мен геометрия біріктірілген бір математика тесті.</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0"><span class="pill">A деңгейі</span><span class="pill">B деңгейі</span><span class="pill">C деңгейі</span></div><button class="btn btn-primary" style="width:100%" onclick="startMathTest()">Математика тестін бастау →</button></section>
     <section class="feature" style="background:linear-gradient(135deg,#eef6ff,#e0f2fe);border:1px solid #bae6fd"><div class="icon">💻</div><h3>Информатика</h3><p>Алгоритмдер, Python және информатика негіздері бойынша тапсырмалар.</p><button class="btn btn-primary" style="width:100%" onclick="startAlphaTask('informatics')">Информатика тапсырмаларын бастау →</button></section>
   </div>
 </div>
@@ -1635,7 +1634,7 @@ function startAlphaTask(key){
   startSubjectTest('Тапсырма — '+titles[key],task);
 }
 function startGeometryTest(){startSubjectTest('Геометрия',GEOMETRY_QUESTIONS)}
-function startMathTest(){startSubjectTest('Математика',MATH_QUESTIONS)}
+function startMathTest(){const algebra=MATH_QUESTIONS.slice(0,20);const geometry=GEOMETRY_QUESTIONS.slice(0,20);const combined=[];for(let i=0;i<20;i++){if(algebra[i])combined.push(algebra[i]);if(geometry[i])combined.push(geometry[i]);}startSubjectTest('Математика (алгебра және геометрия)',combined)}
 function startSubjectTest(subjectTitle, questions){
   // Тек нақты берілген сұрақтарды көрсетеміз; жалған толтырғыш сұрақ қоспаймыз.
   questions = Array.isArray(questions) ? questions.slice(0,40) : [];
