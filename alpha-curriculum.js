@@ -43,7 +43,7 @@ if(!subject){
 if(subject==='informatics'&&g===11){const c=card('1-бөлім. Жасанды интеллект','§1–16 · 8 сабақ');c.append(btn('Бөлімді ашу →',()=>{section=true;show()}));grid.append(c)}
 else{grid.append(card('Материалдар дайындалуда',g+'-сынып · '+(subject==='math'?'Математика':'Информатика')))}
 }else if(lesson<0){
-topics.forEach(([t],i)=>{const c=card(t,'');c.append(btn('Презентацияны қарау →',()=>{lesson=i;slide=0;show()}));const taskButton=btn('Интерактивті тапсырма',async()=>{if(!await requirePaidLesson())return;lesson=i;slide=0;quiz()});const videoButton=btn('Видеосабақ',async()=>{if(!await requirePaidLesson())return;alert('Бұл тақырыпқа видеосабақ әлі жүктелмеген.')});const updateLocks=()=>{const paid=typeof getStudentTariff==='function'&&getStudentTariff()!=='free';taskButton.textContent=(paid?'':'🔒 ')+'Интерактивті тапсырма';videoButton.textContent=(paid?'':'🔒 ')+'Видеосабақ'};updateLocks();c.append(taskButton,videoButton);grid.append(c)});
+topics.forEach(([t],i)=>{const c=card(t,'');c.append(btn('Презентацияны қарау →',()=>{lesson=i;slide=0;show()}));const taskButton=btn('Интерактивті тапсырма',async()=>{if(!await requirePaidLesson())return;lesson=i;slide=0;quiz()});const videoButton=btn('Видеосабақ',async()=>{if(!await requirePaidLesson())return;alert('Бұл тақырыпқа видеосабақ әлі жүктелмеген.')});const updateLocks=()=>{const paid=typeof getStudentTariff==='function'&&getStudentTariff()!=='free';taskButton.textContent=(paid?'':'🔒 ')+'Интерактивті тапсырма';videoButton.textContent=(paid?'':'🔒 ')+'Видеосабақ'};updateLocks();c.append(taskButton,videoButton);c.append(btn('🎮 Геймификациялық ойын',()=>{lesson=i;slide=0;openGamification()}));grid.append(c)});
 }else{
 const [name,slides]=topics[lesson];const c=card(name,'Презентация · '+(slides.length+1)+' слайд');
 const panel=el('div','alpha-slide');const title=slide===0?name:slides[slide-1][0];const body=slide===0?'ИНФОРМАТИКА ЖӘНЕ ЖАСАНДЫ ИНТЕЛЛЕКТ · 11-СЫНЫП':slides[slide-1][1];panel.append(el('div','alpha-slide-count',(slide+1)+' / '+(slides.length+1)),el('h2','',title),el('p','',body));c.append(panel);
@@ -51,23 +51,26 @@ c.append(btn('← Алдыңғы',()=>{slide=Math.max(0,slide-1);show()},slide==
 c.append(btn('Келесі →',()=>{slide=Math.min(slides.length,slide+1);show()},slide===slides.length));
 c.append(btn('Толық экран',()=>{if(panel.requestFullscreen)panel.requestFullscreen()}));
 c.append(el('p','alpha-edu-muted','PowerPoint файлын жүктеу кейін қосылады. Қазір слайд мазмұнын сайттан қарауға болады.'));
-if(lesson===0){
-  const gameCard=card('🎮 AI QUEST — Геймификациялық ойын','5 аймақ · 25 сұрақ · Жасанды интеллект әлемі');
-  const gameFrame=document.createElement('iframe');
-  gameFrame.src='ai-pixel-quest.html';
-  gameFrame.title='AI QUEST — 1-сабақ геймификациялық ойыны';
-  gameFrame.loading='lazy';
-  gameFrame.allowFullscreen=true;
-  gameFrame.style.cssText='display:block;width:100%;height:740px;max-width:100%;border:0;border-radius:16px;background:#101a2c;';
-  gameCard.append(gameFrame);
-  const gameLink=document.createElement('a');
-  gameLink.href='ai-pixel-quest.html';gameLink.target='_blank';gameLink.rel='noopener noreferrer';
-  gameLink.textContent='Ойынды толық экранда ашу ↗';
-  gameCard.append(gameLink);
-  grid.append(gameCard);
-}
+c.append(btn('🎮 Геймификациялық ойын',()=>openGamification()));
+
 grid.append(c);
 }r.append(grid);
+}
+function openGamification(){
+const r=root();if(!r)return;
+r.replaceChildren();
+r.append(btn('← Сабаққа қайту',()=>show()));
+r.append(el('h2','','🎮 Геймификациялық ойын · '+(topics[lesson]?.[0]||'AI QUEST')));
+const frame=document.createElement('iframe');
+frame.src='ai-pixel-quest.html';
+frame.title='AI QUEST — Жасанды интеллект әлемі';
+frame.setAttribute('allowfullscreen','');
+frame.style.cssText='display:block;width:100%;height:min(78vh,850px);min-height:540px;border:0;border-radius:16px;background:#101a2c;';
+r.append(frame);
+const link=document.createElement('a');
+link.href='ai-pixel-quest.html';link.target='_blank';link.rel='noopener noreferrer';
+link.textContent='Ойынды бөлек терезеде ашу ↗';
+r.append(link);
 }
 function quiz(){
 const r=root();r.replaceChildren();r.append(btn('← Сабаққа қайту',()=>show()),el('h2','','Интерактивті тапсырма · '+topics[lesson][0]));
