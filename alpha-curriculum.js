@@ -45,7 +45,29 @@ else{grid.append(card('Материалдар дайындалуда',g+'-сын
 }else if(lesson<0){
 topics.forEach(([t],i)=>{const c=card(t,'');c.append(btn('Презентацияны қарау →',()=>{lesson=i;slide=0;show()}));const taskButton=btn('Интерактивті тапсырма',async()=>{if(!await requirePaidLesson())return;lesson=i;slide=0;quiz()});const videoButton=btn('Видеосабақ',async()=>{if(!await requirePaidLesson())return;alert('Бұл тақырыпқа видеосабақ әлі жүктелмеген.')});const updateLocks=()=>{const paid=typeof getStudentTariff==='function'&&getStudentTariff()!=='free';taskButton.textContent=(paid?'':'🔒 ')+'Интерактивті тапсырма';videoButton.textContent=(paid?'':'🔒 ')+'Видеосабақ'};updateLocks();c.append(taskButton,videoButton);c.append(btn('🎮 Геймификациялық ойын',()=>{lesson=i;slide=0;openGamification()}));grid.append(c)});
 }else{
-const [name,slides]=topics[lesson];const c=card(name,'Презентация · '+(slides.length+1)+' слайд');
+const [name,slides]=topics[lesson];const c=card(name,'Презентация · '+(lesson===0?'10':slides.length+1)+' слайд');
+if(lesson===0){
+  const pptxUrl=new URL('ALPHA_ZHASANDY_INTELLEKT_ZHEKE_SURETTER.pptx',document.baseURI).href;
+  const viewer='https://view.officeapps.live.com/op/embed.aspx?src='+encodeURIComponent(pptxUrl);
+  const frame=document.createElement('iframe');
+  frame.src=viewer;
+  frame.title='Жасанды интеллект — 11-сынып, 1-сабақ, 10 слайд';
+  frame.loading='lazy';
+  frame.allowFullscreen=true;
+  frame.style.cssText='display:block;width:100%;aspect-ratio:16/9;min-height:360px;border:0;border-radius:16px;background:#101a2c;margin:16px 0';
+  c.append(frame);
+  const note=el('p','alpha-edu-muted','Презентацияны сайт ішінде қараңыз. Егер онлайн қарау ашылмаса, PowerPoint файлын жүктеп алыңыз.');
+  c.append(note);
+  const link=document.createElement('a');
+  link.href=pptxUrl;link.download='ALPHA_ZHASANDY_INTELLEKT_ZHEKE_SURETTER.pptx';
+  link.className='btn btn-primary';link.textContent='⬇ PowerPoint презентациясын жүктеу';
+  link.style.cssText='display:inline-block;margin:8px 8px 8px 0';
+  c.append(link);
+  c.append(btn('🎮 Геймификациялық ойын',()=>openGamification()));
+  grid.append(c);
+  r.append(grid);
+  return;
+}
 const panel=el('div','alpha-slide');const title=slide===0?name:slides[slide-1][0];const body=slide===0?'ИНФОРМАТИКА ЖӘНЕ ЖАСАНДЫ ИНТЕЛЛЕКТ · 11-СЫНЫП':slides[slide-1][1];panel.append(el('div','alpha-slide-count',(slide+1)+' / '+(slides.length+1)),el('h2','',title),el('p','',body));c.append(panel);
 c.append(btn('← Алдыңғы',()=>{slide=Math.max(0,slide-1);show()},slide===0));
 c.append(btn('Келесі →',()=>{slide=Math.min(slides.length,slide+1);show()},slide===slides.length));
